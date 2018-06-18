@@ -1,0 +1,30 @@
+{
+  "name": "onboarding.developers.italia.it",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apuliasoft/onboarding.developers.italia.it.git"
+  },
+  "keywords": [
+    "onboarding"
+  ],
+  "author": "Giuseppe Santoro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/apuliasoft/onboarding.developers.italia.it/issues"
+  },
+  "homepage": "https://github.com/apuliasoft/onboarding.developers.italia.it#readme",
+  "dependencies": {
+    "hapi": "^17.5.1",
+    "inert": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/hapi": "^17.0.12"
+  }
+}
