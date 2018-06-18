@@ -15,7 +15,7 @@
     "onboarding"
   ],
   "author": "Giuseppe Santoro",
-  "license": "ISC",
+  "license": "BSD 3-Clause License",
   "bugs": {
     "url": "https://github.com/apuliasoft/onboarding.developers.italia.it/issues"
   },
