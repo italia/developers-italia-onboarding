@@ -51,12 +51,6 @@ request(PUB_AMM_URL, (err, res, csv_file) => {
     const data = papa.parse(csv_file).data;
     data.shift();
 
-    function Authority(row) {
-        this.code = row[COD_AMM],
-        this.description = row[DES_AMM]
-    }
-
-
     console.log('index data in lunar.js format')
     let paDb = {};
     let index = lunr(function () {
@@ -77,7 +71,6 @@ request(PUB_AMM_URL, (err, res, csv_file) => {
 
         });
     });
-
 
     console.log('WRITE: authorities.index.json');
     const serializedIndex = JSON.stringify(index);
