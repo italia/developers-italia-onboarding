@@ -3,6 +3,9 @@
 const Path = require('path');
 const Hapi = require('hapi');
 
+// Crea l'indice inverso e il database delle PA
+require('./src/create_index.js');
+
 const server = Hapi.server({
     port: 3000,
     host: 'localhost',
