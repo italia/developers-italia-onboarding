@@ -1,14 +1,13 @@
 'use strict';
 
-const fs = require('fs');
 const path = require('path');
 const request = require('request');
 const papa = require('papaparse');
 const lunr = require('lunr');
+const writeFileAtomicSync = require('write-file-atomic').sync;
 
 const BASE_URL = 'http://www.indicepa.gov.it/public-services/opendata-read-service.php?dstype=FS&filename='
 const PUB_AMM_URL = `${BASE_URL}amministrazioni.txt`;
-const PEC_URL = `${BASE_URL}pec.txt`;
 
 const COD_AMM = 0;
 const DES_AMM = 1;
@@ -74,9 +73,9 @@ request(PUB_AMM_URL, (err, res, csv_file) => {
 
     console.log('WRITE: authorities.index.json');
     const serializedIndex = JSON.stringify(index);
-    fs.writeFileSync(path.join(__dirname, '..', 'public', 'assets', 'data', 'authorities.index.json'), serializedIndex);
+    writeFileAtomicSync(path.join(__dirname, '..', 'public', 'assets', 'data', 'authorities.index.json'), serializedIndex);
 
     console.log('WRITE: authorities.db.json');
     const serializedPaDb = JSON.stringify(paDb);
-    fs.writeFileSync(path.join(__dirname, '..', 'public', 'assets', 'data', 'authorities.db.json'), serializedPaDb);
+    writeFileAtomicSync(path.join(__dirname, '..', 'public', 'assets', 'data', 'authorities.db.json'), serializedPaDb);
 });

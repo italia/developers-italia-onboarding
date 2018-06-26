@@ -25,7 +25,8 @@
     "inert": "^5.1.0",
     "lunr": "^2.2.1",
     "papaparse": "^4.5.0",
-    "request": "^2.87.0"
+    "request": "^2.87.0",
+    "write-file-atomic": "^2.3.0"
   },
   "devDependencies": {
     "@types/hapi": "^17.0.12"
