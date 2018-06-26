@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/apuliasoft/onboarding.developers.italia.it.git"
+    "url": "git+https://github.com/italia/onboarding.developers.italia.it.git"
   },
   "keywords": [
     "onboarding"
@@ -17,9 +17,9 @@
   "author": "Giuseppe Santoro",
   "license": "BSD 3-Clause License",
   "bugs": {
-    "url": "https://github.com/apuliasoft/onboarding.developers.italia.it/issues"
+    "url": "https://github.com/italia/onboarding.developers.italia.it/issues"
   },
-  "homepage": "https://github.com/apuliasoft/onboarding.developers.italia.it#readme",
+  "homepage": "https://github.com/italia/onboarding.developers.italia.it#readme",
   "dependencies": {
     "hapi": "^17.5.1",
     "inert": "^5.1.0",
