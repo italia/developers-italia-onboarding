@@ -1,0 +1,34 @@
+{
+  "name": "onboarding.developers.italia.it",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/italia/onboarding.developers.italia.it.git"
+  },
+  "keywords": [
+    "onboarding"
+  ],
+  "author": "Giuseppe Santoro",
+  "license": "BSD 3-Clause License",
+  "bugs": {
+    "url": "https://github.com/italia/onboarding.developers.italia.it/issues"
+  },
+  "homepage": "https://github.com/italia/onboarding.developers.italia.it#readme",
+  "dependencies": {
+    "hapi": "^17.5.1",
+    "inert": "^5.1.0",
+    "lunr": "^2.2.1",
+    "papaparse": "^4.5.0",
+    "request": "^2.87.0",
+    "write-file-atomic": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/hapi": "^17.0.12"
+  }
+}
