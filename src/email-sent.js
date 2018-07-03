@@ -32,7 +32,7 @@ module.exports = function(request, reply){
         const mailOptions = {
             from: '"Team Digitale" <test@teamdigitale.com>', // sender address
             to: 'giuseppesantoro87@gmail.com', // list of receivers
-            subject: 'Onboarding Developer Italia', // Subject line
+            subject: 'Onboarding Developers Italia', // Subject line
             html: mustache.render(template, {
                 referente: referente,
                 url: url,
