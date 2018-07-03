@@ -3,9 +3,6 @@
 const Path = require('path');
 const Hapi = require('hapi');
 
-// Crea l'indice inverso e il database delle PA
-require('./src/create_index.js');
-
 const server = Hapi.server({
     port: 3000,
     host: 'localhost',
@@ -19,15 +16,25 @@ const server = Hapi.server({
 const init = async () => {
     await server.register(require('inert'));
 
-    server.route({
+    server.route([{
+        method: 'POST',
+        path: '/email-sent',
+        handler: require('./src/email-sent')
+    },{
+        method: 'GET',
+        path: '/registered',
+        handler: require('./src/registered')
+    },{
         method: 'GET',
         path: '/{param*}',
         handler: {
             directory: {
-                path: '.'
+                path: '.',
+                redirectToSlash: true,
+                index: true,
             }
         }
-    });
+    }]);
 
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
@@ -39,4 +46,8 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
 });
 
-init();
+
+// Crea l'indice inverso e il database delle PA
+require('./src/create_index.js')().then(() => {
+    init();
+});

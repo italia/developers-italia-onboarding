@@ -41,41 +41,46 @@ const URL_GOOGLEPLUS = 29;
 const URL_YOUTUBE = 30;
 const LIV_ACCESSIBILI = 31;
 
-
+module.exports = function() {
 console.log(`GET: ${PUB_AMM_URL}`);
-request(PUB_AMM_URL, (err, res, csv_file) => {
-    if (err) { return console.log(err); }
-
-    console.log('converting the CSV string in an array');
-    const data = papa.parse(csv_file).data;
-    data.shift();
-
-    console.log('index data in lunar.js format')
-    let paDb = {};
-    let index = lunr(function () {
-        this.ref('code');
-        this.field('code', { boost: 6 });
-        this.field('description', { boost: 3 });
-
-        data.forEach((row) => {
-            this.add({
-                code: row[COD_AMM],
-                description: row[DES_AMM]
+    return new Promise(function(resolve, reject){
+        request(PUB_AMM_URL, (err, res, csv_file) => {
+            if (err) { return reject(err); }
+        
+            console.log('converting the CSV string in an array');
+            const data = papa.parse(csv_file).data;
+            data.shift();
+        
+            console.log('index data in lunar.js format')
+            let paDb = {};
+            let index = lunr(function () {
+                this.ref('code');
+                this.field('code', { boost: 6 });
+                this.field('description', { boost: 3 });
+        
+                data.forEach((row) => {
+                    this.add({
+                        code: row[COD_AMM],
+                        description: row[DES_AMM]
+                    });
+        
+                    paDb[row[COD_AMM]] = {
+                        description: row[DES_AMM],
+                        pec: row[TIPO_MAIL1] == 'pec' ? row[MAIL1] : ''
+                    };
+                });
             });
+        
+            console.log('WRITE: authorities.index.json');
+            const serializedIndex = JSON.stringify(index);
+            writeFileAtomicSync(path.join(__dirname, '..', 'public', 'assets', 'data', 'authorities.index.json'), serializedIndex);
+        
+            console.log('WRITE: authorities.db.json');
+            const serializedPaDb = JSON.stringify(paDb);
+            writeFileAtomicSync(path.join(__dirname, '..', 'public', 'assets', 'data', 'authorities.db.json'), serializedPaDb);
 
-            paDb[row[COD_AMM]] = {
-                description: row[DES_AMM],
-                pec: row[TIPO_MAIL1] == 'pec' ? row[MAIL1] : ''
-            };
-
+            resolve();
         });
     });
-
-    console.log('WRITE: authorities.index.json');
-    const serializedIndex = JSON.stringify(index);
-    writeFileAtomicSync(path.join(__dirname, '..', 'public', 'assets', 'data', 'authorities.index.json'), serializedIndex);
-
-    console.log('WRITE: authorities.db.json');
-    const serializedPaDb = JSON.stringify(paDb);
-    writeFileAtomicSync(path.join(__dirname, '..', 'public', 'assets', 'data', 'authorities.db.json'), serializedPaDb);
-});
+    
+}
