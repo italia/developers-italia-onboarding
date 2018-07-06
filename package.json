@@ -21,14 +21,28 @@
   },
   "homepage": "https://github.com/italia/onboarding.developers.italia.it#readme",
   "dependencies": {
+    "fs-extra": "^6.0.1",
+    "generate-password": "^1.4.0",
     "hapi": "^17.5.1",
     "inert": "^5.1.0",
+    "jscs": "^3.0.7",
+    "jsonwebtoken": "^8.3.0",
+    "lowdb": "^1.0.0",
     "lunr": "^2.2.1",
+    "mustache": "^2.3.0",
+    "nodemailer": "^4.6.7",
     "papaparse": "^4.5.0",
     "request": "^2.87.0",
     "write-file-atomic": "^2.3.0"
   },
   "devDependencies": {
-    "@types/hapi": "^17.0.12"
+    "@types/hapi": "^17.0.12",
+    "eslint": "^5.0.1",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0"
   }
 }
