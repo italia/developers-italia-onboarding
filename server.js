@@ -3,6 +3,9 @@
 const Path = require('path');
 const Hapi = require('hapi');
 
+const emailSentHandler = require('./src/email-sent');
+const registeredHandler = require('./src/registered');
+
 const server = Hapi.server({
     port: 3000,
     host: 'localhost',
@@ -19,11 +22,11 @@ const init = async () => {
     server.route([{
         method: 'POST',
         path: '/email-sent',
-        handler: require('./src/email-sent')
+        handler: emailSentHandler
     },{
         method: 'GET',
         path: '/registered',
-        handler: require('./src/registered')
+        handler: registeredHandler
     },{
         method: 'GET',
         path: '/{param*}',
