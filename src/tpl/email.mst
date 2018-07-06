@@ -292,8 +292,9 @@
                     <tr>
                       <td>
                         <p>Gentile {{amministrazione}},</p>
-                        <p>Ci è pervenuta la richiesta di aggiundere la URL {{url}} all'elenco dei repository del portale Developer Italia da parte di {{referente}}.</p>
-                        <p>Per confermare la registrazione, utilizzare il pulsante qui in basso.</p>
+                        <p>Ci è pervenuta la richiesta di aggiungere la URL {{url}} al portale Developers Italia come strumento di code hosting ufficiale utilizzato dalla vostra amministrazione per pubblicare il software a riuso (secondo quanto disposto dalla Linee Guida di Acquisizione e Riuso del Software di AgID, con riferimento all'art 68 e 69 del Codice dell'Amministrazione Digitale).</p>
+                        <p>La richiesta è stata effettuata dal seguente referente: {{referente}}.</p>
+                        <p>Se la richiesta è corretta, potete confermare la registrazione utilizzando il pulsante qui in basso:</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
                             <tr>
