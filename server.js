@@ -48,6 +48,6 @@ process.on('unhandledRejection', (err) => {
 
 
 // Crea l'indice inverso e il database delle PA
-require('./src/create_index.js')().then(() => {
+require('./src/create-index.js')().then(() => {
     init();
 });
