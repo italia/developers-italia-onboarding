@@ -24,14 +24,17 @@ module.exports = function (request) {
   const url = decoded.url;
   const pec = amministrazioni[ipa].pec;
 
-  db.get('registrati')
-    .push({
-      referente: referente,
-      ipa: ipa,
-      url: url,
-      pec: pec
-    })
-    .write();
-
-  return 'Registrazione avvenuta con successo';
+  if (db.get('registrati').find({ url: url }).value()) {
+        return "L'url esiste gia` nel database";
+  } else {
+    db.get('registrati')
+      .push({
+        referente: referente,
+        ipa: ipa,
+        url: url,
+        pec: pec
+      })
+      .write();
+    return 'Registrazione avvenuta con successo';
+  }
 };
