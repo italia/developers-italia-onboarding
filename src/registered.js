@@ -15,7 +15,7 @@ const db = low(adapter);
 // Set some defaults (required if your JSON file is empty)
 db.defaults({ registrati: [] }).write();
 
-module.exports = function (request) {
+module.exports = function (request, h) {
   const token = request.query.token;
   const decoded = jwt.verify(token, key);
 
@@ -33,5 +33,5 @@ module.exports = function (request) {
     })
     .write();
 
-  return 'Registrazione avvenuta con successo';
+  return h.view('confirmed', null, { layout: 'index' });
 };
