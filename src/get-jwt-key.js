@@ -2,17 +2,19 @@ const fs = require('fs-extra');
 const generator = require('generate-password');
 
 module.exports = function () {
-  const path = './private/data/private.key';
+  const dir = './private/data/';
+  const file = dir + 'private.key';
 
-  if (!fs.existsSync(path)) {
+  if (!fs.existsSync(file)) {
     const password = generator.generate({
       length: 50,
       numbers: true,
       symbols: true
     });
 
-    fs.writeFileSync(path, password);
+    fs.ensureDirSync(dir);
+    fs.writeFileSync(file, password);
   }
 
-  return fs.readFileSync(path).toString('utf8');
+  return fs.readFileSync(file).toString('utf8');
 };

@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "test",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon --watch src server.js"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
   "dependencies": {
     "fs-extra": "^6.0.1",
     "generate-password": "^1.4.0",
-    "hapi": "^17.5.1",
+    "hapi": "^17.5.2",
     "inert": "^5.1.0",
     "jscs": "^3.0.7",
     "jsonwebtoken": "^8.3.0",
@@ -31,7 +31,9 @@
     "lunr": "^2.2.1",
     "mustache": "^2.3.0",
     "nodemailer": "^4.6.7",
+    "nodemon": "^1.18.3",
     "papaparse": "^4.5.0",
+    "parse-domain": "^2.1.2",
     "request": "^2.87.0",
     "write-file-atomic": "^2.3.0"
   },
