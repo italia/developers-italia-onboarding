@@ -6,7 +6,7 @@ const papa = require('papaparse');
 const lunr = require('lunr');
 const writeFileAtomicSync = require('write-file-atomic').sync;
 
-const BASE_URL = 'http://www.indicepa.gov.it/public-services/opendata-read-service.php?dstype=FS&filename='
+const BASE_URL = 'http://www.indicepa.gov.it/public-services/opendata-read-service.php?dstype=FS&filename=';
 const PUB_AMM_URL = `${BASE_URL}amministrazioni.txt`;
 
 const COD_AMM = 0;

@@ -12,9 +12,6 @@ fs.ensureFileSync(whitelistFile);
 const adapter = new FileSync(whitelistFile);
 const db = low(adapter);
 
-// Set some defaults (required if your JSON file is empty)
-db.defaults({ registrati: [] }).write();
-
 module.exports = function (request) {
   const token = request.query.token;
   const decoded = jwt.verify(token, key);
@@ -24,17 +21,13 @@ module.exports = function (request) {
   const url = decoded.url;
   const pec = amministrazioni[ipa].pec;
 
-  if (db.get('registrati').find({ url: url }).value()) {
-        return "L'url esiste gia` nel database";
-  } else {
-    db.get('registrati')
-      .push({
-        referente: referente,
-        ipa: ipa,
-        url: url,
-        pec: pec
-      })
-      .write();
-    return 'Registrazione avvenuta con successo';
-  }
+  db.get('registrati')
+    .push({
+      referente: referente,
+      ipa: ipa,
+      url: url,
+      pec: pec
+    })
+    .write();
+  return 'Registrazione avvenuta con successo';
 };
