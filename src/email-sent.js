@@ -52,7 +52,7 @@ module.exports = function (request, h) {
         referente: referente,
         url: url,
         amministrazione: amministrazione,
-        link: `http://localhost:3000/registered?token=${token}`
+        link: `http://localhost:3000/register-confirm?token=${token}`
       })
     };
 

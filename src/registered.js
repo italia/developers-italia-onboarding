@@ -3,9 +3,6 @@
 const fs = require('fs-extra');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
-const jwt = require('jsonwebtoken');
-const amministrazioni = require('../public/assets/data/authorities.db.json');
-const key = require('./get-jwt-key.js')();
 
 const whitelistFile = 'private/data/whitelist.db.json';
 fs.ensureFileSync(whitelistFile);
@@ -16,13 +13,11 @@ const db = low(adapter);
 db.defaults({ registrati: [] }).write();
 
 module.exports = function (request, h) {
-  const token = request.query.token;
-  const decoded = jwt.verify(token, key);
 
-  const referente = decoded.referente;
-  const ipa = decoded.ipa;
-  const url = decoded.url;
-  const pec = amministrazioni[ipa].pec;
+  const referente = request.query.nomeReferente;
+  const ipa = request.query.ipa;
+  const url = request.query.url;
+  const pec = request.query.pec;
 
   db.get('registrati')
     .push({
