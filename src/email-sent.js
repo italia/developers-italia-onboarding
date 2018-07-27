@@ -28,7 +28,8 @@ module.exports = function (request) {
 
   if (db.get('registrati').find({ url: url }).value()) {
     return `La url ${url} esiste gia' nel database`;
-  } else if (!isValid(url)) {
+  } 
+  if (!isValid(url)) {
     return `La url ${url} non e' valida`;
   }
 
