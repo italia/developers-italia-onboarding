@@ -22,8 +22,9 @@ module.exports = function (request) {
     return `La url ${url} non e' valida`;
   }
 
-  const configString = fs.readFileSync('config-dev.json').toString('utf8');
-  const mailServerConfig = JSON.parse(configString);
+  const mailServerConfig = JSON.parse((process.argv.includes('prod')) ? 
+    fs.readFileSync('config-prod.json').toString('utf8') : 
+    fs.readFileSync('config-dev.json').toString('utf8'));
 
   const userConfigFile = 'account-config.json';
   fs.ensureFileSync(userConfigFile);
@@ -52,7 +53,7 @@ module.exports = function (request) {
         pass: accountConfig.pass 
       }
     });
-
+    
     const template = fs.readFileSync('src/tpl/email.mst').toString('utf8');
 
     const token = jwt.sign({
