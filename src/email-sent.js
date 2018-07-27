@@ -26,17 +26,6 @@ module.exports = function (request) {
     fs.readFileSync('config-prod.json').toString('utf8') : 
     fs.readFileSync('config-dev.json').toString('utf8'));
 
-  const userConfigFile = 'account-config.json';
-  fs.ensureFileSync(userConfigFile);
-  const adapter = new FileSync(userConfigFile);
-  const db = low(adapter);
-
-  // Set some defaults (required if your JSON file is empty)
-  db.defaults({
-    user: 'opdqxtw7fb6e6hjl@ethereal.email',
-    pass: 'scH1PwkRzwA9rD39Qt'
-  }).write();
-
   const configAccountString = fs.readFileSync('account-config.json').toString('utf8');
   const accountConfig = JSON.parse(configAccountString);
 

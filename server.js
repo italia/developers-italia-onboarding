@@ -2,9 +2,11 @@
 
 const Path = require('path');
 const Hapi = require('hapi');
+const fs = require('fs-extra');
 
 const emailSentHandler = require('./src/email-sent');
 const registeredHandler = require('./src/registered');
+const whiteList = 'account-config.json';
 
 const server = Hapi.server({
   port: 3000,
@@ -23,11 +25,11 @@ const init = async () => {
     method: 'POST',
     path: '/email-sent',
     handler: emailSentHandler
-  },{
+  }, {
     method: 'GET',
     path: '/registered',
     handler: registeredHandler
-  },{
+  }, {
     method: 'GET',
     path: '/{param*}',
     handler: {
@@ -52,5 +54,9 @@ process.on('unhandledRejection', (err) => {
 
 // Crea l'indice inverso e il database delle PA
 require('./src/create-index.js')().then(() => {
-  init();
+  if (fs.existsSync(whiteList)) {
+    init();
+  } else {
+    console.log('Attenzione! Creare prima un file di creadenziali seguendo il modello di account-config-tpl.json');
+  }
 });
