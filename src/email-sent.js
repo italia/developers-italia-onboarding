@@ -1,6 +1,8 @@
 'use strict';
 
 const fs = require('fs-extra');
+const low = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync');
 const nodemailer = require('nodemailer');
 const mustache = require('mustache');
 const jwt = require('jsonwebtoken');
@@ -23,6 +25,20 @@ module.exports = function (request) {
   const configString = fs.readFileSync('config-dev.json').toString('utf8');
   const mailServerConfig = JSON.parse(configString);
 
+  const userConfigFile = 'account-config.json';
+  fs.ensureFileSync(userConfigFile);
+  const adapter = new FileSync(userConfigFile);
+  const db = low(adapter);
+
+  // Set some defaults (required if your JSON file is empty)
+  db.defaults({
+    user: 'opdqxtw7fb6e6hjl@ethereal.email',
+    pass: 'scH1PwkRzwA9rD39Qt'
+  }).write();
+
+  const configAccountString = fs.readFileSync('account-config.json').toString('utf8');
+  const accountConfig = JSON.parse(configAccountString);
+
   // Generate test SMTP service account from ethereal.email
   // Only needed if you don't have a real mail account for testing
   nodemailer.createTestAccount((err, account) => {
@@ -32,8 +48,8 @@ module.exports = function (request) {
       port: mailServerConfig.port,
       secure: mailServerConfig.secure, // true for 465, false for other ports
       auth: {
-        user: account.user, // generated ethereal user
-        pass: account.pass // generated ethereal password
+        user: accountConfig.user, 
+        pass: accountConfig.pass 
       }
     });
 
