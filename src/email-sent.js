@@ -9,6 +9,16 @@ const parseDomain = require('parse-domain');
 const key = require('./get-jwt-key.js')();
 const amministrazioni = require('../public/assets/data/authorities.db.json');
 
+const low = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync');
+const whitelistFile = 'private/data/whitelist.db.json';
+fs.ensureFileSync(whitelistFile);
+const adapter = new FileSync(whitelistFile);
+const db = low(adapter);
+
+// Set some defaults (required if your JSON file is empty)
+db.defaults({ registrati: [] }).write();
+
 module.exports = function (request) {
   const referente = request.payload.nomeReferente;
   const ipa = request.payload.ipa;
@@ -16,7 +26,9 @@ module.exports = function (request) {
   const pec = amministrazioni[ipa].pec;
   const amministrazione = amministrazioni[ipa].description;
 
-  if (!isValid(url)) {
+  if (db.get('registrati').find({ url: url }).value()) {
+    return `La url ${url} esiste gia' nel database`;
+  } else if (!isValid(url)) {
     return `La url ${url} non e' valida`;
   }
 
