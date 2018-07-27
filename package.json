@@ -36,6 +36,7 @@
     "papaparse": "^4.5.0",
     "parse-domain": "^2.1.2",
     "request": "^2.87.0",
+    "vision": "^5.3.3",
     "write-file-atomic": "^2.3.0"
   },
   "devDependencies": {
