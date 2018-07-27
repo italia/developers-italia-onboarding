@@ -16,9 +16,9 @@ module.exports = function (request) {
   const pec = amministrazioni[ipa].pec;
   const amministrazione = amministrazioni[ipa].description;
 
-  if(!isValid(url)) {
+  if (!isValid(url)) {
     return `La url ${url} non e' valida`;
-  } 
+  }
 
   // Generate test SMTP service account from ethereal.email
   // Only needed if you don't have a real mail account for testing
@@ -92,50 +92,50 @@ function isValid(url) {
 function isInWhiteList(url) {
   let result = false;
   const dictionary = {
-      'github': /^(https?):\/\/(github\.com)\/([\da-zA-Z-_])*\/?$/,
-      'bitbucket': /^(https?):\/\/(bitbucket\.org)\/([\da-zA-Z-_])*\/?$/,
-      'gitlab': /^(https?):\/\/(gitlab\.com)\/([\da-zA-Z-_]+)\/?$/,
-      'phabricator': /^(https?):\/\/(secure\.phabricator\.com)\/(p)\/([\da-zA-Z-_]+)\/?$/,
-      'gitea' : /^(https?):\/\/(try\.gitea\.io)\/([\da-zA-Z-_]+)\/?$/,
-      'gogs' : /^(https?):\/\/(try\.gogs\.io)\/([\da-zA-Z-_]+)\/?$/
+    'github': /^(https?):\/\/(github\.com)\/([\da-zA-Z-_])*\/?$/,
+    'bitbucket': /^(https?):\/\/(bitbucket\.org)\/([\da-zA-Z-_])*\/?$/,
+    'gitlab': /^(https?):\/\/(gitlab\.com)\/([\da-zA-Z-_]+)\/?$/,
+    'phabricator': /^(https?):\/\/(secure\.phabricator\.com)\/(p)\/([\da-zA-Z-_]+)\/?$/,
+    'gitea': /^(https?):\/\/(try\.gitea\.io)\/([\da-zA-Z-_]+)\/?$/,
+    'gogs': /^(https?):\/\/(try\.gogs\.io)\/([\da-zA-Z-_]+)\/?$/
   };
 
   const arrayUrl = [
-      "https://github.com/",
-      "https://bitbucket.org/",
-      "https://gitlab.com/",
-      "https://phabricator.com/",
-      "https://gitea.io/",
-      "https://gogs.io/"
+    'https://github.com/',
+    'https://bitbucket.org/',
+    'https://gitlab.com/',
+    'https://phabricator.com/',
+    'https://gitea.io/',
+    'https://gogs.io/'
   ];
 
   const urlParsed = new URL(url);
   const protocol = urlParsed.protocol;
   const hostname = urlParsed.hostname;
-  
+
   const domainParsed = parseDomain(url);
   if (domainParsed != null) {
-      const domain = domainParsed.domain;
+    const domain = domainParsed.domain;
 
-      const regex = dictionary[domain];
-      const isValid = regex && regex.test(url); 
+    const regex = dictionary[domain];
+    const isValid = regex && regex.test(url);
 
-      let baseUrl = '';
+    let baseUrl = '';
 
-      /*  Gli url nella forma  https://try.gogs.io/<username>/<projectname>,  
-                              https://try.gitea.io/<username>/<projectname>, 
-                              https://secure.phabricator.com/project/view/395/
-          devono diventare    https://gogs.io/<username>/<projectname>,  
-                              https://gitea.io/<username>/<projectname>, 
-                              https://phabricator.com/project/view/<numProject>/
-      */
-      if(["gitea", "gogs", "phabricator"].includes(domain)) {
-          baseUrl = `${protocol}//${domain}.${domainParsed.tld}/`;
-      } else {
-          baseUrl = `${protocol}//${hostname}/`;
-      }
+    /*  Gli url nella forma  https://try.gogs.io/<username>/<projectname>,  
+                            https://try.gitea.io/<username>/<projectname>, 
+                            https://secure.phabricator.com/project/view/395/
+        devono diventare    https://gogs.io/<username>/<projectname>,  
+                            https://gitea.io/<username>/<projectname>, 
+                            https://phabricator.com/project/view/<numProject>/
+    */
+    if (['gitea', 'gogs', 'phabricator'].includes(domain)) {
+      baseUrl = `${protocol}//${domain}.${domainParsed.tld}/`;
+    } else {
+      baseUrl = `${protocol}//${hostname}/`;
+    }
 
-      result = isValid && arrayUrl.includes(baseUrl);
+    result = isValid && arrayUrl.includes(baseUrl);
   }
   return result;
 }
