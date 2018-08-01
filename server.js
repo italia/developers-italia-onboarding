@@ -5,7 +5,7 @@ const Hapi = require('hapi');
 
 const emailSentHandler = require('./src/email-sent');
 const registeredHandler = require('./src/registered');
-const repoHandler = require('./src/yaml-repo');
+const repoHandler = require('./src/repo-list');
 
 const server = Hapi.server({
   port: 3000,
@@ -30,6 +30,10 @@ const init = async () => {
     handler: registeredHandler
   },{
     method: 'GET',
+    path: '/repo-list',
+    handler: repoHandler
+  },{
+    method: 'GET',
     path: '/{param*}',
     handler: {
       directory: {
@@ -38,10 +42,6 @@ const init = async () => {
         index: true,
       }
     }
-  }, {
-    method: 'GET',
-    path: '/yaml-repo',
-    handler: repoHandler
   }]);
 
   await server.start();
