@@ -54,7 +54,7 @@ process.on('unhandledRejection', (err) => {
 
 // Crea l'indice inverso e il database delle PA
 require('./src/create-index.js')().then(() => {
-  if (fs.existsSync(whiteList)) {
+  if (JSON.parse(process.argv.includes('dev')) || fs.existsSync(whiteList)) {
     init();
   } else {
     console.log('Attenzione! Creare prima un file di creadenziali seguendo il modello di account-config-tpl.json');

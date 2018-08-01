@@ -2,6 +2,6 @@
     "host": "smtp.ethereal.email",
     "port": 587,
     "secure": false,
-    "hostReceiver": "localhost",
-    "portReceiver": 3000
+    "applicationHost": "localhost",
+    "applicationPort": 3000
 }

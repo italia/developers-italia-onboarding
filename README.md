@@ -10,6 +10,13 @@ npm install
 ```
 
 Avviare l'applicazione
-```bash
-npm start
-```
+    modalita' sviluppo
+        ```bash
+        npm start
+        ```
+    OPPURE
+    modalita' produzione
+        Creare nella cartella principale del progetto un file di nome 'account-config.json' basandosi sul template di 'account-config.json'
+        ```bash modalita' di produzione
+        npm run prod
+        ```
