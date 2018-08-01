@@ -19,6 +19,7 @@ module.exports = function (request, h) {
   if (!isValid(url)) {
     let data = { errorMsg: 'Indirizzo URL invalido: ricompila il form' };
     return h.view('main-content', data, { layout: 'index' });
+
   }
 
   // Generate test SMTP service account from ethereal.email
