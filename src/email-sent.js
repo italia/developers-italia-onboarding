@@ -55,7 +55,7 @@ module.exports = function (request) {
     });
   } else {
     const configAccountString = fs.readFileSync('account-config.json').toString('utf8');
-    const accountConfig = JSON.parse(configAccountString);
+    const accountConfig = JSON.parse(configAccountString); 
 
     const transporter = nodemailer.createTransport({
       host: mailServerConfig.host,
@@ -84,7 +84,7 @@ module.exports = function (request) {
     // setup email data with unicode symbols
     const mailOptions = {
       from: '"Team Digitale" <test@teamdigitale.com>', // sender address
-      to: 'giuseppesantoro87@gmail.com', // list of receivers
+      to: pec, // list of receivers
       subject: 'Onboarding Developer Italia', // Subject line
       html: mustache.render(template, {
         referente: referente,
