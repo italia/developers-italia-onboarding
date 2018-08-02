@@ -26,41 +26,60 @@ module.exports = function (request) {
   const pec = amministrazioni[ipa].pec;
   const amministrazione = amministrazioni[ipa].description;
 
+  //let transporter = null;
   if (db.get('registrati').find({ url: url }).value()) {
     return `La url ${url} esiste gia' nel database`;
   } else if (!isValid(url)) {
     return `La url ${url} non e' valida`;
   }
 
+  const mailServerConfig = JSON.parse(process.argv.includes('dev') ?
+    fs.readFileSync('config-dev.json').toString('utf8') :
+    fs.readFileSync('config-prod.json').toString('utf8'));
 
-  const mailServerConfig = JSON.parse((process.argv.includes('prod')) ? 
-    fs.readFileSync('config-prod.json').toString('utf8') : 
-    fs.readFileSync('config-dev.json').toString('utf8'));
+  if (process.argv.includes('dev')) {
+    // Generate test SMTP service account from ethereal.email
+    // Only needed if you don't have a real mail account for testing
+    nodemailer.createTestAccount((err, account) => {
+      // create reusable transporter object using the default SMTP transport
+      const transporter = nodemailer.createTransport({
+        host: mailServerConfig.host,
+        port: mailServerConfig.port,
+        secure: mailServerConfig.secure, // true for 465, false for other ports
+        auth: {
+          user: account.user,
+          pass: account.pass
+        }
+      });
+      sendEmail(transporter);
+    });
+  } else {
+    const configAccountString = fs.readFileSync('account-config.json').toString('utf8');
+    const accountConfig = JSON.parse(configAccountString);
 
-  const configAccountString = fs.readFileSync('account-config.json').toString('utf8');
-  const accountConfig = JSON.parse(configAccountString);
-
-  // Generate test SMTP service account from ethereal.email
-  // Only needed if you don't have a real mail account for testing
-  nodemailer.createTestAccount((err, account) => {
-    // create reusable transporter object using the default SMTP transport
     const transporter = nodemailer.createTransport({
       host: mailServerConfig.host,
       port: mailServerConfig.port,
       secure: mailServerConfig.secure, // true for 465, false for other ports
       auth: {
-        user: accountConfig.user, 
-        pass: accountConfig.pass 
+        user: accountConfig.user,
+        pass: accountConfig.pass
       }
     });
-    
-    const template = fs.readFileSync('src/tpl/email.mst').toString('utf8');
+    sendEmail(transporter);
+  }
 
+  function sendEmail(transporter) {
+    const template = fs.readFileSync('src/tpl/email.mst').toString('utf8');
     const token = jwt.sign({
       referente: referente,
       ipa: ipa,
       url: url
     }, key);
+
+    const destinationLink = JSON.parse(process.argv.includes('dev')) ?
+      `http://${mailServerConfig.applicationHost}:${mailServerConfig.applicationPort}/registered?token=${token}` :
+      `http://${mailServerConfig.applicationHost}/registered?token=${token}`;
 
     // setup email data with unicode symbols
     const mailOptions = {
@@ -71,7 +90,7 @@ module.exports = function (request) {
         referente: referente,
         url: url,
         amministrazione: amministrazione,
-        link: `http://${mailServerConfig.hostReceiver}:${mailServerConfig.portReceiver}/registered?token=${token}`
+        link: destinationLink
       })
     };
 
@@ -84,7 +103,7 @@ module.exports = function (request) {
       // Preview only available when sending through an Ethereal account
       console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
     });
-  });
+  }
 
   return `Abbiamo inviato il link con cui confermare l'iscrizione tramite email all'indirizzo ${pec}.`;
 };

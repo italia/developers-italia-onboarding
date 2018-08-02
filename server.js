@@ -57,6 +57,6 @@ require('./src/create-index.js')().then(() => {
   if (JSON.parse(process.argv.includes('dev')) || fs.existsSync(whiteList)) {
     init();
   } else {
-    console.log('Attenzione! Creare prima un file di creadenziali seguendo il modello di account-config-tpl.json');
+    console.log('Attenzione! Creare prima un file di credenziali "account-config.json" seguendo il modello di account-config-tpl.json');
   }
 });
