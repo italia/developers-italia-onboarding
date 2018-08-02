@@ -9,27 +9,17 @@ const parseDomain = require('parse-domain');
 const key = require('./get-jwt-key.js')();
 const amministrazioni = require('../public/assets/data/authorities.db.json');
 
-const low = require('lowdb');
-const FileSync = require('lowdb/adapters/FileSync');
-const whitelistFile = 'private/data/whitelist.db.json';
-fs.ensureFileSync(whitelistFile);
-const adapter = new FileSync(whitelistFile);
-const db = low(adapter);
-
-// Set some defaults (required if your JSON file is empty)
-db.defaults({ registrati: [] }).write();
-
-module.exports = function (request) {
+module.exports = function (request, h) {
   const referente = request.payload.nomeReferente;
   const ipa = request.payload.ipa;
   const url = request.payload.url;
   const pec = amministrazioni[ipa].pec;
   const amministrazione = amministrazioni[ipa].description;
 
-  if (db.get('registrati').find({ url: url }).value()) {
-    return `La url ${url} esiste gia' nel database`;
-  } else if (!isValid(url)) {
-    return `La url ${url} non e' valida`;
+  if (!isValid(url)) {
+    let data = { errorMsg: 'Indirizzo URL invalido: ricompila il form' };
+    return h.view('main-content', data, { layout: 'index' });
+
   }
 
   // Generate test SMTP service account from ethereal.email
@@ -78,7 +68,8 @@ module.exports = function (request) {
     });
   });
 
-  return `Abbiamo inviato il link con cui confermare l'iscrizione tramite email all'indirizzo ${pec}.`;
+  let data = { pec: pec };
+  return h.view('email-sent', data, { layout: 'index' });
 };
 
 /**

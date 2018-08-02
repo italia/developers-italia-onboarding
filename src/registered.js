@@ -12,7 +12,10 @@ fs.ensureFileSync(whitelistFile);
 const adapter = new FileSync(whitelistFile);
 const db = low(adapter);
 
-module.exports = function (request) {
+// Set some defaults (required if your JSON file is empty)
+db.defaults({ registrati: [] }).write();
+
+module.exports = function (request, h) {
   const token = request.query.token;
   const decoded = jwt.verify(token, key);
 
@@ -29,5 +32,6 @@ module.exports = function (request) {
       pec: pec
     })
     .write();
-  return 'Registrazione avvenuta con successo';
+
+  return h.view('confirmed', null, { layout: 'index' });
 };
