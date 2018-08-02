@@ -13,7 +13,6 @@ const db = low(adapter);
 db.defaults({ registrati: [] }).write();
 
 module.exports = function (request, h) {
-
   const referente = request.query.nomeReferente;
   const ipa = request.query.ipa;
   const url = request.query.url;
