@@ -9,7 +9,22 @@ Installare le dipendenze
 npm install
 ```
 
-Avviare l'applicazione
+Avviare l'applicazione con docker
+
+- Modalità sviluppo
+
 ```bash
-npm start
+docker build -t onboard .
+docker run -p 3000:3000 -e env=dev onboard 
+```
+
+- Modalita' produzione
+        
+Creare nella cartella principale del progetto un file di nome `account-config.json` basandosi sul template di `account-config.json`. 
+
+Lanciare i seguenti comandi
+
+```bash modalita' di produzione
+docker build -t onboard .
+docker run -p 3000:3000 -e env=dev onboard 
 ```
