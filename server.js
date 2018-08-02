@@ -3,54 +3,53 @@
 const Path = require('path');
 const Hapi = require('hapi');
 
-const emailSentHandler = require('./src/email-sent');
-const registeredHandler = require('./src/registered');
-
-const server = Hapi.server({
-    port: 3000,
-    host: 'localhost',
-    routes: {
-        files: {
-            relativeTo: Path.join(__dirname, 'public')
-        }
-    }
+require('./src/create-index.js')().then(() => {
+  init();
 });
 
-const init = async () => {
-    await server.register(require('inert'));
+async function init() {
 
-    server.route([{
-        method: 'POST',
-        path: '/email-sent',
-        handler: emailSentHandler
-    },{
-        method: 'GET',
-        path: '/registered',
-        handler: registeredHandler
-    },{
-        method: 'GET',
-        path: '/{param*}',
-        handler: {
-            directory: {
-                path: '.',
-                redirectToSlash: true,
-                index: true,
-            }
-        }
-    }]);
+  const emailSentHandler = require('./src/email-sent');
+  const registeredHandler = require('./src/registered');
 
-    await server.start();
-    console.log(`Server running at: ${server.info.uri}`);
-};
+  const server = Hapi.server({
+    port: 3000,
+    host: '0.0.0.0',
+    routes: {
+      files: {
+        relativeTo: Path.join(__dirname, 'public')
+      }
+    }
+  });
+
+  await server.register(require('inert'));
+
+  server.route([{
+    method: 'POST',
+    path: '/email-sent',
+    handler: emailSentHandler
+  }, {
+    method: 'GET',
+    path: '/registered',
+    handler: registeredHandler
+  }, {
+    method: 'GET',
+    path: '/{param*}',
+    handler: {
+      directory: {
+        path: '.',
+        redirectToSlash: true,
+        index: true,
+      }
+    }
+  }]);
+
+  await server.start();
+  console.log(`Server running at: ${server.info.uri}`);
+}
 
 process.on('unhandledRejection', (err) => {
 
-    console.log(err);
-    process.exit(1);
-});
-
-
-// Crea l'indice inverso e il database delle PA
-require('./src/create-index.js')().then(() => {
-    init();
+  console.log(err);
+  process.exit(1);
 });
