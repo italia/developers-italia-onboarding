@@ -19,18 +19,20 @@ const db = low(adapter);
 // Set some defaults (required if your JSON file is empty)
 db.defaults({ registrati: [] }).write();
 
-module.exports = function (request) {
+module.exports = function (request, h) {
   const referente = request.payload.nomeReferente;
   const ipa = request.payload.ipa;
   const url = request.payload.url;
   const pec = amministrazioni[ipa].pec;
   const amministrazione = amministrazioni[ipa].description;
 
-  //let transporter = null;
   if (db.get('registrati').find({ url: url }).value()) {
-    return `La url ${url} esiste gia' nel database`;
-  } else if (!isValid(url)) {
-    return `La url ${url} non e' valida`;
+    let data = { errorMsg: `La url ${url} esiste gia' nel database` };
+    return h.view('main-content', data, { layout: 'index' });
+  } 
+  if (!isValid(url)) {
+    let data = { errorMsg: 'Indirizzo URL invalido: ricompila il form' };
+    return h.view('main-content', data, { layout: 'index' });
   }
 
   const mailServerConfig = JSON.parse(process.argv.includes('dev') ?
@@ -105,14 +107,15 @@ module.exports = function (request) {
     });
   }
 
-  return `Abbiamo inviato il link con cui confermare l'iscrizione tramite email all'indirizzo ${pec}.`;
+  let data = { pec: pec };
+  return h.view('email-sent', data, { layout: 'index' });
 };
 
 /**
  * Controlla se l'URL e' ben formata e se il nome del dominio rientra in una whitelist di url.
- * 
+ *
  * @param url rappresenta l'url da controllare
- * 
+ *
  * @return true se la URL e' ben formata e se ientra in una whitelist, false altrimenti
  */
 function isValid(url) {
@@ -122,10 +125,10 @@ function isValid(url) {
 }
 
 /**
-* Controlla se il dominio della URL passata rientra in una whitelist di domini 
-* 
+* Controlla se il dominio della URL passata rientra in una whitelist di domini
+*
 * @param url rappresenta l'url da controllare
-* 
+*
 * @return true se l'url e' presente nella whitelist, false altrimenti
 */
 function isInWhiteList(url) {
@@ -161,11 +164,11 @@ function isInWhiteList(url) {
 
     let baseUrl = '';
 
-    /*  Gli url nella forma  https://try.gogs.io/<username>/<projectname>,  
-                            https://try.gitea.io/<username>/<projectname>, 
+    /*  Gli url nella forma  https://try.gogs.io/<username>/<projectname>,
+                            https://try.gitea.io/<username>/<projectname>,
                             https://secure.phabricator.com/project/view/395/
-        devono diventare    https://gogs.io/<username>/<projectname>,  
-                            https://gitea.io/<username>/<projectname>, 
+        devono diventare    https://gogs.io/<username>/<projectname>,
+                            https://gitea.io/<username>/<projectname>,
                             https://phabricator.com/project/view/<numProject>/
     */
     if (['gitea', 'gogs', 'phabricator'].includes(domain)) {

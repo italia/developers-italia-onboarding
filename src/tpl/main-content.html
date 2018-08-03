@@ -1,0 +1,50 @@
+<main id="content">
+    <div class="d-flex align-items-center justify-content-center main-content mt-5">
+      <div class="container">
+        <div class="row">
+          <div class="my-5 col-md-8">
+            <form action="email-sent" method="POST">
+              <h1>Registrazione</h1>
+                <br/>
+
+                <div class="form-group">
+                  <input type="text" class="form-control" id="nomeReferente" name="nomeReferente">
+                  <label for="nomeReferente">Nome Referente</label>
+                </div>
+
+                <div class="form-group">
+                  <i class="ico-prefix it-search"></i>
+                  <input type="text" class="form-control" id="ricercaAmministrazione">
+                  <label for="ricercaAmministrazione">Ricerca Amministrazione</label>
+                  <ul id="risultatoRicerca" class="autocomplete-wrap"></ul>
+                </div>
+
+                <div class="form-group active">
+                  <input type="text" class="form-control active" id="ipa" name="ipa" readonly>
+                  <label for="ipa">Codice iPA</label>
+                </div>
+
+                <div class="form-group active">
+                  <input type="text" class="form-control active" id="nomeAmministrazione" readonly>
+                  <label for="nomeAmministrazione">Amministrazione</label>
+                </div>
+
+                <div class="form-group active">
+                  <input type="text" class="form-control active" id="pec" readonly>
+                  <label for="pec">PEC</label>
+                </div>
+
+                <div class="form-group">
+                  <input type="text" class="form-control" id="url" name="url">
+                  <label for="url">URL strumento di code hosting</label>
+                </div>
+
+                <br>
+                <button type="submit" class="btn btn-primary">Registra</button>
+              
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>

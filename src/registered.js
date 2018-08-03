@@ -3,23 +3,20 @@
 const fs = require('fs-extra');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
-const jwt = require('jsonwebtoken');
-const amministrazioni = require('../public/assets/data/authorities.db.json');
-const key = require('./get-jwt-key.js')();
 
 const whitelistFile = 'private/data/whitelist.db.json';
 fs.ensureFileSync(whitelistFile);
 const adapter = new FileSync(whitelistFile);
 const db = low(adapter);
 
-module.exports = function (request) {
-  const token = request.query.token;
-  const decoded = jwt.verify(token, key);
+// Set some defaults (required if your JSON file is empty)
+db.defaults({ registrati: [] }).write();
 
-  const referente = decoded.referente;
-  const ipa = decoded.ipa;
-  const url = decoded.url;
-  const pec = amministrazioni[ipa].pec;
+module.exports = function (request, h) {
+  const referente = request.query.nomeReferente;
+  const ipa = request.query.ipa;
+  const url = request.query.url;
+  const pec = request.query.pec;
 
   db.get('registrati')
     .push({
@@ -29,5 +26,6 @@ module.exports = function (request) {
       pec: pec
     })
     .write();
-  return 'Registrazione avvenuta con successo';
+
+  return h.view('confirmed', null, { layout: 'index' });
 };
