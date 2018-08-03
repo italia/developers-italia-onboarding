@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon --watch src server.js"
+    "dev": "nodemon --watch src server.js dev",
+    "prod": "node server.js prod"
   },
   "repository": {
     "type": "git",
@@ -15,7 +16,7 @@
     "onboarding"
   ],
   "author": "Giuseppe Santoro",
-  "license": "BSD 3-Clause License",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/italia/onboarding.developers.italia.it/issues"
   },

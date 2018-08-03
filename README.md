@@ -14,8 +14,8 @@ Avviare l'applicazione con docker
 - Modalità sviluppo
 
 ```bash
-docker build -t onboard .
-docker run -p 3000:3000 -e env=dev onboard 
+docker build -t <imageName> .
+docker run -p 3000:3000 -e env=dev <imageName> 
 ```
 
 - Modalita' produzione
@@ -25,6 +25,6 @@ Creare nella cartella principale del progetto un file di nome `account-config.js
 Lanciare i seguenti comandi
 
 ```bash modalita' di produzione
-docker build -t onboard .
-docker run -p 3000:3000 -e env=dev onboard 
+docker build -t <imageName> .
+docker run -p 3000:3000 -e env=dev <imageName> 
 ```
