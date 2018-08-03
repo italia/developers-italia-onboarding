@@ -1,11 +1,15 @@
 'use strict';
 
+//const fs = require('fs');
 const Path = require('path');
 const Hapi = require('hapi');
+const Mustache = require('mustache');
 
 const emailSentHandler = require('./src/email-sent');
+const registerConfirmHandler = require('./src/register-confirm');
 const registeredHandler = require('./src/registered');
 const repoHandler = require('./src/repo-list');
+const homeHandler = require('./src/home');
 
 const server = Hapi.server({
   port: 3000,
@@ -19,6 +23,23 @@ const server = Hapi.server({
 
 const init = async () => {
   await server.register(require('inert'));
+  await server.register(require('vision'));
+
+  server.views({
+    engines: {
+      html: {
+        compile: (template) => {
+          Mustache.parse(template);
+
+          return (context) => Mustache.render(template, context);
+        }
+      }
+    },
+    relativeTo: __dirname,
+    path: 'src/tpl',
+    layout: true,
+    layoutPath: 'public'
+  });
 
   server.route([{
     method: 'POST',
@@ -26,13 +47,21 @@ const init = async () => {
     handler: emailSentHandler
   },{
     method: 'GET',
-    path: '/registered',
-    handler: registeredHandler
-  },{
-    method: 'GET',
     path: '/repo-list',
     handler: repoHandler
-  },{
+  }, {
+    method: 'GET',
+    path: '/register-confirm',
+    handler: registerConfirmHandler
+  }, {
+    method: 'GET',
+    path: '/registered',
+    handler: registeredHandler
+  }, {
+    method: 'GET',
+    path: '/',
+    handler: homeHandler
+  }, {
     method: 'GET',
     path: '/{param*}',
     handler: {
