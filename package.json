@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon --watch src server.js"
+    "dev": "nodemon --watch src server.js dev",
+    "prod": "node server.js prod"
   },
   "repository": {
     "type": "git",
