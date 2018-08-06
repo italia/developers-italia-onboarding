@@ -24,5 +24,5 @@ Lanciare i seguenti comandi
 
 ```bash modalita' di produzione
 docker build -t <imageName> .
-docker run -p 3000:3000 -e env=dev <imageName> 
+docker run -p 3000:3000 -e env=prod <imageName> 
 ```
