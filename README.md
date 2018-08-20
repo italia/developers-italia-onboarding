@@ -9,7 +9,20 @@ Installare le dipendenze
 npm install
 ```
 
-Avviare l'applicazione
+Avviare l'applicazione con docker
+
+- Modalità sviluppo
+
 ```bash
-npm start
+docker build -t <imageName> .
+docker run -p 3000:3000 -e env=[dev|pm-dev] <imageName> 
+```
+
+- Modalita' produzione
+        
+Lanciare i seguenti comandi
+
+```bash modalita' di produzione
+docker build -t <imageName> .
+docker run -p 3000:3000 -e env=pm-prod <imageName> 
 ```
