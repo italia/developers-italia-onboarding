@@ -5,8 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon --watch src server.js dev",
-    "pm-dev": "pm2-runtime server.js dev",
-    "pm-prod": "pm2-runtime server.js prod"
+    "pm-prod": "pm2-runtime server.js"
   },
   "repository": {
     "type": "git",
