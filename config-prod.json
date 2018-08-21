@@ -1,0 +1,7 @@
+{
+    "host": "",
+    "port": 587,
+    "secure": false,
+    "applicationHost": "",
+    "applicationPort": 80
+}
