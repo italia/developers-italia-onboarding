@@ -22,6 +22,10 @@ docker run -p 3000:3000 -e env=dev <imageName>
 
 - Modalita' produzione
         
+Creare nella cartella principale del progetto un file di nome `account-config.json` basandosi sul template di `account-config-tpl.json`.
+
+Configurare il file `config-prod.json`.
+
 Lanciare i seguenti comandi
 
 ```bash modalita' di produzione

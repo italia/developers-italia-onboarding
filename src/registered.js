@@ -20,7 +20,7 @@ module.exports = function (request, h) {
 
   console.log(referente + pec);
 
-  const aggiunto = db.get('registrati')
+  db.get('registrati')
     .push({
       referente: referente,
       ipa: ipa,
@@ -28,8 +28,6 @@ module.exports = function (request, h) {
       pec: pec
     })
     .write();
-
-  console.log(aggiunto);
 
   return h.view('confirmed', null, { layout: 'index' });
 };
