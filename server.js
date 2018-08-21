@@ -14,7 +14,7 @@ const init = async () => {
   const homeHandler = require('./src/home');
 
   const server = Hapi.server({
-    port: 3000,
+    port: 80,
     routes: {
       files: {
         relativeTo: Path.join(__dirname, 'public')
@@ -70,7 +70,7 @@ const init = async () => {
   }]);
 
   await server.start();
-  console.log(`Server running at: ${server.info.uri}`);
+  console.log(`Server is running at port ${server.info.port}`);
 };
 
 process.on('unhandledRejection', (err) => {

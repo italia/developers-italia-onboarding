@@ -3,5 +3,5 @@
     "port": 587,
     "secure": false,
     "applicationHost": "localhost",
-    "applicationPort": 3000
+    "applicationPort": 80
 }

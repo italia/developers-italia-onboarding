@@ -18,8 +18,6 @@ module.exports = function (request, h) {
   const url = request.query.url;
   const pec = request.query.pec;
 
-  console.log(referente + pec);
-
   db.get('registrati')
     .push({
       referente: referente,
