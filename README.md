@@ -26,3 +26,5 @@ Lanciare i seguenti comandi
 docker build -t <imageName> .
 docker run -p 80:80 -e env=pm-prod <imageName> 
 ```
+
+Per invocare la API che restituisce la lista relativa alle PA registrate, usare la URL `http://localhost/repo-list`
