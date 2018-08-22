@@ -11,6 +11,7 @@ const init = async () => {
   const emailSentHandler = require('./src/email-sent');
   const registerConfirmHandler = require('./src/register-confirm');
   const registeredHandler = require('./src/registered');
+  const repoHandler = require('./src/repo-list');
   const homeHandler = require('./src/home');
 
   const server = Hapi.server({
@@ -45,6 +46,10 @@ const init = async () => {
     method: 'POST',
     path: '/email-sent',
     handler: emailSentHandler
+  },{
+    method: 'GET',
+    path: '/repo-list',
+    handler: repoHandler
   }, {
     method: 'GET',
     path: '/register-confirm',
