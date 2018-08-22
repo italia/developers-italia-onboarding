@@ -2,3 +2,4 @@ node_modules/
 public/assets/data/authorities.index.json
 public/assets/data/authorities.db.json
 /private/data
+account-config.json
