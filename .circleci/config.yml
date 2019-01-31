@@ -25,7 +25,7 @@ jobs:
           scp -C ./onboarding.tar.gz circleci@developers.italia.it:/apps/www/onboarding.developers.italia.it/ 
           # Load, stop and restart new docker image
           ssh circleci@developers.italia.it << 'ENDSSH'
-              touch /apps/www/onboarding.developers.italia.it/smpt-account-config.json
+              touch /apps/www/onboarding.developers.italia.it/smtp-account-config.json
               gunzip -c onboarding.tar.gz | docker load /apps/www/onboarding.developers.italia.it/onboarding.tar.gz
               docker stop onboarding
               docker rm onboarding
