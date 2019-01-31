@@ -22,16 +22,19 @@ jobs:
             docker save onboarding | gzip > onboarding.tar.gz
       - run:
           name: Config Deployment Server
+          command: |
             # Add to known hosts
             mkdir -p ~/.ssh
             echo $SSH_KNOWN_HOSTS | base64 -d >> ~/.ssh/known_hosts
             # rsync folder to remote server 
       - run:
           name: Push Docker Image to Deployment Server
+          command: |
             scp -C ./onboarding.tar.gz circleci@developers.italia.it:/apps/www/onboarding.developers.italia.it/ 
             # Load, stop and restart new docker image
       - run:
           name: Swap Docker Images on Deployment Server
+          command: |
             ssh circleci@developers.italia.it << 'ENDSSH'
                 touch /apps/www/onboarding.developers.italia.it/smtp-account-config.json
                 gunzip -c onboarding.tar.gz | docker load /apps/www/onboarding.developers.italia.it/onboarding.tar.gz
