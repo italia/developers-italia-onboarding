@@ -10,9 +10,10 @@ jobs:
       
     working_directory: ~/repo
 
-    machine: true
     steps:
       - checkout
+
+      - setup_remote_docker
 
       # Build docker image
       - run: 
