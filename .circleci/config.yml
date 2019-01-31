@@ -1,0 +1,44 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: node:8-alpine 
+      
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Build docker image
+      - run: |
+          docker build -t onboarding .
+          # Save image to tar.gz file
+          docker save --output onboarding.tar onboarding
+          # Check `rsync` 
+          which rsync || sudo apt-get update && sudo apt-get install -y rsync
+          # Add to known hosts
+          mkdir -p ~/.ssh
+          echo $SSH_KNOWN_HOSTS | base64 -d >> ~/.ssh/known_hosts
+          # rsync folder to remote server 
+          rsync --delete -avP --rsync-path="sudo -u www-data rsync" ./onboarding.tar circleci@developers.italia.it:/apps/www/onboarding.developers.italia.it/ 
+          # Load, stop and restart new docker image
+          ssh circleci@developers.italia.it << 'ENDSSH'
+              docker load /apps/www/onboarding.developers.italia.it/onboarding.tar
+              docker stop onboarding
+              docker rm onboarding
+              docker run --name=onboarding --restart=always -p 8003:80 -e env=pm-prod onboarding
+          ENDSSH
+
+workflows:
+  version: 2
+  continuous-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+                only:
+                  - master
