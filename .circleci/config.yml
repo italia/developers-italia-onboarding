@@ -14,23 +14,31 @@ jobs:
       - checkout
 
       # Build docker image
-      - run: |
-          docker build -t onboarding .
-          # Save image to tar.gz file
-          docker save onboarding | gzip > onboarding.tar.gz
-          # Add to known hosts
-          mkdir -p ~/.ssh
-          echo $SSH_KNOWN_HOSTS | base64 -d >> ~/.ssh/known_hosts
-          # rsync folder to remote server 
-          scp -C ./onboarding.tar.gz circleci@developers.italia.it:/apps/www/onboarding.developers.italia.it/ 
-          # Load, stop and restart new docker image
-          ssh circleci@developers.italia.it << 'ENDSSH'
-              touch /apps/www/onboarding.developers.italia.it/smtp-account-config.json
-              gunzip -c onboarding.tar.gz | docker load /apps/www/onboarding.developers.italia.it/onboarding.tar.gz
-              docker stop onboarding
-              docker rm onboarding
-              docker run --name=onboarding --restart=always -p 8003:80 -e env=pm-prod -v /apps/www/onboarding.developers.italia.it/smtp-account-config.json:/usr/src/app/smtp-account-config.json onboarding 
-          ENDSSH
+      - run: 
+          name: Build Docker Image 
+          command: |
+            docker build -t onboarding .
+            # Save image to tar.gz file
+            docker save onboarding | gzip > onboarding.tar.gz
+      - run:
+          name: Config Deployment Server
+            # Add to known hosts
+            mkdir -p ~/.ssh
+            echo $SSH_KNOWN_HOSTS | base64 -d >> ~/.ssh/known_hosts
+            # rsync folder to remote server 
+      - run:
+          name: Push Docker Image to Deployment Server
+            scp -C ./onboarding.tar.gz circleci@developers.italia.it:/apps/www/onboarding.developers.italia.it/ 
+            # Load, stop and restart new docker image
+      - run:
+          name: Swap Docker Images on Deployment Server
+            ssh circleci@developers.italia.it << 'ENDSSH'
+                touch /apps/www/onboarding.developers.italia.it/smtp-account-config.json
+                gunzip -c onboarding.tar.gz | docker load /apps/www/onboarding.developers.italia.it/onboarding.tar.gz
+                docker stop onboarding
+                docker rm onboarding
+                docker run --name=onboarding --restart=always -p 8003:80 -e env=pm-prod -v /apps/www/onboarding.developers.italia.it/smtp-account-config.json:/usr/src/app/smtp-account-config.json onboarding 
+            ENDSSH
 
 workflows:
   version: 2
