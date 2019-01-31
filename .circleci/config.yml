@@ -29,7 +29,7 @@ jobs:
               gunzip -c onboarding.tar.gz | docker load /apps/www/onboarding.developers.italia.it/onboarding.tar.gz
               docker stop onboarding
               docker rm onboarding
-              docker run --name=onboarding --restart=always -p 8003:80 -e env=pm-prod -v $(pwd)/apps/www/onboarding.developers.italia.it/smtp-account-config.json:/usr/src/app/smtp-account-config.json onboarding 
+              docker run --name=onboarding --restart=always -p 8003:80 -e env=pm-prod -v /apps/www/onboarding.developers.italia.it/smtp-account-config.json:/usr/src/app/smtp-account-config.json onboarding 
           ENDSSH
 
 workflows:
@@ -40,4 +40,5 @@ workflows:
           filters:
             branches:
                 only:
-                  - master
+                  - deployment-config
+                  #- master
