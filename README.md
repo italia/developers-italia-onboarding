@@ -5,6 +5,66 @@ registrare i propri repository di code hosting sul portale `Developers Italia`.
 In questo modo sarà possibile aggiungere il repository alla lista indicizzata
 dal *crawler* del portale che popolerà il catalogo del riuso. 
 
+# Flow dell'applicativo
+
+1. Inserimento da parte della PA dei dati relativi all'organizzazione.
+N.B. Utilizzando la funzionalità di *ricerca amministrazione* i dati verranno
+automaticamente inseriti nei campi *Codice iPA, Amministrazione e PEC*. 
+2. Dopo aver selezionato il pulsante *Registra*, l'applicativo invierà una PEC
+   all'indirizzo email dell'amministrazione indicato nel form. 
+3. All'interno della email inviata è presente un link per confermare la
+   registrazione. Cliccando sul link si arriverà ad una pagina di conferma. 
+4. Selezionando *Registra* nella pagina di conferma l'amministrazione sarà
+   registrata. 
+
+
+# Formati 
+
+Le informazioni vengono salvate in un file JSON con la seguente struttura:
+
+```json
+{
+  "registrati": [
+    {
+      "referente": "pluto",
+      "ipa": "c_a123",
+      "url": "https://github.com/undefined",
+      "pec": "protocollo.comunemaramao@pec.it"
+    },
+    {
+      "referente": "pluto",
+      "ipa": "c_a123",
+      "url": "https://gitlab.com/undefined",
+      "pec": "protocollo.comunemaramao@pec.it"
+    }
+  ]
+}
+```
+
+Come si può notare, la stessa PA può registrare diverse URL per repository di
+codice pubblico. 
+
+# Percorsi
+Le PA registrate vengono salvate all'interno del file
+`private/whitelist.db.json`. 
+Per invocare la API che restituisce la lista delle PA registrate, usare
+la URL `http://localhost/repo-list`.
+Il formato ritornato è il seguente:
+
+```yaml
+---
+  registrati: 
+    - 
+      ipa: "c_a123"
+      url: "https://github.com/undefined"
+      pec: "protocollo.comunemaramao@pec.it"
+    - 
+      ipa: "c_a123"
+      url: "https://gitlab.com/undefined"
+      pec: "protocollo.comunemaramao@pec.it"
+```
+
+
 # Avvio del progetto 
 
 ## Modalità di sviluppo (dev)
@@ -73,12 +133,6 @@ Per far ciò, lanciare i seguenti comandi:
 docker build -t <imageName> .
 docker run -p 80:80 -e env=pm-prod <imageName> 
 ```
-
-# Percorsi
-Le PA registrate vengono salvate all'interno del file
-`private/whitelist.db.json`. 
-Per invocare la API che restituisce la lista delle PA registrate, usare
-la URL `http://localhost/repo-list`.
 
 # LICENSE
 Questo progetto è coperto da una licenza di tipo BSD 3-Clause License (codice
