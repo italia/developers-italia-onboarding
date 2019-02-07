@@ -29,6 +29,5 @@ workflows:
           filters:
             branches:
                 only:
-                  - deployment-config
-                  #- master
+                  - master
 
