@@ -42,7 +42,7 @@ module.exports = function (request, h) {
       sendEmail(transporter);
     });
   } else {
-    const configAccountString = fs.readFileSync('account-config.json').toString('utf8');
+    const configAccountString = fs.readFileSync('smtp-account-config.json').toString('utf8');
     const accountConfig = JSON.parse(configAccountString); 
 
     const transporter = nodemailer.createTransport({
