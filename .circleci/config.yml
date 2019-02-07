@@ -13,37 +13,16 @@ jobs:
     steps:
       - checkout
 
-      - setup_remote_docker
-
-      # Build docker image
+      # npm build 
       - run: 
-          name: Build Docker Image 
-          command: |
-            docker build -t onboarding .
-            # Save image to tar.gz file
-            docker save onboarding | gzip > onboarding.tar.gz
+          name: npm install 
+          command: npm install
       - run:
-          name: Config Deployment Server
-          command: |
-            # Add to known hosts
-            mkdir -p ~/.ssh
-            echo $SSH_KNOWN_HOSTS | base64 -d >> ~/.ssh/known_hosts
-            # rsync folder to remote server 
-      - run:
-          name: Push Docker Image to Deployment Server
-          command: |
-            scp -C ./onboarding.tar.gz circleci@developers.italia.it:/apps/www/onboarding.developers.italia.it/ 
-            # Load, stop and restart new docker image
-      - run:
-          name: Swap Docker Images on Deployment Server
-          command: |
-            ssh circleci@developers.italia.it << 'ENDSSH'
-                touch /apps/www/onboarding.developers.italia.it/smtp-account-config.json
-                gunzip -c /apps/www/onboarding.developers.italia.it/onboarding.tar.gz | docker load 
-                docker stop onboarding
-                docker rm onboarding
-                docker run --name=onboarding --restart=always -p 8003:80 -e env=pm-prod -v /apps/www/onboarding.developers.italia.it/smtp-account-config.json:/usr/src/app/smtp-account-config.json onboarding 
-            ENDSSH
+          name: npm lint 
+          command: npm run lint
+      #- run:
+          #name: npm test 
+          #command: npm run test
 
 workflows:
   version: 2

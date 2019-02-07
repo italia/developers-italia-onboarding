@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "lint": "eslint .", 
     "dev": "nodemon --watch src server.js dev",
     "pm-prod": "pm2-runtime server.js"
   },
