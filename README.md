@@ -1,4 +1,6 @@
 # Onboarding
+![Build Status](https://img.shields.io/circleci/project/github/italia/developers-italia-onboarding/master.svg?style=flat
+) ![Issues](https://img.shields.io/github/issues/italia/developers-italia-onboarding.svg) ![License](https://img.shields.io/github/license/italia/developers-italia-onboarding.svg?style=flat)
 
 Tramite l'applicazione di onboarding, le PA avranno la possibilità di
 registrare i propri repository di code hosting sul portale `Developers Italia`.
