@@ -6,10 +6,74 @@
             <form action="email-sent" method="POST">
               <h1>Registrazione</h1>
                 <br/>
+                <p>
+                  <a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                   Per maggiori Informazioni 
+                  </a>
+                </p>
+                <div class="collapse" id="collapseExample">
+                  <div class="card card-body">
+                    Attraverso questo form, le Pubbliche Amministrazioni
+                    possono registrare il proprio repository di codice sorgente
+                    pubblico all'interno di Developers Italia. In questo modo
+                    il crawler del portale sarà in grado di verificare la
+                    presenza del file publiccode.yml nei singoli repository
+                    e pubblicarne i dati relativi all'interno del catalogo del
+                    software a riuso. Tutti i campi sono obbligatori. </br></br>
+
+                    <div id="collapseDiv1" class="collapse-div" role="tablist">
+                      <div class="collapse-header" id="heading1">
+                        <button data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+                          Nome e Cognome 
+                        </button>
+                      </div>
+                      <div id="collapse1" class="collapse" role="tabpanel" aria-labelledby="heading1">
+                        <div class="collapse-body">
+                          Nome e Cognome del referente devono essere inseriti.
+                        </div>
+                      </div>
+                      <div class="collapse-header" id="heading2">
+                        <button data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                          Ricerca
+                        </button>
+                      </div>
+                      <div id="collapse2" class="collapse" role="tabpanel" aria-labelledby="heading2">
+                        <div class="collapse-body">
+                          Tramite la barra di ricerca è possibile individuare
+                          e popolare automaticamente i seguenti 3 campi (Codice
+                          iPA, Amministrazione e Indirizzo PEC). Questi dati
+                          sono forniti da <i>indicepa.gov.it</i>.
+                        </div>
+                      </div>
+                      <div class="collapse-header" id="heading3">
+                        <button data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                          URL Repository  
+                        </button>
+                      </div>
+                      <div id="collapse3" class="collapse" role="tabpanel" aria-labelledby="heading3">
+                        <div class="collapse-body">
+                          In questo campo è necessario specificare la URL completa dell'organizzazione all'interno del repository.
+                          Ad esempio, se l'organizzazione si chiama
+                          <i>italia</i> ed è ospitata su <i>GitHub</i>, la URL
+                          da inserire sarà <i>https://github.com/italia</i>.</br>
+                          NB: attualmente i seguenti repository sono supportati:
+                          <ul>
+                            <li>https://github.com/</li>
+                            <li>https://bitbucket.org/</li>
+                            <li>https://gitlab.com/</li>
+                            <li>https://phabricator.com/</li>
+                            <li>https://gitea.io/</li>
+                            <li>https://gogs.io/</li>
+                          </ul> 
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 <div class="form-group">
-                  <input type="text" class="form-control" id="nomeReferente" name="nomeReferente">
-                  <label for="nomeReferente">Nome Referente</label>
+                  <input type="text" class="form-control" id="nomeReferente" name="nomeReferente" required>
+                  <label for="nomeReferente">Nome e Cognome Referente *</label>
                 </div>
 
                 <div class="form-group">
@@ -21,22 +85,22 @@
 
                 <div class="form-group active">
                   <input type="text" class="form-control active" id="ipa" name="ipa" readonly>
-                  <label for="ipa">Codice iPA</label>
+                  <label for="ipa">Codice iPA *</label>
                 </div>
 
                 <div class="form-group active">
                   <input type="text" class="form-control active" id="nomeAmministrazione" readonly>
-                  <label for="nomeAmministrazione">Amministrazione</label>
+                  <label for="nomeAmministrazione">Amministrazione *</label>
                 </div>
 
                 <div class="form-group active">
                   <input type="text" class="form-control active" id="pec" readonly>
-                  <label for="pec">PEC</label>
+                  <label for="pec">PEC *</label>
                 </div>
 
                 <div class="form-group">
-                  <input type="text" class="form-control" id="url" name="url">
-                  <label for="url">URL strumento di code hosting</label>
+                  <input type="text" class="form-control" id="url" name="url" required>
+                  <label for="url">URL dell'organizzazione nello strumento di code hosting (e.g., github.com/italia) *</label>
                 </div>
 
                 <br>
