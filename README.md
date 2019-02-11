@@ -66,6 +66,19 @@ Il formato ritornato è il seguente:
       pec: "protocollo.comunemaramao@pec.it"
 ```
 
+# Repository supportati
+
+Al momento i seguenti repository sono supportati:
+```
+   'https://github.com/',
+   'https://bitbucket.org/',
+   'https://gitlab.com/',
+   'https://phabricator.com/',
+   'https://gitea.io/',
+   'https://gogs.io/'
+```
+La lista è in continua evoluzione. 
+
 
 # Avvio del progetto 
 
