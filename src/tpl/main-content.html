@@ -4,22 +4,18 @@
         <div class="row">
           <div class="my-5 col-md-8">
             <form action="email-sent" method="POST">
-              <h1>Registrazione</h1>
+              <h1>Registra il tuo repository</h1>
                 <br/>
-                <p>
-                  <a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                   Per maggiori Informazioni 
-                  </a>
-                </p>
-                <div class="collapse" id="collapseExample">
-                  <div class="card card-body">
+                <h5>
                     Attraverso questo form, le Pubbliche Amministrazioni
                     possono registrare il proprio repository di codice sorgente
-                    pubblico all'interno di Developers Italia. In questo modo
-                    il crawler del portale sarà in grado di verificare la
-                    presenza del file publiccode.yml nei singoli repository
-                    e pubblicarne i dati relativi all'interno del catalogo del
-                    software a riuso. Tutti i campi sono obbligatori. </br></br>
+                    pubblico all'interno di <a href="//developers.italia.it">Developers Italia</a>. 
+                    In questo modo, il crawler del portale sarà in grado di verificare la
+                    presenza del file <a href="//github.com/italia/publiccode.yml">publiccode.yml</a> 
+                    nei singoli repository e pubblicarne i relativi dati
+                    all'interno del catalogo del software a riuso. Segue una
+                    descrizione dei singoli campi:
+                </h5>
 
                     <div id="collapseDiv1" class="collapse-div" role="tablist">
                       <div class="collapse-header" id="heading1">
@@ -29,12 +25,16 @@
                       </div>
                       <div id="collapse1" class="collapse" role="tabpanel" aria-labelledby="heading1">
                         <div class="collapse-body">
-                          Nome e Cognome del referente devono essere inseriti.
+                          Nome e Cognome del referente devono essere inseriti.</br>
+                          NB: siccome per completare la procedura è necessario
+                          leggere il messaggio PEC inviato all'indirizzo di
+                          riferimento dell'amministrazione, è bene che il
+                          referente abbia accesso a tale indirizzo. 
                         </div>
                       </div>
                       <div class="collapse-header" id="heading2">
                         <button data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                          Ricerca
+                          Ricerca Amministrazione
                         </button>
                       </div>
                       <div id="collapse2" class="collapse" role="tabpanel" aria-labelledby="heading2">
@@ -65,12 +65,14 @@
                             <li>https://gitea.io/</li>
                             <li>https://gogs.io/</li>
                           </ul> 
+                          Inoltre, ogni PA può aggiungere diversi repository e/o organizzazioni.  
                         </div>
                       </div>
-                    </div>
-                  </div>
                 </div>
-
+                <p>
+                <h5>Qui di seguito è possibile compilare il form.</br>
+                Si ricorda come tutti i campi sono obbligatori. </h5>
+                </p>
                 <div class="form-group">
                   <input type="text" class="form-control" id="nomeReferente" name="nomeReferente" required>
                   <label for="nomeReferente">Nome e Cognome Referente *</label>
