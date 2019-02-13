@@ -4,7 +4,7 @@ function setUpSearchbar(idx, db) {
 
         if (this.value.length < 3) return;
 
-        var results = idx.search(this.value).slice(0, 4);
+        var results = idx.search(this.value).slice(0, 50);
         if (results.length > 0) {
             var resultsElem = $('#risultatoRicerca');
 

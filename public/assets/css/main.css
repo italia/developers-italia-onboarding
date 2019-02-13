@@ -1,3 +1,15 @@
 #middle-content {
     min-height: calc(100vh - 330px);
 }
+
+.alert {
+  margin-top: 1%;
+}
+
+#collapseDiv1{
+  margin-top: 2%;
+}
+
+.child{
+  margin-left: 4%;
+}
