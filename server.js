@@ -14,8 +14,12 @@ const init = async () => {
   const repoHandler = require('./src/repo-list');
   const homeHandler = require('./src/home');
 
+  const appConfig = JSON.parse(process.argv.includes('dev') ?
+    fs.readFileSync('config-dev.json').toString('utf8') :
+    fs.readFileSync('config-prod.json').toString('utf8'));
+
   const server = Hapi.server({
-    port: 80,
+    port: appConfig.applicationPort,
     routes: {
       files: {
         relativeTo: Path.join(__dirname, 'public')
