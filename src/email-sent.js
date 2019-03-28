@@ -8,6 +8,9 @@ const { URL } = require('url');
 const parseDomain = require('parse-domain');
 const key = require('./get-jwt-key.js')();
 const amministrazioni = require('../public/assets/data/authorities.db.json');
+const validateUrl = require('./validator.js');
+const { VALIDATION_OK, VALIDATION_NOT_WHITELIST, VALIDATION_INVALID_URL } = require('./validator-result.js');
+const getErrorMessage = require('./validation-error-message.js');
 
 module.exports = function (request, h) {
   const referente = request.payload.nomeReferente;
@@ -16,8 +19,9 @@ module.exports = function (request, h) {
   const pec = amministrazioni[ipa].pec;
   const amministrazione = amministrazioni[ipa].description;
 
-  if (!isValid(url)) {
-    let data = { errorMsg: 'Indirizzo URL invalido: ricompila il form' };
+  let validationResult = validateUrl(url);
+  if (validationResult != VALIDATION_OK) {
+    let data = { errorMsg: getErrorMessage(validationResult) };
     return h.view('main-content', data, { layout: 'index' });
   }
 
