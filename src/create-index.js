@@ -145,11 +145,6 @@ const parseContent = (data_csv) => {
     const data = papa.parse(data_csv).data;
     let arr = [];
     data.shift();
-    arr[COD_AMM] = 'sebba';
-    arr[DES_AMM] = 'sebba azienda';
-    arr[MAIL1] = 'sebbalex@gmail.com';
-    arr[TIPO_MAIL1] = 'pec';
-    data.push(arr);
 
     console.log('index data in lunar.js format');
     let paDb = {};
