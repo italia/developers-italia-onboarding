@@ -19,7 +19,7 @@ const init = async () => {
     fs.readFileSync('config-prod.json').toString('utf8'));
 
   const server = Hapi.server({
-    port: appConfig.applicationPort,
+    port: appConfig.applicationPort ? appConfig.applicationPort :  80,
     routes: {
       files: {
         relativeTo: Path.join(__dirname, 'public')

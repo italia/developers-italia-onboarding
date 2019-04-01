@@ -7,25 +7,32 @@ const jwt = require('jsonwebtoken');
 const key = require('./get-jwt-key.js')();
 const amministrazioni = require('../public/assets/data/authorities.db.json');
 const validateUrl = require('./validator.js');
-const { VALIDATION_OK, VALIDATION_NOT_WHITELIST, VALIDATION_INVALID_URL } = require('./validator-result.js');
+const {VALIDATION_OK} = require('./validator-result.js');
 const getErrorMessage = require('./validation-error-message.js');
 
 module.exports = function (request, h) {
+  const mailServerConfig = JSON.parse(process.argv.includes('dev') ?
+    fs.readFileSync('config-dev.json').toString('utf8') :
+    fs.readFileSync('config-prod.json').toString('utf8'));
+
   const referente = request.payload.nomeReferente;
   const ipa = request.payload.ipa;
   const url = request.payload.url;
-  const pec = amministrazioni[ipa].pec;
+  const pec =
+    mailServerConfig.overrideRecipient && mailServerConfig.overrideMail ?
+      mailServerConfig.overrideMail.rcpt :
+      amministrazioni[ipa].pec;
+  const originalPec =
+    mailServerConfig.overrideRecipient && mailServerConfig.overrideMail ?
+      amministrazioni[ipa].pec :
+      '';
   const amministrazione = amministrazioni[ipa].description;
 
   let validationResult = validateUrl(url);
   if (validationResult != VALIDATION_OK) {
-    let data = { errorMsg: getErrorMessage(validationResult) };
-    return h.view('main-content', data, { layout: 'index' });
+    let data = {errorMsg: getErrorMessage(validationResult)};
+    return h.view('main-content', data, {layout: 'index'});
   }
-
-  const mailServerConfig = JSON.parse(process.argv.includes('dev') ?
-    fs.readFileSync('config-dev.json').toString('utf8') :
-    fs.readFileSync('config-prod.json').toString('utf8'));
 
   if (process.argv.includes('dev')) {
     // Generate test SMTP service account from ethereal.email
@@ -67,7 +74,7 @@ module.exports = function (request, h) {
       url: url
     }, key);
 
-    const destinationLink = JSON.parse(process.argv.includes('dev')) ?
+    const destinationLink = mailServerConfig.applicationPort ?
       `http://${mailServerConfig.applicationHost}:${mailServerConfig.applicationPort}/register-confirm?token=${token}` :
       `http://${mailServerConfig.applicationHost}/register-confirm?token=${token}`;
 
@@ -80,7 +87,8 @@ module.exports = function (request, h) {
         referente: referente,
         url: url,
         amministrazione: amministrazione,
-        link: destinationLink
+        link: destinationLink,
+        originalPec: originalPec
       })
     };
 
@@ -95,6 +103,6 @@ module.exports = function (request, h) {
     });
   }
 
-  let data = { pec: pec };
-  return h.view('email-sent', data, { layout: 'index' });
+  let data = {pec: pec};
+  return h.view('email-sent', data, {layout: 'index'});
 };
