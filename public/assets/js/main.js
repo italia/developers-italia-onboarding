@@ -1,3 +1,38 @@
+const ipaInput = document.querySelector('input#ipa');
+const refInput = document.querySelector('input#nomeReferente');
+const urlInput = document.querySelector('input#url');
+
+
+ipaInput.addEventListener('input', () => {
+  ipaInput.setCustomValidity('');
+  ipaInput.checkValidity();
+});
+
+refInput.addEventListener('input', () => {
+  refInput.setCustomValidity('');
+  refInput.checkValidity();
+});
+
+urlInput.addEventListener('input', () => {
+  urlInput.setCustomValidity('');
+  urlInput.checkValidity();
+});
+
+ipaInput.addEventListener('invalid', () => {
+  if (ipaInput.value === '')
+    ipaInput.setCustomValidity('Selezionare un\'amministrazione dal campo Ricerca Amministrazione!');
+});
+
+refInput.addEventListener('invalid', () => {
+  if (refInput.value === '')
+    refInput.setCustomValidity('Specificare un referente per l\'amministrazione!');
+});
+
+urlInput.addEventListener('invalid', () => {
+  if (urlInput.value === '')
+    urlInput.setCustomValidity('Specificare un URL di riferimento!');
+});
+
 function setUpSearchbar(idx, db) {
   $('#ricercaAmministrazione').keyup(function () {
     $('#risultatoRicerca').empty();
@@ -22,9 +57,10 @@ function setUpSearchbar(idx, db) {
         $('#nomeAmministrazione').val(this.dataset.description);
         $('#pec').val(this.dataset.pec);
         $('#risultatoRicerca').empty();
+        ipaInput.setCustomValidity('');
+        ipaInput.checkValidity();
       });
     }
-
   });
 }
 
@@ -40,3 +76,9 @@ $.get("assets/data/authorities.index.json", function (rowIndex) {
     setUpSearchbar(idx, db);
   });
 });
+
+//hack to make readonly fields required and validate them
+$(".readonly").on('keydown paste', function (e) {
+  e.preventDefault();
+});
+
