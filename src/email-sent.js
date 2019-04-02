@@ -78,11 +78,19 @@ module.exports = function (request, h) {
       `http://${mailServerConfig.applicationHost}:${mailServerConfig.applicationPort}/register-confirm?token=${token}` :
       `http://${mailServerConfig.applicationHost}/register-confirm?token=${token}`;
 
+    const from = mailServerConfig.mailTemplate && mailServerConfig.mailTemplate.from ?
+      mailServerConfig.mailTemplate.from :
+      '"Team Digitale" <test@teamdigitale.com>';
+
+    const subject = mailServerConfig.mailTemplate && mailServerConfig.mailTemplate.subject ?
+      mailServerConfig.mailTemplate.subject :
+      'Onboarding Developer Italia';
+
     // setup email data with unicode symbols
     const mailOptions = {
-      from: '"Team Digitale" <test@teamdigitale.com>', // sender address
+      from: from, // sender address
       to: pec, // list of receivers
-      subject: 'Onboarding Developer Italia', // Subject line
+      subject: subject, // Subject line
       html: mustache.render(template, {
         referente: referente,
         url: url,
