@@ -9,19 +9,19 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   echo "Pulling docker image"
   docker pull italia/developers-italia-onboarding
   echo "Stopping and removing container"
-  docker stop onboarding
-  docker rm onboarding
+  docker stop developers-italia-onboarding
+  docker rm developers-italia-onboarding
   echo "Creating new container from base image"
-  docker create --name=onboarding \
+  docker create --name=developers-italia-onboarding \
     --restart=always \
-    -p 8003:80 \
+    -p 8003:3000 \
     -e env=pm-prod \
     -v /apps/www/onboarding.developers.italia.it/smtp-account-config.json:/usr/src/app/smtp-account-config.json \
     -v /apps/www/onboarding.developers.italia.it/config-prod.json:/usr/src/app/config-prod.json \
-    -v /data/crawler/indicepa.csv:/usr/src/app/indicepa.csv \
+    -v /data/crawler/indicepa.csv:/usr/src/app/amministrazioni.txt \
       onboarding 
   echo "Starting new container"
-  docker start onboarding
-  docker ps | grep onboarding
+  docker start developers-italia-onboarding
+  docker ps | grep developers-italia-onboarding
   echo "Done."
 fi
