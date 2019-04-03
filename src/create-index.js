@@ -143,7 +143,6 @@ const parseContent = (data_csv) => {
   return new Promise((resolve) => {
     console.log('converting the CSV string in an array');
     const data = papa.parse(data_csv).data;
-    let arr = [];
     data.shift();
 
     console.log('index data in lunar.js format');

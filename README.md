@@ -137,7 +137,7 @@ informazioni:
     },
     "mailTemplate": {
       "from": "\"Team Digitale\" <test@teamdigitale.com>",
-      "subject": "Onboarding Developer Italia"
+      "subject": "Onboarding Developers Italia"
     }
 }
 ```

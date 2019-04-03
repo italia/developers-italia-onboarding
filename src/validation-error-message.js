@@ -15,15 +15,14 @@ function getErrorMessage(validatorResult) {
 
   let message = '';
   switch (validatorResult) {
-    case VALIDATION_INVALID_URL:
-      message = 'Indirizzo URL invalido: ricompila il form';
-      break;
-    case VALIDATION_NOT_WHITELIST:
-      message = 'Indirizzo URL non presente nella whitelist: ricompila il form';
-      break;
-    default:
-      throw new Error('Url non valido');
-      break;
+  case VALIDATION_INVALID_URL:
+    message = 'Indirizzo URL invalido: ricompila il form';
+    break;
+  case VALIDATION_NOT_WHITELIST:
+    message = 'Indirizzo URL non presente nella whitelist: ricompila il form';
+    break;
+  default:
+    throw new Error('Url non valido');
   }
 
   return message;
