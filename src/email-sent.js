@@ -111,6 +111,6 @@ module.exports = function (request, h) {
     });
   }
 
-  let data = {pec: pec};
+  let data = {pec: originalPec};
   return h.view('email-sent', data, {layout: 'index'});
 };
