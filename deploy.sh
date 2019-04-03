@@ -17,6 +17,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     -p 8003:80 \
     -e env=pm-prod \
     -v /apps/www/onboarding.developers.italia.it/smtp-account-config.json:/usr/src/app/smtp-account-config.json \
+    -v /apps/www/onboarding.developers.italia.it/config-prod.json:/usr/src/app/config-prod.json \
     -v /data/crawler/indicepa.csv:/usr/src/app/indicepa.csv \
       onboarding 
   echo "Starting new container"
