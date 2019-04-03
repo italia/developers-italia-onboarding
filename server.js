@@ -19,7 +19,7 @@ const init = async () => {
     fs.readFileSync('config-prod.json').toString('utf8'));
 
   const server = Hapi.server({
-    port: appConfig.applicationPort,
+    port: appConfig.applicationPort ? appConfig.applicationPort : 80,
     routes: {
       files: {
         relativeTo: Path.join(__dirname, 'public')
@@ -46,11 +46,22 @@ const init = async () => {
     layoutPath: 'public'
   });
 
+
   server.route([{
+    method: 'GET',
+    path: '/assets/js/jquery/{param*}',
+    handler: {
+      directory: {
+        path: '../node_modules/jquery/dist/',
+        redirectToSlash: true,
+        index: false
+      }
+    }
+  }, {
     method: 'POST',
     path: '/email-sent',
     handler: emailSentHandler
-  },{
+  }, {
     method: 'GET',
     path: '/repo-list',
     handler: repoHandler
@@ -76,7 +87,8 @@ const init = async () => {
         index: true,
       }
     }
-  }]);
+  }
+  ]);
 
   await server.start();
   console.log(`Server is running at port ${server.info.port}`);

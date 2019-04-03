@@ -4,26 +4,35 @@ const fs = require('fs-extra');
 const nodemailer = require('nodemailer');
 const mustache = require('mustache');
 const jwt = require('jsonwebtoken');
-const { URL } = require('url');
-const parseDomain = require('parse-domain');
 const key = require('./get-jwt-key.js')();
 const amministrazioni = require('../public/assets/data/authorities.db.json');
+const validateUrl = require('./validator.js');
+const {VALIDATION_OK} = require('./validator-result.js');
+const getErrorMessage = require('./validation-error-message.js');
 
 module.exports = function (request, h) {
-  const referente = request.payload.nomeReferente;
-  const ipa = request.payload.ipa;
-  const url = request.payload.url;
-  const pec = amministrazioni[ipa].pec;
-  const amministrazione = amministrazioni[ipa].description;
-
-  if (!isValid(url)) {
-    let data = { errorMsg: 'Indirizzo URL invalido: ricompila il form' };
-    return h.view('main-content', data, { layout: 'index' });
-  }
-
   const mailServerConfig = JSON.parse(process.argv.includes('dev') ?
     fs.readFileSync('config-dev.json').toString('utf8') :
     fs.readFileSync('config-prod.json').toString('utf8'));
+
+  const referente = request.payload.nomeReferente;
+  const ipa = request.payload.ipa;
+  const url = request.payload.url;
+  const pec =
+    mailServerConfig.overrideRecipient && mailServerConfig.overrideMail ?
+      mailServerConfig.overrideMail.rcpt :
+      amministrazioni[ipa].pec;
+  const originalPec =
+    mailServerConfig.overrideRecipient && mailServerConfig.overrideMail ?
+      amministrazioni[ipa].pec :
+      '';
+  const amministrazione = amministrazioni[ipa].description;
+
+  let validationResult = validateUrl(url);
+  if (validationResult != VALIDATION_OK) {
+    let data = {errorMsg: getErrorMessage(validationResult)};
+    return h.view('main-content', data, {layout: 'index'});
+  }
 
   if (process.argv.includes('dev')) {
     // Generate test SMTP service account from ethereal.email
@@ -43,7 +52,7 @@ module.exports = function (request, h) {
     });
   } else {
     const configAccountString = fs.readFileSync('smtp-account-config.json').toString('utf8');
-    const accountConfig = JSON.parse(configAccountString); 
+    const accountConfig = JSON.parse(configAccountString);
 
     const transporter = nodemailer.createTransport({
       host: mailServerConfig.host,
@@ -65,20 +74,29 @@ module.exports = function (request, h) {
       url: url
     }, key);
 
-    const destinationLink = JSON.parse(process.argv.includes('dev')) ?
+    const destinationLink = mailServerConfig.applicationPort ?
       `http://${mailServerConfig.applicationHost}:${mailServerConfig.applicationPort}/register-confirm?token=${token}` :
       `http://${mailServerConfig.applicationHost}/register-confirm?token=${token}`;
 
+    const from = mailServerConfig.mailTemplate && mailServerConfig.mailTemplate.from ?
+      mailServerConfig.mailTemplate.from :
+      '"Team Digitale" <test@teamdigitale.com>';
+
+    const subject = mailServerConfig.mailTemplate && mailServerConfig.mailTemplate.subject ?
+      mailServerConfig.mailTemplate.subject :
+      'Onboarding Developer Italia';
+
     // setup email data with unicode symbols
     const mailOptions = {
-      from: '"Team Digitale" <test@teamdigitale.com>', // sender address
+      from: from, // sender address
       to: pec, // list of receivers
-      subject: 'Onboarding Developer Italia', // Subject line
+      subject: subject, // Subject line
       html: mustache.render(template, {
         referente: referente,
         url: url,
         amministrazione: amministrazione,
-        link: destinationLink
+        link: destinationLink,
+        originalPec: originalPec
       })
     };
 
@@ -93,77 +111,6 @@ module.exports = function (request, h) {
     });
   }
 
-  let data = { pec: pec };
-  return h.view('email-sent', data, { layout: 'index' });
+  let data = {pec: pec};
+  return h.view('email-sent', data, {layout: 'index'});
 };
-
-/**
- * Controlla se l'URL e' ben formata e se il nome del dominio rientra in una whitelist di url.
- *
- * @param url rappresenta l'url da controllare
- *
- * @return true se la URL e' ben formata e se ientra in una whitelist, false altrimenti
- */
-function isValid(url) {
-  const generalRegex = /^(https?):\/\/(www\.)?([a-z]+)(\.([\da-zA-Z-]+)){1,2}(\/[\da-zA-Z-]+)*\/?$/;
-
-  return generalRegex.test(url) && isInWhiteList(url);
-}
-
-/**
-* Controlla se il dominio della URL passata rientra in una whitelist di domini
-*
-* @param url rappresenta l'url da controllare
-*
-* @return true se l'url e' presente nella whitelist, false altrimenti
-*/
-function isInWhiteList(url) {
-  let result = false;
-  const dictionary = {
-    'github': /^(https?):\/\/(github\.com)\/([\da-zA-Z-_])*\/?$/,
-    'bitbucket': /^(https?):\/\/(bitbucket\.org)\/([\da-zA-Z-_])*\/?$/,
-    'gitlab': /^(https?):\/\/(gitlab\.com)\/([\da-zA-Z-_]+)\/?$/,
-    'phabricator': /^(https?):\/\/(secure\.phabricator\.com)\/(p)\/([\da-zA-Z-_]+)\/?$/,
-    'gitea': /^(https?):\/\/(try\.gitea\.io)\/([\da-zA-Z-_]+)\/?$/,
-    'gogs': /^(https?):\/\/(try\.gogs\.io)\/([\da-zA-Z-_]+)\/?$/
-  };
-
-  const arrayUrl = [
-    'https://github.com/',
-    'https://bitbucket.org/',
-    'https://gitlab.com/',
-    'https://phabricator.com/',
-    'https://gitea.io/',
-    'https://gogs.io/'
-  ];
-
-  const urlParsed = new URL(url);
-  const protocol = urlParsed.protocol;
-  const hostname = urlParsed.hostname;
-
-  const domainParsed = parseDomain(url);
-  if (domainParsed != null) {
-    const domain = domainParsed.domain;
-
-    const regex = dictionary[domain];
-    const isValid = regex && regex.test(url);
-
-    let baseUrl = '';
-
-    /*  Gli url nella forma  https://try.gogs.io/<username>/<projectname>,
-                            https://try.gitea.io/<username>/<projectname>,
-                            https://secure.phabricator.com/project/view/395/
-        devono diventare    https://gogs.io/<username>/<projectname>,
-                            https://gitea.io/<username>/<projectname>,
-                            https://phabricator.com/project/view/<numProject>/
-    */
-    if (['gitea', 'gogs', 'phabricator'].includes(domain)) {
-      baseUrl = `${protocol}//${domain}.${domainParsed.tld}/`;
-    } else {
-      baseUrl = `${protocol}//${hostname}/`;
-    }
-
-    result = isValid && arrayUrl.includes(baseUrl);
-  }
-  return result;
-}

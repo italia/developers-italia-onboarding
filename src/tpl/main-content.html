@@ -1,67 +1,71 @@
 <main id="content">
-    <div class="d-flex align-items-center justify-content-center main-content mt-5">
-      <div class="container">
-        <div class="row">
-          <div class="my-5 col-md-8">
-            <form action="email-sent" method="POST">
-              <h1>Registra il tuo repository</h1>
-                <br/>
-                <h5>
-                    Attraverso questo form, le Pubbliche Amministrazioni
-                    possono registrare il proprio repository di codice sorgente
-                    pubblico all'interno di <a href="//developers.italia.it">Developers Italia</a>. 
-                    In questo modo, il crawler del portale sarà in grado di verificare la
-                    presenza del file <a href="https://docs.italia.it/italia/developers-italia/publiccodeyml/it/master/">publiccode.yml</a> 
-                    nei singoli repository e pubblicarne i relativi dati
-                    all'interno del catalogo del software a riuso. 
-                    Si ricorda che tutti i campi sono obbligatori. </h5>
-                </h5>
+  <div class="d-flex align-items-center justify-content-center main-content mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="my-5 col-md-8">
+          <form action="email-sent" method="POST">
+            <h1>Registra il tuo repository</h1>
+            <br/>
+            <h5>
+              Attraverso questo form, le Pubbliche Amministrazioni
+              possono registrare il proprio repository di codice sorgente
+              pubblico all'interno di <a href="//developers.italia.it">Developers Italia</a>.
+              In questo modo, il crawler del portale sarà in grado di verificare la
+              presenza del file <a href="https://docs.italia.it/italia/developers-italia/publiccodeyml/it/master/">publiccode.yml</a>
+              nei singoli repository e pubblicarne i relativi dati
+              all'interno del catalogo del software a riuso.
+              Si ricorda che tutti i campi sono obbligatori. </h5>
+            </h5>
 
-                <div class="form-group">
-                  <input type="text" class="form-control" id="nomeReferente" name="nomeReferente" required>
-                  <label for="nomeReferente">Nome e Cognome Referente *</label>
-                </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="nomeReferente" name="nomeReferente" required>
+              <label for="nomeReferente">Nome e Cognome Referente *</label>
+            </div>
 
-                <div class="form-group">
-                  <i class="ico-prefix it-search"></i>
-                  <input type="text" class="form-control" id="ricercaAmministrazione">
-                  <label for="ricercaAmministrazione">Ricerca Amministrazione</label>
-                  <small class="form-text text-muted">I tre campi sottostanti verranno automaticamente compilati con i risultati della ricerca</small>
-                  <ul id="risultatoRicerca" class="autocomplete-wrap"></ul>
-                </div>
+            <div class="form-group">
+              <i class="ico-prefix it-search"></i>
+              <input type="text" class="form-control" id="ricercaAmministrazione">
+              <label for="ricercaAmministrazione">Ricerca Amministrazione</label>
+              <small class="form-text text-muted">I tre campi sottostanti verranno automaticamente compilati con i
+                risultati della ricerca
+              </small>
+              <ul id="risultatoRicerca" class="autocomplete-wrap"></ul>
+            </div>
 
-                <div class="form-group active child">
-                  <input type="text" class="form-control active" id="ipa" name="ipa" readonly>
-                  <label for="ipa">Codice iPA *</label>
-                </div>
+            <div class="form-group active child">
+              <input type="text" class="form-control-plaintext active readonly" id="ipa" name="ipa" tabindex="-1"
+                     required>
+              <label for="ipa">Codice iPA *</label>
+            </div>
 
-                <div class="form-group active child">
-                  <input type="text" class="form-control active" id="nomeAmministrazione" readonly>
-                  <label for="nomeAmministrazione">Amministrazione *</label>
-                </div>
+            <div class="form-group active child">
+              <input type="text" class="form-control-plaintext active readonly" id="nomeAmministrazione" tabindex="-1"
+                     required>
+              <label for="nomeAmministrazione">Amministrazione *</label>
+            </div>
 
-                <div class="form-group active child">
-                  <input type="text" class="form-control active" id="pec" readonly>
-                  <label for="pec">PEC *</label>
-                </div>
+            <div class="form-group active child">
+              <input type="text" class="form-control-plaintext active readonly" id="pec" tabindex="-1" required>
+              <label for="pec">PEC *</label>
+            </div>
 
-                <div class="form-group">
-                  <input type="text" class="form-control" id="url" name="url" required>
-                  <label for="url">URL dell'organizzazione nello strumento di code hosting e.g., github.com/italia *</label>
-                  <small class="form-text text-muted">
-                    Ogni PA può aggiungere diversi repository e/o organizzazioni.
-                    Si ricorda che attualmente sono supportati i seguenti
-                    repository: GitHub, GitLab, BitBucket, Phabricator, Gitea,
-                    Gogs
-                  </small>
-                </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="url" name="url" required>
+              <label for="url">URL dell'organizzazione nello strumento di code hosting e.g., github.com/italia *</label>
+              <small class="form-text text-muted">
+                Ogni PA può aggiungere diversi repository e/o organizzazioni.
+                Si ricorda che attualmente sono supportati i seguenti
+                repository: GitHub, GitLab, BitBucket, Phabricator, Gitea,
+                Gogs
+              </small>
+            </div>
 
-                <br>
-                <button type="submit" class="btn btn-primary">Registra</button>
-              
-            </form>
-          </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Registra</button>
+
+          </form>
         </div>
       </div>
     </div>
-  </main>
+  </div>
+</main>
