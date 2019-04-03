@@ -16,6 +16,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     --restart=always \
     -p 8003:3000 \
     -e env=pm-prod \
+    -v /apps/www/onboarding.developers.italia.it/private:/usr/src/app/private:rw \
     -v /apps/www/onboarding.developers.italia.it/smtp-account-config.json:/usr/src/app/smtp-account-config.json \
     -v /apps/www/onboarding.developers.italia.it/config-prod.json:/usr/src/app/config-prod.json \
     -v /data/crawler/indicepa.csv:/usr/src/app/amministrazioni.txt \
