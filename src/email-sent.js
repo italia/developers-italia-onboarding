@@ -22,10 +22,10 @@ module.exports = function (request, h) {
     mailServerConfig.overrideRecipient && mailServerConfig.overrideMail ?
       mailServerConfig.overrideMail.rcpt :
       amministrazioni[ipa].pec;
-  const originalPec =
-    mailServerConfig.overrideRecipient && mailServerConfig.overrideMail ?
-      amministrazioni[ipa].pec :
-      '';
+
+  const originalPec = amministrazioni[ipa].pec;
+  const overridePec = (mailServerConfig.overrideRecipient && mailServerConfig.overrideMail);
+
   const amministrazione = amministrazioni[ipa].description;
 
   let validationResult = validateUrl(url);
@@ -96,7 +96,8 @@ module.exports = function (request, h) {
         url: url,
         amministrazione: amministrazione,
         link: destinationLink,
-        originalPec: originalPec
+        originalPec: originalPec,
+        overridePec: overridePec
       })
     };
 

@@ -298,9 +298,9 @@
                         con riferimento all'art 68 e 69 del Codice dell'Amministrazione Digitale).</p>
                         <p>La richiesta è stata effettuata dal seguente referente: {{referente}}.</p>
                         <p>
-                          {{#originalPec}}
+                          {{#overridePec}}
                             L'indirizzo PEC originale a cui inoltrare la richiesta è: <b>{{originalPec}}</b>
-                          {{/originalPec}}
+                          {{/overridePec}}
                         </p>
                         <p>Se la richiesta è corretta, potete confermare la registrazione utilizzando il pulsante qui in basso:</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
