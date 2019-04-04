@@ -4,3 +4,4 @@ public/assets/data/authorities.db.json
 /private/data
 smtp-account-config.json
 *.swp
+config-prod.json

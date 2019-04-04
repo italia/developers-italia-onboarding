@@ -73,10 +73,12 @@ module.exports = function (request, h) {
       ipa: ipa,
       url: url
     }, key);
+    //
+    // const destinationLink = mailServerConfig.applicationPort ?
+    //   `http://${mailServerConfig.applicationHost}:${mailServerConfig.applicationPort}/register-confirm?token=${token}` :
+    //   `http://${mailServerConfig.applicationHost}/register-confirm?token=${token}`;
 
-    const destinationLink = mailServerConfig.applicationPort ?
-      `http://${mailServerConfig.applicationHost}:${mailServerConfig.applicationPort}/register-confirm?token=${token}` :
-      `http://${mailServerConfig.applicationHost}/register-confirm?token=${token}`;
+    const destinationLink =`${mailServerConfig.applicationBaseURL}/register-confirm?token=${token}`;
 
     const from = mailServerConfig.mailTemplate && mailServerConfig.mailTemplate.from ?
       mailServerConfig.mailTemplate.from :

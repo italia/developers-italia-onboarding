@@ -2,14 +2,13 @@
   "host": "smtp.ethereal.email",
   "port": 587,
   "secure": false,
-  "applicationHost": "localhost",
-  "applicationPort": 3000,
+  "applicationBaseURL": "https://localhost:3000",
   "overrideRecipient": true,
   "overrideMail": {
     "rcpt" : "example@domain.com"
   },
   "mailTemplate": {
-    "from": "\"Team Digitale\" <test@teamdigitale.com>",
+    "from": "\"Team Digitale\" <noreply@teamdigitale.com>",
     "subject": "Onboarding Developer Italia"
   }
 }
