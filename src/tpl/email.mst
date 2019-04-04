@@ -291,8 +291,9 @@
                   <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
+                      {{#overridePec}}
                         <div style="font-style: italic">
-                          <p>In data {{timestamp}} è stata inserita tramite il portale https://onboarding.developers.italia.it/ 
+                          <p>In data {{timestamp}} è stata inserita tramite il portale https://onboarding.developers.italia.it/
                           una richiesta di registrazione di uno strumento di code hosting da cui avviare la scansione periodica
                           finalizzata a individuare software a riuso:</p>
                           <ul>
@@ -304,8 +305,9 @@
                           <p>Al fine di verificare che la richiesta pervenga effettivamente dall'Ente dichiarato è necessario
                           inviare al relativo indirizzo PEC il messaggio sotto riportato. Il clic sul link riportato in tale
                           messaggio completerà la procedura.</p>
-                        </div>
-                        <hr />
+                         </div>
+                         <hr />
+                        {{/overridePec}}
                         <p>Gentile {{amministrazione}},</p>
                         <p>ci è pervenuta la richiesta di aggiungere la URL <a href="{{url}}">{{url}}</a>
                         al portale Developers Italia come strumento di code hosting ufficiale utilizzato dalla vostra Amministrazione per pubblicare

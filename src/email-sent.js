@@ -96,6 +96,7 @@ module.exports = function (request, h) {
       html: mustache.render(template, {
         referente: referente,
         url: url,
+        codiceIPA: ipa,
         amministrazione: amministrazione,
         link: destinationLink,
         originalPec: originalPec,
