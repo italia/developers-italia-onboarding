@@ -18,8 +18,11 @@ const init = async () => {
     fs.readFileSync('config-dev.json').toString('utf8') :
     fs.readFileSync('config-prod.json').toString('utf8'));
 
-  const httpPort = appConfig.applicationBaseURL && Array.isArray(appConfig.applicationBaseURL.split(':')) && appConfig.applicationBaseURL.split(':').length==3?
-    appConfig.applicationBaseURL.split(':')[2] : 80;
+  const httpPort =
+    appConfig.applicationBaseURL &&
+    Array.isArray(appConfig.applicationBaseURL.split(':')) &&
+    appConfig.applicationBaseURL.split(':').length == 3 ?
+      appConfig.applicationBaseURL.split(':')[2] : 80;
 
   const server = Hapi.server({
     port: httpPort,
@@ -38,7 +41,6 @@ const init = async () => {
       html: {
         compile: (template) => {
           Mustache.parse(template);
-
           return (context) => Mustache.render(template, context);
         }
       }

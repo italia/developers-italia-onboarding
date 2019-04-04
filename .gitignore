@@ -5,3 +5,5 @@ public/assets/data/authorities.db.json
 smtp-account-config.json
 *.swp
 config-prod.json
+amministrazioni.txt
+.idea/
