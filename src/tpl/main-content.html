@@ -4,30 +4,27 @@
       <div class="row">
         <div class="my-5 col-md-8">
           <form action="email-sent" method="POST">
-            <h1>Registra il tuo repository</h1>
+            <h1>Registrazione repository per software pubblico</h1>
             <br/>
             <h5>
-              Attraverso questo form, le Pubbliche Amministrazioni
-              possono registrare il proprio repository di codice sorgente
-              pubblico all'interno di <a href="//developers.italia.it">Developers Italia</a>.
-              In questo modo, il crawler del portale sarà in grado di verificare la
-              presenza del file <a href="https://docs.italia.it/italia/developers-italia/publiccodeyml/it/master/">publiccode.yml</a>
-              nei singoli repository e pubblicarne i relativi dati
-              all'interno del catalogo del software a riuso.
-              Si ricorda che tutti i campi sono obbligatori. </h5>
+              Attraverso questo form le Pubbliche Amministrazioni possono dichiarare lo strumento di code hosting 
+              dove pubblicano il software di cui sono titolari, ai sensi delle <a href="https://developers.italia.it/it/riuso">Linee guida sull'acquisizione e il
+              riuso di software</a>. Developers Italia, al fine di popolare il catalogo del software pubblico, effettua 
+              scansioni periodiche sugli strumenti di code hosting dichiarati dalle amministrazioni per rilevare i repository contenenti
+              un file <a href="https://docs.italia.it/italia/developers-italia/publiccodeyml/it/master/">publiccode.yml</a>.
             </h5>
 
             <div class="form-group">
               <input type="text" class="form-control" id="nomeReferente" name="nomeReferente" required>
-              <label for="nomeReferente">Nome e Cognome Referente *</label>
+              <label for="nomeReferente">Referente (nome e cognome) *</label>
             </div>
 
             <div class="form-group">
               <i class="ico-prefix it-search"></i>
               <input type="text" class="form-control" id="ricercaAmministrazione">
-              <label for="ricercaAmministrazione">Ricerca Amministrazione</label>
+              <label for="ricercaAmministrazione">Ricerca amministrazione</label>
               <small class="form-text text-muted">I tre campi sottostanti verranno automaticamente compilati con i
-                risultati della ricerca
+                risultati della ricerca.
               </small>
               <ul id="risultatoRicerca" class="autocomplete-wrap"></ul>
             </div>
@@ -51,18 +48,16 @@
 
             <div class="form-group">
               <input type="text" class="form-control" id="url" name="url" required>
-              <label for="url">URL dell'organizzazione nello strumento di code hosting e.g., github.com/italia *</label>
+              <label for="url">URL dell'organizzazione nello strumento di code hosting (ad es. https://github.com/ComuneDiRoma) *</label>
               <small class="form-text text-muted">
                 Ogni PA può aggiungere diversi repository e/o organizzazioni.
-                Si ricorda che attualmente sono supportati i seguenti
-                repository: GitHub, GitLab, BitBucket, Phabricator, Gitea,
-                Gogs
+                Attualmente sono supportati i seguenti strumenti di code hosting: 
+                GitHub, GitLab, BitBucket, Phabricator, Gitea, Gogs
               </small>
             </div>
 
             <br>
             <button type="submit" class="btn btn-primary">Registra</button>
-
           </form>
         </div>
       </div>
