@@ -2,8 +2,16 @@ read -p "WARNING! This script means downtime! Continue? [y/n]: " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
   if [ ! -f smtp-account-config.json ]; then
-    echo "Creating smtp-account-config.json file"
-    touch smtp-account-config.json
+    echo "You need a file named smtp-account-config.json in this folder"
+    exit 1 
+  fi
+  if [ ! -f config-prod.json ]; then
+    echo "You need a file named config-prod.json in this folder"
+    exit 1 
+  fi
+  if [ ! -d private ]; then
+    echo "You need a directory named private in this folder"
+    exit 1 
   fi
   # Start pull
   echo "Pulling docker image"
@@ -16,10 +24,11 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     --restart=always \
     -p 8003:3000 \
     -e env=pm-prod \
+    -v /apps/www/onboarding.developers.italia.it/private:/usr/src/app/private:rw \
     -v /apps/www/onboarding.developers.italia.it/smtp-account-config.json:/usr/src/app/smtp-account-config.json \
     -v /apps/www/onboarding.developers.italia.it/config-prod.json:/usr/src/app/config-prod.json \
     -v /data/crawler/indicepa.csv:/usr/src/app/amministrazioni.txt \
-      onboarding 
+      italia/developers-italia-onboarding 
   echo "Starting new container"
   docker start developers-italia-onboarding
   docker ps | grep developers-italia-onboarding
