@@ -18,7 +18,7 @@ const init = async () => {
     fs.readFileSync('config-dev.json').toString('utf8') :
     fs.readFileSync('config-prod.json').toString('utf8'));
 
-  const httpPort = appConfig.applicationBaseURL && Array.isArray(appConfig.applicationBaseURL.split(':')) ?
+  const httpPort = appConfig.applicationBaseURL && Array.isArray(appConfig.applicationBaseURL.split(':')) && appConfig.applicationBaseURL.split(':').length==3?
     appConfig.applicationBaseURL.split(':')[2] : 80;
 
   const server = Hapi.server({
