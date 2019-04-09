@@ -22,7 +22,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   echo "Creating new container from base image"
   docker create --name=developers-italia-onboarding \
     --restart=always \
-    -p 8003:3000 \
+    -p 8003:80\
     -e env=pm-prod \
     -v /apps/www/onboarding.developers.italia.it/private:/usr/src/app/private:rw \
     -v /apps/www/onboarding.developers.italia.it/smtp-account-config.json:/usr/src/app/smtp-account-config.json \
