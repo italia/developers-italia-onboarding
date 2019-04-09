@@ -86,7 +86,7 @@ module.exports = function (request, h) {
 
     const subject = mailServerConfig.mailTemplate && mailServerConfig.mailTemplate.subject ?
       mailServerConfig.mailTemplate.subject :
-      'Onboarding Developer Italia';
+      'Onboarding Developers Italia';
 
     // setup email data with unicode symbols
     const mailOptions = {
