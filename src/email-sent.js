@@ -106,8 +106,6 @@ module.exports = function (request, h) {
       })
     };
     
-    // if (mailServerConfig.mail.cc) mailOptions.cc = mailServerConfig.mail.cc;
-
     // send mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
