@@ -7,8 +7,10 @@
   "overrideMail": {
     "rcpt" : "example@domain.com"
   },
-  "mailTemplate": {
+  "mail": {
     "from": "\"Team Digitale\" <noreply@teamdigitale.com>",
-    "subject": "Onboarding Developers Italia"
+    "subject": "Onboarding Developer Italia",
+    "cc": "example@domain.com",
+    "bcc": ["example@domain.com","example2@domain.com"]
   }
 }

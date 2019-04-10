@@ -78,20 +78,22 @@ module.exports = function (request, h) {
     //   `http://${mailServerConfig.applicationHost}:${mailServerConfig.applicationPort}/register-confirm?token=${token}` :
     //   `http://${mailServerConfig.applicationHost}/register-confirm?token=${token}`;
 
-    const destinationLink =`${mailServerConfig.applicationBaseURL}/register-confirm?token=${token}`;
+    const destinationLink = `${mailServerConfig.applicationBaseURL}/register-confirm?token=${token}`;
 
-    const from = mailServerConfig.mailTemplate && mailServerConfig.mailTemplate.from ?
-      mailServerConfig.mailTemplate.from :
+    const from = mailServerConfig.mail && mailServerConfig.mail.from ?
+      mailServerConfig.mail.from :
       '"Team Digitale" <test@teamdigitale.com>';
 
-    const subject = mailServerConfig.mailTemplate && mailServerConfig.mailTemplate.subject ?
-      mailServerConfig.mailTemplate.subject :
+    const subject = mailServerConfig.mail && mailServerConfig.mail.subject ?
+      mailServerConfig.mail.subject :
       'Onboarding Developers Italia';
 
     // setup email data with unicode symbols
     const mailOptions = {
       from: from, // sender address
       to: pec, // list of receivers
+      cc: (mailServerConfig.mail.cc) ? mailServerConfig.mail.cc : '',
+      bcc: (mailServerConfig.mail.bcc) ? mailServerConfig.mail.bcc : '',
       subject: subject, // Subject line
       html: mustache.render(template, {
         referente: referente,
@@ -103,6 +105,8 @@ module.exports = function (request, h) {
         overridePec: overridePec
       })
     };
+    
+    // if (mailServerConfig.mail.cc) mailOptions.cc = mailServerConfig.mail.cc;
 
     // send mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
