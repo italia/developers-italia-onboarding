@@ -52,11 +52,17 @@ function setUpSearchbar(idx, db) {
         resultsElem.append(getResultElement(result));
       });
 
+      resultsElem.addClass('autocomplete-list-show');
+
       $('.result-item').click(function () {
         $('#ipa').val(this.dataset.code);
+        $("label[for='ipa']").addClass('active');
         $('#nomeAmministrazione').val(this.dataset.description);
+        $("label[for='nomeAmministrazione']").addClass('active');
         $('#pec').val(this.dataset.pec);
+        $("label[for='pec']").addClass('active');
         $('#risultatoRicerca').empty();
+        resultsElem.removeClass('autocomplete-list-show');
         ipaInput.setCustomValidity('');
         ipaInput.checkValidity();
       });
@@ -64,9 +70,18 @@ function setUpSearchbar(idx, db) {
   });
 }
 
-function getResultElement(result) {
+function getResultElementOld(result) {
   return '<li class="result-item" data-code="' + result.code + '" data-pec="' + result.pec + '" data-description="' + result.description + '">'
     + result.description
+    + '</li>';
+}
+function getResultElement(result) {
+  return '<li class="result-item" data-code="' + result.code + '" data-pec="' + result.pec + '" data-description="' + result.description + '">'
+    + '<a href="#">' +
+    '    <span class="autocomplete-list-text">\n' +
+    '      <span>'+result.description+'</span>\n' +
+    '    </span>' +
+    '  </a>'
     + '</li>';
 }
 

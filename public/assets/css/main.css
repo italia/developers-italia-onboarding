@@ -18,3 +18,10 @@
 input.readonly {
   pointer-events: none;
 }
+
+/* hack to have this component working with new bootstrap-italia*/
+#risultatoRicerca {
+  margin-top: 30px !important;
+  max-height: 300px;
+  overflow: auto;
+}
