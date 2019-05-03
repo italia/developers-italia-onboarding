@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "lint": "eslint .",
-    "dev": "nodemon -w src -w server.js server.js dev",
+    "dev": "nodemon -e js,html -w src -w server.js server.js dev",
     "pm-prod": "pm2-runtime server.js"
   },
   "repository": {
@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/italia/onboarding.developers.italia.it#readme",
   "dependencies": {
+    "bootstrap-italia": "^1.2.6",
     "fs-extra": "^6.0.1",
     "generate-password": "^1.4.1",
     "hapi": "^18.1.0",

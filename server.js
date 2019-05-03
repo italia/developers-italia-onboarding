@@ -63,6 +63,16 @@ const init = async () => {
       }
     }
   }, {
+    method: 'GET',
+    path: '/bootstrap-italia/{param*}',
+    handler: {
+      directory: {
+        path: '../node_modules/bootstrap-italia/',
+        redirectToSlash: true,
+        index: false
+      }
+    }
+  }, {
     method: 'POST',
     path: '/email-sent',
     handler: emailSentHandler

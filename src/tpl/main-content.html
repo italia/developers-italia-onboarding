@@ -13,7 +13,7 @@
               scansioni periodiche sugli strumenti di code hosting dichiarati dalle amministrazioni per rilevare i repository contenenti
               un file <a href="https://docs.italia.it/italia/developers-italia/publiccodeyml/it/master/">publiccode.yml</a>.
             </h5>
-
+            <br />
             <div class="form-group">
               <input type="text" class="form-control" id="nomeReferente" name="nomeReferente" required>
               <label for="nomeReferente">Referente (nome e cognome) *</label>
@@ -21,12 +21,12 @@
 
             <div class="form-group">
               <i class="ico-prefix it-search"></i>
-              <input type="text" class="form-control" id="ricercaAmministrazione">
+              <input type="text" class="form-control autocomplete" id="ricercaAmministrazione">
               <label for="ricercaAmministrazione">Ricerca amministrazione</label>
               <small class="form-text text-muted">I tre campi sottostanti verranno automaticamente compilati con i
                 risultati della ricerca.
               </small>
-              <ul id="risultatoRicerca" class="autocomplete-wrap"></ul>
+              <ul id="risultatoRicerca" class="autocomplete-list"></ul>
             </div>
 
             <div class="form-group active child">
