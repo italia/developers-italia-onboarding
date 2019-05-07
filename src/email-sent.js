@@ -14,7 +14,6 @@ module.exports = function (request, h) {
     fs.readFileSync('config-dev.json').toString('utf8') :
     fs.readFileSync('config-prod.json').toString('utf8'));
 
-  console.log(request.payload)
   const referente = request.payload.nomeReferente;
   const ipa = request.payload.ipa;
   const amministrazione = request.payload.description;
@@ -72,7 +71,7 @@ module.exports = function (request, h) {
       ipa: ipa,
       url: url,
       description: amministrazione,
-      pec: pec
+      pec: originalPec
     }, key);
     //
     // const destinationLink = mailServerConfig.applicationPort ?
