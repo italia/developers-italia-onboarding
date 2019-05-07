@@ -18,6 +18,9 @@
 input.readonly {
   pointer-events: none;
 }
+label[for="ipa"],label[for="nomeAmministrazione"],label[for="pec"] {
+  pointer-events: none;
+}
 
 /* hack to have this component working with new bootstrap-italia*/
 #risultatoRicerca {
