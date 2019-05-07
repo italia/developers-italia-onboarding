@@ -73,10 +73,6 @@ module.exports = function (request, h) {
       description: amministrazione,
       pec: originalPec
     }, key);
-    //
-    // const destinationLink = mailServerConfig.applicationPort ?
-    //   `http://${mailServerConfig.applicationHost}:${mailServerConfig.applicationPort}/register-confirm?token=${token}` :
-    //   `http://${mailServerConfig.applicationHost}/register-confirm?token=${token}`;
 
     const destinationLink = `${mailServerConfig.applicationBaseURL}/register-confirm?token=${token}`;
 
