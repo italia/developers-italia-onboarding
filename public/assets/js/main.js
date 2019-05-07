@@ -2,7 +2,7 @@ const ipaInput = document.querySelector('input#ipa');
 const refInput = document.querySelector('input#nomeReferente');
 const urlInput = document.querySelector('input#url');
 
-if(ipaInput) {
+if (ipaInput) {
 //validation
   ipaInput.addEventListener('input', () => {
     ipaInput.setCustomValidity('');
@@ -20,12 +20,8 @@ if(ipaInput) {
   });
 
   ipaInput.addEventListener('invalid', () => {
-    if (ipaInput.value === '') {
+    if (ipaInput.value === '')
       ipaInput.setCustomValidity('Selezionare un\'amministrazione dal campo Ricerca Amministrazione!');
-      $('#ricercaAmministrazione').focus();
-      $('#ricercaAmministrazione').addClass('active');
-      console.log('ciao')
-    }
   });
 
   refInput.addEventListener('invalid', () => {
@@ -45,7 +41,8 @@ if(ipaInput) {
  * @returns {string}
  */
 function getResultElement(result) {
-  return '<li class="result-item" data-ipa="' + result.ipa + '" data-pec="' + result.pec + '" data-description="' + result.description + '" data-office="' + result.office + '">'
+  return '<li class="result-item" data-ipa="' + result.ipa + '" data-pec="' + result.pec + '" ' +
+    'data-description="' + result.description + '" data-office="' + result.office + '">'
     + '<a href="#">' +
     '    <span class="autocomplete-list-text">\n' +
     '      <span>' + result.value + '</span>\n' +
@@ -76,8 +73,8 @@ function modelData(result, item = {}) {
  * @param data
  */
 function populateAutocompleteBox(data) {
+  let resultsElem = $('#risultatoRicerca');
   if (data.hits.hits.length > 0) {
-    let resultsElem = $('#risultatoRicerca');
 
     resultsElem.empty();
     //modelling data
@@ -87,9 +84,10 @@ function populateAutocompleteBox(data) {
       })
       .map(function (result) {
         let out = [];
-        result.office.forEach(function (item) {
-          out.push(modelData(result, item));
-        });
+        if (result.office && Array.isArray(result.office))
+          result.office.forEach(function (item) {
+            out.push(modelData(result, item));
+          });
         out.push(modelData(result))
         return out;
       })
@@ -128,7 +126,10 @@ function populateAutocompleteBox(data) {
 $('#ricercaAmministrazione').on('keyup', function (e) {
   $('#risultatoRicerca').empty();
 
-  if (this.value.length < 2) return;
+  if (this.value.length < 2) {
+    $('#risultatoRicerca').removeClass('autocomplete-list-show');
+    return;
+  }
   if (e.which == 13) {
     e.preventDefault();
   }
