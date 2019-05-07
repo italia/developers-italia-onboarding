@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint server.js src/**/*.js public/assets/js/*",
     "dev": "nodemon -e js,html -w src -w server.js server.js dev",
     "pm-prod": "pm2-runtime server.js"
   },

@@ -88,7 +88,7 @@ function populateAutocompleteBox(data) {
           result.office.forEach(function (item) {
             out.push(modelData(result, item));
           });
-        out.push(modelData(result))
+        out.push(modelData(result));
         return out;
       })
       .forEach(function (r) {
@@ -102,11 +102,11 @@ function populateAutocompleteBox(data) {
 
     $('.result-item').click(function (e) {
       $('#ipa').val(this.dataset.ipa);
-      $("label[for='ipa']").addClass('active');
+      $('label[for=\'ipa\']').addClass('active');
       $('#nomeAmministrazione').val(this.dataset.description);
-      $("label[for='nomeAmministrazione']").addClass('active');
+      $('label[for=\'nomeAmministrazione\']').addClass('active');
       $('#pec').val(this.dataset.pec);
-      $("label[for='pec']").addClass('active');
+      $('label[for=\'pec\']').addClass('active');
       $('#risultatoRicerca').empty();
       $('#ricercaAmministrazione').val(this.dataset.description);
       resultsElem.removeClass('autocomplete-list-show');
@@ -135,7 +135,7 @@ $('#ricercaAmministrazione').on('keyup', function (e) {
   }
   let query = $('#ricercaAmministrazione').val();
   $.getJSON({
-    url: "http://localhost:9200/test/pa/_search",
+    url: 'http://localhost:9200/test/pa/_search',
     // url: "https://cors-anywhere.herokuapp.com/https://elasticsearch.developers.italia.it/indicepa/_search",
     // url: "http://localhost:8080/indicepa/_search",
     contentType: 'application/json; charset=UTF-8',
@@ -178,11 +178,11 @@ $('#ricercaAmministrazione').on('keyup', function (e) {
       }
     }),
     success: populateAutocompleteBox
-  })
+  });
 });
 
 //hack to make readonly fields required and validate them
-$(".readonly").on('keydown paste', function (e) {
+$('.readonly').on('keydown paste', function (e) {
   e.preventDefault();
 });
 
