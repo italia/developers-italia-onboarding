@@ -135,13 +135,9 @@ $('#ricercaAmministrazione').on('keyup', function (e) {
   }
   let query = $('#ricercaAmministrazione').val();
   $.getJSON({
-    url: 'http://localhost:9200/test/pa/_search',
-    // url: "https://cors-anywhere.herokuapp.com/https://elasticsearch.developers.italia.it/indicepa/_search",
-    // url: "http://localhost:8080/indicepa/_search",
+    /* global ES_URL */
+    url: ES_URL,
     contentType: 'application/json; charset=UTF-8',
-    headers: {
-      // origin: 'http://localhost:8080'
-    },
     type: 'POST',
     dataType: 'json',
     data: JSON.stringify({
