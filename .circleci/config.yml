@@ -13,6 +13,11 @@ jobs:
     steps:
       - checkout
 
+      # inject env vars
+      - run:
+          name: sed
+          command: sed -i "" -e "s|^const ES_URL.*|const ES_URL = 'https://elasticsearch.developers.italia.it/indicepa/_search';|g"  ../public/assets/js/constants.js
+
       # npm build 
       - run: 
           name: npm install 

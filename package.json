@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint server.js src/**/*.js public/assets/js/*",
     "dev": "nodemon -e js,html -w src -w server.js server.js dev",
     "pm-prod": "pm2-runtime server.js"
   },
@@ -32,7 +32,6 @@
     "json2yaml": "^1.1.0",
     "jsonwebtoken": "^8.3.0",
     "lowdb": "^1.0.0",
-    "lunr": "^2.3.5",
     "mustache": "^2.3.0",
     "nodemailer": "^4.6.7",
     "nodemon": "^1.18.3",

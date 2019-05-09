@@ -5,7 +5,6 @@ const nodemailer = require('nodemailer');
 const mustache = require('mustache');
 const jwt = require('jsonwebtoken');
 const key = require('./get-jwt-key.js')();
-const amministrazioni = require('../public/assets/data/authorities.db.json');
 const validateUrl = require('./validator.js');
 const {VALIDATION_OK} = require('./validator-result.js');
 const getErrorMessage = require('./validation-error-message.js');
@@ -17,16 +16,15 @@ module.exports = function (request, h) {
 
   const referente = request.payload.nomeReferente;
   const ipa = request.payload.ipa;
+  const amministrazione = request.payload.description;
   const url = request.payload.url;
   const pec =
     mailServerConfig.overrideRecipient && mailServerConfig.overrideMail ?
       mailServerConfig.overrideMail.rcpt :
-      amministrazioni[ipa].pec;
+      request.payload.pec;
 
-  const originalPec = amministrazioni[ipa].pec;
+  const originalPec = request.payload.pec;
   const overridePec = (mailServerConfig.overrideRecipient && mailServerConfig.overrideMail);
-
-  const amministrazione = amministrazioni[ipa].description;
 
   let validationResult = validateUrl(url);
   if (validationResult != VALIDATION_OK) {
@@ -71,12 +69,10 @@ module.exports = function (request, h) {
     const token = jwt.sign({
       referente: referente,
       ipa: ipa,
-      url: url
+      url: url,
+      description: amministrazione,
+      pec: originalPec
     }, key);
-    //
-    // const destinationLink = mailServerConfig.applicationPort ?
-    //   `http://${mailServerConfig.applicationHost}:${mailServerConfig.applicationPort}/register-confirm?token=${token}` :
-    //   `http://${mailServerConfig.applicationHost}/register-confirm?token=${token}`;
 
     const destinationLink = `${mailServerConfig.applicationBaseURL}/register-confirm?token=${token}`;
 
