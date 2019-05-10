@@ -14,8 +14,18 @@ const init = async () => {
   const repoHandler = require('./src/repo-list');
   const homeHandler = require('./src/home');
 
+  const appConfig = JSON.parse(process.argv.includes('dev') ?
+    fs.readFileSync('config-dev.json').toString('utf8') :
+    fs.readFileSync('config-prod.json').toString('utf8'));
+
+  const httpPort =
+    appConfig.applicationBaseURL &&
+    Array.isArray(appConfig.applicationBaseURL.split(':')) &&
+    appConfig.applicationBaseURL.split(':').length == 3 ?
+      appConfig.applicationBaseURL.split(':')[2] : 80;
+
   const server = Hapi.server({
-    port: 80,
+    port: httpPort,
     routes: {
       files: {
         relativeTo: Path.join(__dirname, 'public')
@@ -31,7 +41,6 @@ const init = async () => {
       html: {
         compile: (template) => {
           Mustache.parse(template);
-
           return (context) => Mustache.render(template, context);
         }
       }
@@ -42,11 +51,32 @@ const init = async () => {
     layoutPath: 'public'
   });
 
+
   server.route([{
+    method: 'GET',
+    path: '/assets/js/jquery/{param*}',
+    handler: {
+      directory: {
+        path: '../node_modules/jquery/dist/',
+        redirectToSlash: true,
+        index: false
+      }
+    }
+  }, {
+    method: 'GET',
+    path: '/bootstrap-italia/{param*}',
+    handler: {
+      directory: {
+        path: '../node_modules/bootstrap-italia/',
+        redirectToSlash: true,
+        index: false
+      }
+    }
+  }, {
     method: 'POST',
     path: '/email-sent',
     handler: emailSentHandler
-  },{
+  }, {
     method: 'GET',
     path: '/repo-list',
     handler: repoHandler
@@ -72,7 +102,8 @@ const init = async () => {
         index: true,
       }
     }
-  }]);
+  }
+  ]);
 
   await server.start();
   console.log(`Server is running at port ${server.info.port}`);
@@ -85,11 +116,8 @@ process.on('unhandledRejection', (err) => {
 });
 
 
-// Crea l'indice inverso e il database delle PA
-require('./src/create-index.js')().then(() => {
-  if (JSON.parse(process.argv.includes('dev')) || fs.existsSync(whiteList)) {
-    init();
-  } else {
-    console.log('Attenzione! Creare prima un file di credenziali "smtp-account-config.json" seguendo il modello di account-config-tpl.json');
-  }
-});
+if (JSON.parse(process.argv.includes('dev')) || fs.existsSync(whiteList)) {
+  init();
+} else {
+  console.log('Attenzione! Creare prima un file di credenziali "smtp-account-config.json" seguendo il modello di account-config-tpl.json');
+}

@@ -1,15 +1,30 @@
 #middle-content {
-    min-height: calc(100vh - 330px);
+  min-height: calc(100vh - 330px);
 }
 
 .alert {
   margin-top: 1%;
 }
 
-#collapseDiv1{
+#collapseDiv1 {
   margin-top: 2%;
 }
 
-.child{
+.child {
   margin-left: 4%;
+}
+
+/* hack to prevent pointer on readonly fields */
+input.readonly {
+  pointer-events: none;
+}
+label[for="ipa"],label[for="nomeAmministrazione"],label[for="pec"] {
+  pointer-events: none;
+}
+
+/* hack to have this component working with new bootstrap-italia*/
+#risultatoRicerca {
+  margin-top: 30px !important;
+  max-height: 300px;
+  overflow: auto;
 }

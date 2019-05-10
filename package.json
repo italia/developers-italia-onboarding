@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "lint": "eslint .", 
-    "dev": "nodemon --watch src server.js dev",
+    "lint": "eslint server.js src/**/*.js public/assets/js/*",
+    "dev": "nodemon -e js,html -w src -w server.js server.js dev",
     "pm-prod": "pm2-runtime server.js"
   },
   "repository": {
@@ -22,15 +22,16 @@
   },
   "homepage": "https://github.com/italia/onboarding.developers.italia.it#readme",
   "dependencies": {
+    "bootstrap-italia": "^1.2.6",
     "fs-extra": "^6.0.1",
     "generate-password": "^1.4.1",
-    "hapi": "^17.5.2",
-    "inert": "^5.1.0",
+    "hapi": "^18.1.0",
+    "inert": "^5.1.2",
+    "jquery": "^3.3.1",
     "jscs": "^3.0.7",
     "json2yaml": "^1.1.0",
     "jsonwebtoken": "^8.3.0",
     "lowdb": "^1.0.0",
-    "lunr": "^2.3.5",
     "mustache": "^2.3.0",
     "nodemailer": "^4.6.7",
     "nodemon": "^1.18.3",

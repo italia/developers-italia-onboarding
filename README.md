@@ -130,10 +130,25 @@ informazioni:
     "port": 587,
     "secure": true,
     "applicationHost": "",
-    "applicationPort": 80
+    "applicationPort": 80,
+    "overrideRecipient": true,
+    "overrideMail": {
+      "rcpt": "example@domain.com"
+    },
+    "mailTemplate": {
+      "from": "\"Team Digitale\" <test@teamdigitale.com>",
+      "subject": "Onboarding Developers Italia"
+    }
 }
 ```
-dove `host` e `port` rappresentano le informazioni del server SMTP. 
+dove `host` e `port` rappresentano le informazioni del server SMTP.
+`applicationHost` e `applicationPort` rappresentano la configurazione per l'url di
+conferma che verrà inserito nella mail.
+`overrideRecipient` e `overridedMail.rcpt` vanno popolati nel caso in cui si desideri
+inviare tutte le mail di conferma verso un unico destinatario che si occuperà
+di inoltrarle verso la PEC dell'amministrazione di riferimento inserita nel corpo della mail.  
+`mailTemplate`
+  `from` `subject` Per customizzare il mittente e l'oggetto della mail da inviare.
 Per specificare le credenziali, invece, è necessario modificare un secondo
 file. Per far ciò, copiare il file denominato
 `smtp-account-config.json.example`, inserire le informazioni relative al
