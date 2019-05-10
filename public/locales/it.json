@@ -1,0 +1,17 @@
+{
+	"common" : {
+		"btnregistra": "Registra"
+	},
+	"main": {
+		"descrizioneForm": "  Attraverso questo form, le Pubbliche Amministrazioni possono registrare il proprio repository di codice sorgente pubblico all'interno di <a href='//developers.italia.it'>Developers Italia</a>. In questo modo, il crawler del portale sarà in grado di verificare la presenza del file <a href='https://docs.italia.it/italia/developers-italia/publiccodeyml/it/master/'>publiccode.yml</a> nei singoli repository e pubblicarne i relativi dati all'interno del catalogo del software a riuso. Si ricorda che tutti i campi sono obbligatori.",
+		"labelipa":"Codice iPA *",
+		"labelricercaAmministrazione": "Ricerca Amministrazione",
+		"labelricercaAmministrazioneDescrizione": "I tre campi sottostanti verranno automaticamente compilati con i risultati della ricerca",
+		"labelnomeReferente": "Nome e Cognome Referente *",
+		"labelnomeAmministrazione": "Amministrazione *",
+		"labelpec": "PEC *",
+		"labelurl": "URL dell'organizzazione nello strumento di code hosting e.g., github.com/italia *",
+		"labelurlDescrizione": " Ogni PA può aggiungere diversi repository e/o organizzazioni. Si ricorda che attualmente sono supportati i seguenti repository: GitHub, GitLab, BitBucket, Phabricator, Gitea, Gogs",
+		"registra": "Registra il tuo repository"
+	}
+}
