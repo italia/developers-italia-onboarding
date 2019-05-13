@@ -36,7 +36,8 @@ const init = async () => {
   await server.register(require('inert'));
   await server.register(require('vision'));
   await server.register({
-  plugin: require('hapi-i18n'),
+  //plugin: require('hapi-i18n'),
+  plugin: require('./hapi18server.js'),
   options: {
     locales: ['it', 'en'],
     directory: __dirname + '/public/locales',
