@@ -20,6 +20,7 @@ module.exports = function (request, h) {
 
   db.get('registrati')
     .push({
+      timestamp: new Date().toJSON(),
       referente: referente,
       ipa: ipa,
       url: url,
