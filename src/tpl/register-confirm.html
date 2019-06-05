@@ -4,22 +4,22 @@
             <div class="row">
                 <div class="my-5 col-md-8">
 
-                    <h3>Confermare registrazione dell'URL nel database?</h3>
+                    <h3>{{register_confirm.confirm}}</h3>
 
-                    Nome referente: {{referente}};
+                    {{register_confirm.labelReferente}} {{referente}};
                     <br/>
-                    Amministrazione richiedente: {{amministrazione}};
+                    {{register_confirm.labelAmministrazione}} {{amministrazione}};
                     <br/>
-                    Codice ipa: {{ipa}};
+                    {{register_confirm.labelCodice}} : {{ipa}};
                     <br/>
-                    Indirizzo PEC: {{pec}};
+                    {{register_confirm.labelpec}} : {{pec}};
                     <br/>
-                    URL di code hosting: {{url}};
+                    {{register_confirm.labelurl}}: {{url}};
                     <br/>
                     <br/>
 
-                    <a href="/registered?nomeReferente={{referente}}&ipa={{ipa}}&url={{url}}&pec={{pec}}&amministrazione={{amministrazione}}" class="btn btn-primary">Registra</a>
-                    <a href="/" class="btn btn-default">Annulla</a>
+                    <a href="/registered?nomeReferente={{referente}}&ipa={{ipa}}&url={{url}}&pec={{pec}}&amministrazione={{amministrazione}}" class="btn btn-primary">{{common.btnregistra}}</a>
+                    <a href="/" class="btn btn-default">{{common.btnannulla}}</a>
 
                 </div>
             </div>
