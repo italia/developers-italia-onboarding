@@ -3,6 +3,14 @@
 		"btnregistra": "Registra EN",
 		"btnannulla": "Annulla"
 	},
+	"confirmed": {
+		"back": "Torna all'inserimento",
+		"titolo": "Registrazione avvenuta con successo"
+	},
+	"email_sent": {
+		"sent": "Ti invieremo il link con cui confermare l'iscrizione all'indirizzo",
+		"back": "Torna all'inserimento"
+	},
 	"register_confirm": {
 		"confirm": "Confermare registrazione dell'URL nel database?",
 		"labelReferente" : "Nome referente:",

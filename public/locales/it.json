@@ -1,6 +1,23 @@
 {
 	"common" : {
-		"btnregistra": "Registra"
+		"btnregistra": "Registra",
+		"btnannulla": "Annulla"
+	},
+	"confirmed": {
+		"back": "Torna all'inserimento",
+		"titolo": "Registrazione avvenuta con successo"
+	},
+	"email_sent": {
+		"sent": "Ti invieremo il link con cui confermare l'iscrizione all'indirizzo",
+		"back": "Torna all'inserimento"
+	},
+	"register_confirm": {
+		"confirm": "Confermare registrazione dell'URL nel database?",
+		"labelReferente" : "Nome referente:",
+		"labelAmministrazione": "Amministrazione richiedente: ",
+		"labelCodice": "Codice ipa:",
+		"labelpec": "Indirizzo PEC:",
+		"labelurl": "URL di code hosting: "
 	},
 	"main": {
 		"descrizioneForm": "  Attraverso questo form, le Pubbliche Amministrazioni possono registrare il proprio repository di codice sorgente pubblico all'interno di <a href='//developers.italia.it'>Developers Italia</a>. In questo modo, il crawler del portale sarà in grado di verificare la presenza del file <a href='https://docs.italia.it/italia/developers-italia/publiccodeyml/it/master/'>publiccode.yml</a> nei singoli repository e pubblicarne i relativi dati all'interno del catalogo del software a riuso. Si ricorda che tutti i campi sono obbligatori.",
