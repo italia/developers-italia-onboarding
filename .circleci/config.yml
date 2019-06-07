@@ -25,9 +25,4 @@ workflows:
   version: 2
   continuous-deploy:
     jobs:
-      - build:
-          filters:
-            branches:
-                only:
-                  - master
-
+      - build
