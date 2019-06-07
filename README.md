@@ -57,10 +57,12 @@ Il formato ritornato è il seguente:
 ---
   registrati: 
     - 
+      timestamp: "2019-05-27T09:45:00.770Z"
       ipa: "c_a123"
       url: "https://github.com/undefined"
       pec: "protocollo.comunemaramao@pec.it"
     - 
+      timestamp: "2019-05-28T09:45:00.770Z"
       ipa: "c_a123"
       url: "https://gitlab.com/undefined"
       pec: "protocollo.comunemaramao@pec.it"
