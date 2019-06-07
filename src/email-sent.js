@@ -9,6 +9,7 @@ const validateUrl = require('./validator.js');
 const {VALIDATION_OK} = require('./validator-result.js');
 const getErrorMessage = require('./validation-error-message.js');
 const i18helper = require('./i18helper.js');
+
 module.exports = function (request, h) {
   const mailServerConfig = JSON.parse(process.argv.includes('dev') ?
     fs.readFileSync('config-dev.json').toString('utf8') :
@@ -96,6 +97,10 @@ module.exports = function (request, h) {
     const commonCatalog = i18helper.getCatalog(request, 'common');
     templateData.email = emailCatalog;
     templateData.common = commonCatalog;
+	const emailContentCatalog = i18helper.getCatalog(request, 'email_content');
+	const commonCatalog = i18helper.getCatalog(request, 'common');
+	templateData.email_content = emailSentCatalog;
+	templateData.commonCatalog = commonCatalog;
     // setup email data with unicode symbols
     const mailOptions = {
       from: from, // sender address
