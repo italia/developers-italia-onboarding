@@ -11,7 +11,7 @@ const {VALIDATION_OK, VALIDATION_NOT_WHITELIST, VALIDATION_INVALID_URL} = requir
  * @return Un oggetto di tipo ValidatorResult
  */
 function validateUrl(url) {
-  const generalRegex = /^(https?):\/\/(www\.)?([a-z]+)(\.([\da-zA-Z-]+)){1,2}(\/[\da-zA-Z-]+)*\/?$/;
+  const generalRegex = /^(https?):\/\/(www\.)?([a-z]+)(\.([\da-zA-Z-]+)){1,2}(\/[\da-zA-Z-_]+)*\/?$/;
   if (!generalRegex.test(url)) {
     return VALIDATION_INVALID_URL;
   }
