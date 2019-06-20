@@ -293,7 +293,7 @@
                       <td>
                       {{#overridePec}}
                         <div style="font-style: italic">
-                          <p>In data {{timestamp}} è stata inserita tramite il portale https://onboarding.developers.italia.it/
+                          <p>In data odierna è stata inserita tramite il portale https://onboarding.developers.italia.it/
                           una richiesta di registrazione di uno strumento di code hosting da cui avviare la scansione periodica
                           finalizzata a individuare software a riuso:</p>
                           <ul>
