@@ -3,7 +3,7 @@ const refInput = document.querySelector('input#nomeReferente');
 const urlInput = document.querySelector('input#url');
 
 if (ipaInput) {
-//validation
+  //validation
   ipaInput.addEventListener('input', () => {
     ipaInput.setCustomValidity('');
     ipaInput.checkValidity();
@@ -64,7 +64,10 @@ function modelData(result, item = {}) {
     pec: item.pec || result.pec,
     link: '#',
     value: (item.description || result.description)
-      + ' <strong>(' + result.ipa + ')</strong>',
+      + '<br />'
+      + '<b>ipa: </b>' + result.ipa
+      + ', <b>pec: </b>'
+      + ((item.pec) ?  item.pec : result.pec),
   };
 }
 
@@ -80,15 +83,21 @@ function populateAutocompleteBox(data) {
     //modelling data
     data.hits.hits
       .map(function (result) {
-        return result._source;
+        return result;
       })
       .map(function (result) {
         let out = [];
-        if (result.office && Array.isArray(result.office))
-          result.office.forEach(function (item) {
-            out.push(modelData(result, item));
-          });
-        out.push(modelData(result));
+        let office = result.inner_hits.office.hits.hits;
+        let _source = result._source;
+        if (office && Array.isArray(office))
+          //if offices are searched and returned
+          if(office.length>0)
+            office.forEach(function (item) {
+              out.push(modelData(_source, item._source));
+            });
+          //else if parent ipa are searched
+          else
+            out.push(modelData(_source));
         return out;
       })
       .forEach(function (r) {
@@ -134,6 +143,7 @@ $('#ricercaAmministrazione').on('keyup', function (e) {
     e.preventDefault();
   }
   let query = $('#ricercaAmministrazione').val();
+
   $.getJSON({
     /* global ES_URL */
     url: ES_URL,
@@ -141,12 +151,18 @@ $('#ricercaAmministrazione').on('keyup', function (e) {
     type: 'POST',
     dataType: 'json',
     data: JSON.stringify({
+      from: 0, size: 50,
+      _source: {
+        includes: ['*'],
+        excludes: ['office']
+      },
       query: {
         bool: {
           should: [
             {
               nested: {
                 path: 'office',
+                inner_hits: {},
                 query: {
                   multi_match: {
                     query: query,
