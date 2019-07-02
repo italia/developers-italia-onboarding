@@ -28,3 +28,8 @@ label[for="ipa"],label[for="nomeAmministrazione"],label[for="pec"] {
   max-height: 300px;
   overflow: auto;
 }
+
+/* Force text-white */
+.text-white {
+    color: white;
+}
