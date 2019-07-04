@@ -8,6 +8,7 @@ const key = require('./get-jwt-key.js')();
 const validateUrl = require('./validator.js');
 const {VALIDATION_OK} = require('./validator-result.js');
 const getErrorMessage = require('./validation-error-message.js');
+const i18helper = require('./i18helper.js');
 
 module.exports = function (request, h) {
   const mailServerConfig = JSON.parse(process.argv.includes('dev') ?
@@ -83,15 +84,7 @@ module.exports = function (request, h) {
     const subject = mailServerConfig.mail && mailServerConfig.mail.subject ?
       mailServerConfig.mail.subject :
       'Onboarding Developers Italia';
-
-    // setup email data with unicode symbols
-    const mailOptions = {
-      from: from, // sender address
-      to: pec, // list of receivers
-      cc: (mailServerConfig.mail.cc) ? mailServerConfig.mail.cc : '',
-      bcc: (mailServerConfig.mail.bcc) ? mailServerConfig.mail.bcc : '',
-      subject: subject, // Subject line
-      html: mustache.render(template, {
+    let templateData = {
         referente: referente,
         url: url,
         codiceIPA: ipa,
@@ -99,7 +92,23 @@ module.exports = function (request, h) {
         link: destinationLink,
         originalPec: originalPec,
         overridePec: overridePec
-      })
+      };
+    const emailCatalog = i18helper.getCatalog(request, 'email');
+    const commonCatalog = i18helper.getCatalog(request, 'common');
+    templateData.email = emailCatalog;
+    templateData.common = commonCatalog;
+	const emailContentCatalog = i18helper.getCatalog(request, 'email_content');
+	const commonCatalog = i18helper.getCatalog(request, 'common');
+	templateData.email_content = emailSentCatalog;
+	templateData.commonCatalog = commonCatalog;
+    // setup email data with unicode symbols
+    const mailOptions = {
+      from: from, // sender address
+      to: pec, // list of receivers
+      cc: (mailServerConfig.mail.cc) ? mailServerConfig.mail.cc : '',
+      bcc: (mailServerConfig.mail.bcc) ? mailServerConfig.mail.bcc : '',
+      subject: subject, // Subject line
+      html: mustache.render(template, templateData)
     };
     
     // send mail with defined transport object
@@ -114,5 +123,10 @@ module.exports = function (request, h) {
   }
 
   let data = {pec: originalPec};
+  const emailSentCatalog = i18helper.getCatalog(request, 'email_sent');
+  const commonCatalog = i18helper.getCatalog(request, 'common');
+  data.email_sent = emailSentCatalog;
+  data.commonCatalog = commonCatalog;
+
   return h.view('email-sent', data, {layout: 'index'});
 };
