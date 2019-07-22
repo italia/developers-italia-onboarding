@@ -76,19 +76,6 @@
         padding-top: 10px;
       }
 
-      .footer {
-        clear: both;
-        Margin-top: 10px;
-        text-align: center;
-        width: 100%; }
-        .footer td,
-        .footer p,
-        .footer span,
-        .footer a {
-          color: #999999;
-          font-size: 12px;
-          text-align: center; }
-
       /* -------------------------------------
           TYPOGRAPHY
       ------------------------------------- */
@@ -345,18 +332,6 @@
 
             <!-- END MAIN CONTENT AREA -->
             </table>
-
-            <!-- START FOOTER -->
-            <div class="footer">
-              <table border="0" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td class="content-block powered-by">
-                    <a href="https://developers.italia.it/">Developers Italia</a>
-                  </td>
-                </tr>
-              </table>
-            </div>
-            <!-- END FOOTER -->
 
           <!-- END CENTERED WHITE CONTAINER -->
           </div>
