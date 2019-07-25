@@ -76,19 +76,6 @@
         padding-top: 10px;
       }
 
-      .footer {
-        clear: both;
-        Margin-top: 10px;
-        text-align: center;
-        width: 100%; }
-        .footer td,
-        .footer p,
-        .footer span,
-        .footer a {
-          color: #999999;
-          font-size: 12px;
-          text-align: center; }
-
       /* -------------------------------------
           TYPOGRAPHY
       ------------------------------------- */
@@ -311,8 +298,8 @@
                         <p>Gentile {{amministrazione}},</p>
                         <p>ci è pervenuta la richiesta di aggiungere la URL <a href="{{url}}">{{url}}</a>
                         al portale Developers Italia come strumento di code hosting ufficiale utilizzato dalla vostra Amministrazione per pubblicare
-                        il software a riuso (secondo quanto disposto dalle Linee Guida per l'Acquisizione e il Riuso di Software,
-                        con riferimento all'art 68 e 69 del Codice dell'Amministrazione Digitale).</p>
+                        il software a riuso (secondo quanto disposto dalle Linee guida per l'acquisizione e il riuso di software per le pubbliche amministrazioni,
+                        con riferimento agli artt. 68 e 69 del Codice dell'Amministrazione Digitale).</p>
                         <p>La richiesta è stata effettuata dal seguente referente: {{referente}}.</p>
                         <p>Se la richiesta è corretta, potete confermare la registrazione cliccando sul seguente link:</p>
                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
@@ -335,6 +322,8 @@
                         in considerazione i soli repository contenenti un file <a href="https://docs.italia.it/italia/developers-italia/publiccodeyml/it/master/">publiccode.yml</a> correttamente compilato.</p>
                         <p>Se si riscontrano problemi nell'utilizzo del pulsante, si prega di copiare ed incollare il seguente link nel browser:</p>
                         <p>{{link}}</p>
+                        <br>
+                        <p>Per ulteriori informazioni riguardo al processo è possibile consultare la pagina di <a href="https://developers.italia.it/it/riuso/pubblicazione">Developers Italia</a>.</p>
                       </td>
                     </tr>
                   </table>
@@ -343,18 +332,6 @@
 
             <!-- END MAIN CONTENT AREA -->
             </table>
-
-            <!-- START FOOTER -->
-            <div class="footer">
-              <table border="0" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td class="content-block powered-by">
-                    <a href="https://developers.italia.it/">Developers Italia</a>
-                  </td>
-                </tr>
-              </table>
-            </div>
-            <!-- END FOOTER -->
 
           <!-- END CENTERED WHITE CONTAINER -->
           </div>
