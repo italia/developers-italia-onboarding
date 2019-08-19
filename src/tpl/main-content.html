@@ -5,18 +5,30 @@
         <div class="my-5 col-md-8">
           <form action="email-sent" method="POST">
             <h1>Registrazione repository per software pubblico</h1>
-            <br/>
+            <br />
             <h5>
-              Attraverso questo form le Pubbliche Amministrazioni possono dichiarare lo strumento di code hosting 
-              dove pubblicano il software di cui sono titolari, ai sensi delle <a href="https://developers.italia.it/it/riuso">Linee guida sull'acquisizione e il
-              riuso di software</a>. Developers Italia, al fine di popolare il catalogo del software pubblico, effettua 
-              scansioni periodiche sugli strumenti di code hosting dichiarati dalle amministrazioni per rilevare i repository contenenti
+              Attraverso questo form le Pubbliche Amministrazioni possono dichiarare uno o più strumenti di code hosting
+              dove pubblicano il software di cui sono titolari, ai sensi degli obblighi di legge descritti dalle
+              <a href="https://developers.italia.it/it/riuso">Linee guida sull'acquisizione e il riuso di software</a>.
+              <br />
+              Developers Italia, al fine di popolare il catalogo del software pubblico, effettua
+              scansioni periodiche degli strumenti di code hosting dichiarati dalle amministrazioni per rilevare i
+              repository contenenti
               un file <a href="https://docs.italia.it/italia/developers-italia/publiccodeyml/it/master/">publiccode.yml</a>.
+              <br />
+              La compilazione di questo form genererà una PEC contenente un link che l'Ente dovrà seguire per confermare
+              l'iscrizione con un semplice click: è pertanto una semplice procedura di verifica per accertare la
+              titolarità degli account usati per la pubblicazione del software.
             </h5>
             <br />
             <div class="form-group">
               <input type="text" class="form-control" id="nomeReferente" name="nomeReferente" required>
               <label for="nomeReferente">Referente (nome e cognome) *</label>
+              <small class="form-text text-muted">
+                Il nome e il cognome della persona che sta effettuando questa richiesta. Sarà citato nella PEC
+                indirizzata all'Amministrazione richiedente in modo da facilitare lo smistamento del messaggio
+                all'interno dell'Amministrazione stessa.
+              </small>
             </div>
 
             <div class="form-group">
@@ -31,28 +43,32 @@
 
             <div class="form-group active child">
               <input type="text" class="form-control-plaintext active readonly" id="ipa" name="ipa" tabindex="-1"
-                     required>
+                required>
               <label for="ipa">Codice iPA *</label>
             </div>
 
             <div class="form-group active child">
               <input type="text" class="form-control-plaintext active readonly" id="nomeAmministrazione" tabindex="-1"
-                     required>
+                required>
               <label for="nomeAmministrazione">Amministrazione *</label>
             </div>
 
             <div class="form-group active child">
-              <input type="text" class="form-control-plaintext active readonly" id="pec" name="pec" tabindex="-1" required>
+              <input type="text" class="form-control-plaintext active readonly" id="pec" name="pec" tabindex="-1"
+                required>
               <label for="pec">PEC *</label>
             </div>
 
             <div class="form-group">
               <input type="text" class="form-control" id="url" name="url" required>
-              <label for="url">URL dell'organizzazione nello strumento di code hosting *</label>
+              <label for="url">URL dell'account nello strumento di code hosting *</label>
               <small class="form-text text-muted">
-                Ogni PA può aggiungere diversi repository e/o organizzazioni.
-                Attualmente sono supportati i seguenti strumenti di code hosting: 
-                GitHub, GitLab, BitBucket, Phabricator, Gitea, Gogs. Ad es. https://github.com/ComuneDiRoma
+                URL dell'account (detto anche "organizzazione")
+                intestato all'Amministrazione. Ad esempio: <i>https://github.com/ComuneDiRoma.</i>
+                L'URL sarà <b>aggiunto</b> a quelli già noti per l'Amministrazione indicata;
+                per rimuovere URL già comunicati si prega di scrivere all'indirizzo 
+                <a href="mailto:contatti@developers.italia.it">contatti@developers.italia.it</a>.
+                Attualmente sono supportati: GitHub, GitLab, BitBucket.
               </small>
             </div>
 
