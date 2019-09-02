@@ -17,6 +17,9 @@ module.exports = function (request, h) {
   const ipa = request.query.ipa;
   const url = request.query.url;
   const pec = request.query.pec;
+  // this will reload file to be more permissive
+  // and allow external manipulation
+  db.read();
 
   db.get('registrati')
     .push({
