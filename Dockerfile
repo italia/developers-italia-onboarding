@@ -9,7 +9,7 @@ RUN npm install
 COPY . .
 
 # inject env vars
-RUN sed -i -e "s|^const ES_URL.*|const ES_URL = 'https://elasticsearch.developers.italia.it/indicepa/_search';|g"  public/assets/js/constants.js
+RUN sed -i -e "s|^const ES_URL.*|const ES_URL = 'https://elasticsearch.developers.italia.it/indicepa_pec/_search';|g"  public/assets/js/constants.js
 
 # Launch application
 CMD npm run $env
