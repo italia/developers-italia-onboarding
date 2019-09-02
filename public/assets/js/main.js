@@ -57,17 +57,17 @@ function getResultElement(result) {
  * @param item
  * @returns {{link: string, description: *, ipa: (Document.ipa|*), value: string, pec: string}}
  */
-function modelData(result, item = {}) {
+function modelData(result) {
   return {
     ipa: result.ipa,
-    description: item.description || result.description,
-    pec: item.pec || result.pec,
+    description: result.description,
+    pec:result.pec,
     link: '#',
-    value: (item.description || result.description)
+    value: result.description
       + '<br />'
       + '<b>ipa: </b>' + result.ipa
       + ', <b>pec: </b>'
-      + ((item.pec) ?  item.pec : result.pec),
+      + result.pec,
   };
 }
 
@@ -83,27 +83,11 @@ function populateAutocompleteBox(data) {
     //modelling data
     data.hits.hits
       .map(function (result) {
-        return result;
-      })
-      .map(function (result) {
-        let out = [];
-        let office = result.inner_hits.office.hits.hits;
         let _source = result._source;
-        if (office && Array.isArray(office))
-          //if offices are searched and returned
-          if(office.length>0)
-            office.forEach(function (item) {
-              out.push(modelData(_source, item._source));
-            });
-          //else if parent ipa are searched
-          else
-            out.push(modelData(_source));
-        return out;
+        return modelData(_source);
       })
-      .forEach(function (r) {
-        r.forEach(function (result) {
-          resultsElem.append(getResultElement(result));
-        });
+      .forEach(function (result) {
+        resultsElem.append(getResultElement(result));
       });
 
     //showing list
@@ -152,36 +136,19 @@ $('#ricercaAmministrazione').on('keyup', function (e) {
     dataType: 'json',
     data: JSON.stringify({
       from: 0, size: 50,
-      _source: {
-        includes: ['*'],
-        excludes: ['office']
-      },
       query: {
         bool: {
           should: [
-            {
-              nested: {
-                path: 'office',
-                inner_hits: {},
-                query: {
-                  multi_match: {
-                    query: query,
-                    operator: 'and',
-                    fields: [
-                      'office.code',
-                      'office.description'
-                    ]
-                  }
-                }
-              }
-            },
             {
               multi_match: {
                 query: query,
                 operator: 'and',
                 fields: [
                   'ipa',
-                  'description'
+                  'pec',
+                  'description',
+                  'type',
+                  'cf'
                 ]
               }
             }
