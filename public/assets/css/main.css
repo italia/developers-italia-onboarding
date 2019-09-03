@@ -28,3 +28,11 @@ label[for="ipa"],label[for="nomeAmministrazione"],label[for="pec"] {
   max-height: 300px;
   overflow: auto;
 }
+
+.form-group {
+  margin-bottom: 2em;
+}
+
+.form-group small.form-text {
+  position: relative;
+}
