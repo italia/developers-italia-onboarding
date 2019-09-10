@@ -12,7 +12,7 @@ executors:
 jobs:
   build:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:lts
 
     working_directory: ~/repo
     steps:
@@ -34,11 +34,11 @@ jobs:
             docker build -t $IMAGE_NAME:latest .
       - run:
           name: Archive Docker image
-          command: docker save -o image.tar $IMAGE_NAME
+          command: docker save -o $IMAGE_NAME_PROD $IMAGE_NAME
       - persist_to_workspace:
           root: .
           paths:
-            - ./image.tar
+            - ./*.tar
   docker-build-dev:
     executor: docker-publisher
     steps:
@@ -50,18 +50,18 @@ jobs:
             docker build -t $IMAGE_NAME:development .
       - run:
           name: Archive Docker image
-          command: docker save -o image.tar $IMAGE_NAME
+          command: docker save -o $IMAGE_NAME_DEV $IMAGE_NAME
       - persist_to_workspace:
           root: .
           paths:
-            - ./image.tar
+            - ./*.tar
   deploy-prod:
     machine:
       enabled: true
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - run: scp /tmp/workspace/image.tar circleci@$SSH_HOST:/tmp/image.tar
+      - run: rsync -avz /tmp/workspace/$IMAGE_NAME_PROD circleci@$SSH_HOST:/tmp/$IMAGE_NAME_PROD
       - run:
           name: deploy on prod
           command: |
@@ -72,8 +72,7 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      #- run: scp /tmp/workspace/image.tar circleci@$SSH_HOST:/tmp/image.tar
-      - run: rsync -avz /tmp/workspace/image.tar circleci@$SSH_HOST:/tmp/image.tar
+      - run: rsync -avz /tmp/workspace/$IMAGE_NAME_DEV circleci@$SSH_HOST:/tmp/$IMAGE_NAME_DEV
       - run:
           name: deploy on dev
           command: |
