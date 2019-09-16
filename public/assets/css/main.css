@@ -18,7 +18,10 @@
 input.readonly {
   pointer-events: none;
 }
-label[for="ipa"],label[for="nomeAmministrazione"],label[for="pec"] {
+
+label[for="ipa"],
+label[for="nomeAmministrazione"],
+label[for="pec"] {
   pointer-events: none;
 }
 
@@ -35,4 +38,8 @@ label[for="ipa"],label[for="nomeAmministrazione"],label[for="pec"] {
 
 .form-group small.form-text {
   position: relative;
+}
+
+a {
+  text-decoration: none;
 }
