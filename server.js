@@ -1,7 +1,7 @@
 'use strict';
 
 const Path = require('path');
-const Hapi = require('hapi');
+const Hapi = require('@hapi/hapi');
 const Mustache = require('mustache');
 const fs = require('fs-extra');
 
@@ -33,8 +33,8 @@ const init = async () => {
     }
   });
 
-  await server.register(require('inert'));
-  await server.register(require('vision'));
+  await server.register(require('@hapi/inert'));
+  await server.register(require('@hapi/vision'));
 
   server.views({
     engines: {
