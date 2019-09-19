@@ -25,7 +25,7 @@
     "@hapi/hapi": "^18.4.0",
     "@hapi/inert": "^5.2.2",
     "@hapi/vision": "^5.5.4",
-    "bootstrap-italia": "^1.3.5",
+    "bootstrap-italia": "^1.3.6",
     "fs-extra": "^8.1.0",
     "generate-password": "^1.4.2",
     "jquery": "^3.4.1",
