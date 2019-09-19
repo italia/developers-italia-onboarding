@@ -4,32 +4,32 @@ const urlInput = document.querySelector('input#url');
 
 if (ipaInput) {
   //validation
-  ipaInput.addEventListener('input', () => {
+  ipaInput.addEventListener('input', function () {
     ipaInput.setCustomValidity('');
     ipaInput.checkValidity();
   });
 
-  refInput.addEventListener('input', () => {
+  refInput.addEventListener('input', function () {
     refInput.setCustomValidity('');
     refInput.checkValidity();
   });
 
-  urlInput.addEventListener('input', () => {
+  urlInput.addEventListener('input', function () {
     urlInput.setCustomValidity('');
     urlInput.checkValidity();
   });
 
-  ipaInput.addEventListener('invalid', () => {
+  ipaInput.addEventListener('invalid', function () {
     if (ipaInput.value === '')
       ipaInput.setCustomValidity('Selezionare un\'amministrazione dal campo Ricerca Amministrazione!');
   });
 
-  refInput.addEventListener('invalid', () => {
+  refInput.addEventListener('invalid', function () {
     if (refInput.value === '')
       refInput.setCustomValidity('Specificare un referente per l\'amministrazione!');
   });
 
-  urlInput.addEventListener('invalid', () => {
+  urlInput.addEventListener('invalid', function () {
     if (urlInput.value === '')
       urlInput.setCustomValidity('Specificare un URL di riferimento!');
   });
@@ -61,7 +61,7 @@ function modelData(result) {
   return {
     ipa: result.ipa,
     description: result.description,
-    pec:result.pec,
+    pec: result.pec,
     link: '#',
     value: result.description
       + '<br />'
