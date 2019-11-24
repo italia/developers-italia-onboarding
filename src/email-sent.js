@@ -15,6 +15,7 @@ module.exports = function (request, h) {
     fs.readFileSync('config-prod.json').toString('utf8'));
 
   const referente = request.payload.nomeReferente;
+  const refTel = request.payload.telReferente;
   const ipa = request.payload.ipa;
   const amministrazione = request.payload.description;
   const url = request.payload.url;
@@ -68,6 +69,7 @@ module.exports = function (request, h) {
     const template = fs.readFileSync('src/tpl/email.mst').toString('utf8');
     const token = jwt.sign({
       referente: referente,
+      refTel: refTel,
       ipa: ipa,
       url: url,
       description: amministrazione,
@@ -93,6 +95,7 @@ module.exports = function (request, h) {
       subject: subject, // Subject line
       html: mustache.render(template, {
         referente: referente,
+        refTel: refTel,
         url: url,
         codiceIPA: ipa,
         amministrazione: amministrazione,
