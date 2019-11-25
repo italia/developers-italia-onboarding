@@ -38,7 +38,7 @@ if (ipaInput) {
   telInput.addEventListener('keyup', function () {
     const regex = /^\+?[1-9]\d{1,14}$/;
     if (!regex.test(telInput.value))
-      telInput.setCustomValidity('Inserire un numero E.164 Valido!');
+      telInput.setCustomValidity('Inserire un numero E.164 Valido');
   });
   telInput.addEventListener('invalid', function () {
     if (telInput.value === '')
