@@ -1,7 +1,8 @@
 'use strict';
 const { URL } = require('url');
 const parseDomain = require('parse-domain');
-const {VALIDATION_OK, VALIDATION_NOT_WHITELIST, VALIDATION_INVALID_URL} = require('./validator-result.js');
+const { VALIDATION_OK, VALIDATION_NOT_WHITELIST, 
+  VALIDATION_INVALID_URL, VALIDATION_PHONE } = require('./validator-result.js');
 
 /**
  * Controlla se l'URL e' ben formata e se il nome del dominio rientra in una whitelist di url.
@@ -17,6 +18,20 @@ function validateUrl(url) {
   }
   if (!isInWhiteList(url)) {
     return VALIDATION_NOT_WHITELIST;
+  }
+  return VALIDATION_OK;
+}
+
+/**
+ * Controlla il formato del numero telefonico
+ * 
+ * @param {string} phone numero telefonico da verificare
+ * @return Un oggetto di tipo ValidatorResult
+ */
+function validatePhoneNumber(phone) {
+  const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+  if (!phoneRegex.test(phone)) {
+    return VALIDATION_PHONE;
   }
   return VALIDATION_OK;
 }
@@ -79,4 +94,7 @@ function isInWhiteList(url) {
   return result;
 }
 
-module.exports = validateUrl;
+module.exports = {
+  url: validateUrl, 
+  phone: validatePhoneNumber
+};
