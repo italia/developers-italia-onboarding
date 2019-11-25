@@ -35,6 +35,11 @@ if (ipaInput) {
       refInput.setCustomValidity('Specificare un referente per l\'amministrazione!');
   });
 
+  telInput.addEventListener('keyup', function () {
+    const regex = /^\+?[1-9]\d{1,14}$/;
+    if (!regex.test(telInput.value))
+      telInput.setCustomValidity('Inserire un numero E.164 Valido!');
+  });
   telInput.addEventListener('invalid', function () {
     if (telInput.value === '')
       telInput.setCustomValidity('Specificare un numero telefonico per il referente!');
