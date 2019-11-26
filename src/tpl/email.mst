@@ -286,7 +286,7 @@
                           <ul>
                             <li><b>Ente:</b> {{amministrazione}} ({{ codiceIPA }})</li>
                             <li><b>Referente:</b> {{referente}}</li>
-                            <li><b>Tel. Referente:</b> {{refTel}}</li>
+                            <li><b>Telefono Referente:</b> {{refTel}}</li>
                             <li><b>PEC:</b> {{originalPec}}</li>
                             <li><b>URL code hosting:</b> {{url}}</li>
                           </ul>
