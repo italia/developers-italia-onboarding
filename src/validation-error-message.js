@@ -1,4 +1,5 @@
-const {VALIDATION_OK, VALIDATION_NOT_WHITELIST, VALIDATION_INVALID_URL} = require('./validator-result.js');
+const {VALIDATION_OK, VALIDATION_NOT_WHITELIST, 
+  VALIDATION_INVALID_URL, VALIDATION_PHONE} = require('./validator-result.js');
 
 
 /**
@@ -15,6 +16,9 @@ function getErrorMessage(validatorResult) {
 
   let message = '';
   switch (validatorResult) {
+  case VALIDATION_PHONE:
+    message = 'Numero telefonico non valido: ricompila il form';
+    break;
   case VALIDATION_INVALID_URL:
     message = 'Indirizzo URL invalido: ricompila il form';
     break;

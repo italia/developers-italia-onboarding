@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer');
 const mustache = require('mustache');
 const jwt = require('jsonwebtoken');
 const key = require('./get-jwt-key.js')();
-const validateUrl = require('./validator.js');
+const validator = require('./validator.js');
 const {VALIDATION_OK} = require('./validator-result.js');
 const getErrorMessage = require('./validation-error-message.js');
 
@@ -15,6 +15,7 @@ module.exports = function (request, h) {
     fs.readFileSync('config-prod.json').toString('utf8'));
 
   const referente = request.payload.nomeReferente;
+  const refTel = request.payload.telReferente;
   const ipa = request.payload.ipa;
   const amministrazione = request.payload.description;
   const url = request.payload.url;
@@ -26,9 +27,14 @@ module.exports = function (request, h) {
   const originalPec = request.payload.pec;
   const overridePec = (mailServerConfig.overrideRecipient && mailServerConfig.overrideMail);
 
-  let validationResult = validateUrl(url);
-  if (validationResult != VALIDATION_OK) {
-    let data = {errorMsg: getErrorMessage(validationResult)};
+  // server validation
+  let validationResultUrl = validator.url(url);
+  let validationResultPhone = validator.phone(refTel);
+  if (validationResultUrl != VALIDATION_OK) {
+    let data = {errorMsg: getErrorMessage(validationResultUrl)};
+    return h.view('main-content', data, {layout: 'index'});
+  } else if (validationResultPhone != VALIDATION_OK) {
+    let data = {errorMsg: getErrorMessage(validationResultPhone)};
     return h.view('main-content', data, {layout: 'index'});
   }
 
@@ -68,6 +74,7 @@ module.exports = function (request, h) {
     const template = fs.readFileSync('src/tpl/email.mst').toString('utf8');
     const token = jwt.sign({
       referente: referente,
+      refTel: refTel,
       ipa: ipa,
       url: url,
       description: amministrazione,
@@ -93,6 +100,7 @@ module.exports = function (request, h) {
       subject: subject, // Subject line
       html: mustache.render(template, {
         referente: referente,
+        refTel: refTel,
         url: url,
         codiceIPA: ipa,
         amministrazione: amministrazione,

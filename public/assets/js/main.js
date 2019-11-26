@@ -1,5 +1,6 @@
 const ipaInput = document.querySelector('input#ipa');
 const refInput = document.querySelector('input#nomeReferente');
+const telInput = document.querySelector('input#telReferente');
 const urlInput = document.querySelector('input#url');
 
 if (ipaInput) {
@@ -12,6 +13,11 @@ if (ipaInput) {
   refInput.addEventListener('input', function () {
     refInput.setCustomValidity('');
     refInput.checkValidity();
+  });
+
+  telInput.addEventListener('input', function () {
+    telInput.setCustomValidity('');
+    telInput.checkValidity();
   });
 
   urlInput.addEventListener('input', function () {
@@ -27,6 +33,16 @@ if (ipaInput) {
   refInput.addEventListener('invalid', function () {
     if (refInput.value === '')
       refInput.setCustomValidity('Specificare un referente per l\'amministrazione!');
+  });
+
+  telInput.addEventListener('keyup', function () {
+    const regex = /^\+?[1-9]\d{1,14}$/;
+    if (!regex.test(telInput.value))
+      telInput.setCustomValidity('Inserire un numero E.164 Valido');
+  });
+  telInput.addEventListener('invalid', function () {
+    if (telInput.value === '')
+      telInput.setCustomValidity('Specificare un numero telefonico per il referente!');
   });
 
   urlInput.addEventListener('invalid', function () {

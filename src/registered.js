@@ -14,6 +14,7 @@ db.defaults({ registrati: [] }).write();
 
 module.exports = function (request, h) {
   const referente = request.query.nomeReferente;
+  const refTel = request.query.refTel;
   const ipa = request.query.ipa;
   const url = request.query.url;
   const pec = request.query.pec;
@@ -25,6 +26,7 @@ module.exports = function (request, h) {
     .push({
       timestamp: new Date().toJSON(),
       referente: referente,
+      refTel: refTel,
       ipa: ipa,
       url: url,
       pec: pec

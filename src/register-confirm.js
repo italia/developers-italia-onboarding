@@ -7,6 +7,7 @@ module.exports = function (request, h) {
   const decoded = jwt.verify(token, key);
 
   const referente = decoded.referente;
+  const refTel = decoded.refTel;
   const ipa = decoded.ipa;
   const url = decoded.url;
   const pec = decoded.pec;
@@ -14,6 +15,7 @@ module.exports = function (request, h) {
 
   let data = {
     referente: referente,
+    refTel: refTel,
     ipa: ipa,
     url: url,
     pec: pec,
