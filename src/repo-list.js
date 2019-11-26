@@ -10,7 +10,11 @@ module.exports = function (request, h) {
   const jsonList = JSON.parse(listRepo);
 
   if (jsonList.registrati.length > 0) {
-    jsonList.registrati.forEach((element) => delete element.referente);
+    // removing sensible data from listing
+    jsonList.registrati.forEach((element) => {
+      delete element.referente;
+      delete element.refTel;
+    });
     const ymlText = yaml.stringify(jsonList);
 
     return h.response(ymlText)
