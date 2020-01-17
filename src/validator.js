@@ -3,7 +3,7 @@ const { VALIDATION_OK,
   VALIDATION_INVALID_URL, VALIDATION_PHONE } = require('./validator-result.js');
 
 /**
- * Controlla se l'URL e' ben formata.
+ * Controlla se l'URL e' ben formata. Sono supportati fino a 5 livelli di dominio.
  *
  * @param url rappresenta l'url da controllare
  *
