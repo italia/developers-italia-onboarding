@@ -1,4 +1,4 @@
-const {VALIDATION_OK, VALIDATION_NOT_WHITELIST, 
+const {VALIDATION_OK, 
   VALIDATION_INVALID_URL, VALIDATION_PHONE} = require('./validator-result.js');
 
 
@@ -21,9 +21,6 @@ function getErrorMessage(validatorResult) {
     break;
   case VALIDATION_INVALID_URL:
     message = 'Indirizzo URL invalido: ricompila il form';
-    break;
-  case VALIDATION_NOT_WHITELIST:
-    message = 'Indirizzo URL non presente nella whitelist: ricompila il form';
     break;
   default:
     throw new Error('Url non valido');
