@@ -30,11 +30,15 @@ module.exports = function (request, h) {
   // server validation
   let validationResultUrl = validator.url(url);
   let validationResultPhone = validator.phone(refTel);
+  let validationCheckDups = validator.checkDups(ipa, url);
   if (validationResultUrl != VALIDATION_OK) {
     let data = {errorMsg: getErrorMessage(validationResultUrl)};
     return h.view('main-content', data, {layout: 'index'});
   } else if (validationResultPhone != VALIDATION_OK) {
     let data = {errorMsg: getErrorMessage(validationResultPhone)};
+    return h.view('main-content', data, {layout: 'index'});
+  }else if (validationCheckDups != VALIDATION_OK) {
+    let data = {errorMsg: getErrorMessage(validationCheckDups)};
     return h.view('main-content', data, {layout: 'index'});
   }
 

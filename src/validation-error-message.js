@@ -1,4 +1,4 @@
-const {VALIDATION_OK, 
+const {VALIDATION_OK, VALIDATION_ALREADY_PRESENT,
   VALIDATION_INVALID_URL, VALIDATION_PHONE} = require('./validator-result.js');
 
 
@@ -21,6 +21,9 @@ function getErrorMessage(validatorResult) {
     break;
   case VALIDATION_INVALID_URL:
     message = 'Indirizzo URL invalido: ricompila il form';
+    break;
+  case VALIDATION_ALREADY_PRESENT:
+    message = 'Il codice IPA e l\'URL sono già presenti';
     break;
   default:
     throw new Error('Url non valido');
