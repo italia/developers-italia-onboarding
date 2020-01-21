@@ -4,6 +4,7 @@ const fs = require('fs-extra');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
+
 const whitelistFile = 'private/data/whitelist.db.json';
 fs.ensureFileSync(whitelistFile);
 const adapter = new FileSync(whitelistFile);
