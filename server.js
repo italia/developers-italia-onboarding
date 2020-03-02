@@ -1,11 +1,10 @@
 'use strict';
 
-const Path = require('path');
+const config = require('./src/config');
+const fs = require('fs-extra');
 const Hapi = require('@hapi/hapi');
 const Mustache = require('mustache');
-const fs = require('fs-extra');
-
-const whiteList = 'smtp-account-config.json';
+const Path = require('path');
 
 const init = async () => {
   const emailSentHandler = require('./src/email-sent');
@@ -15,15 +14,10 @@ const init = async () => {
   const homeHandler = require('./src/home');
   const faqHandler = require('./src/faq');
 
-  const appConfig = JSON.parse(process.argv.includes('dev') ?
-    fs.readFileSync('config-dev.json').toString('utf8') :
-    fs.readFileSync('config-prod.json').toString('utf8'));
-
-  const httpPort =
-    appConfig.applicationBaseURL &&
-    Array.isArray(appConfig.applicationBaseURL.split(':')) &&
-    appConfig.applicationBaseURL.split(':').length == 3 ?
-      appConfig.applicationBaseURL.split(':')[2] : 80;
+  const httpPort = config.appBaseUrl
+                && Array.isArray(config.appBaseUrl.split(':'))
+                && config.appBaseUrl.split(':').length == 3
+                ? config.appBaseUrl.split(':')[2] : 80;
 
   const server = Hapi.server({
     port: httpPort,
@@ -120,9 +114,4 @@ process.on('unhandledRejection', (err) => {
   process.exit(1);
 });
 
-
-if (JSON.parse(process.argv.includes('dev')) || fs.existsSync(whiteList)) {
-  init();
-} else {
-  console.log('Attenzione! Creare prima un file di credenziali "smtp-account-config.json" seguendo il modello di account-config-tpl.json');
-}
+init();

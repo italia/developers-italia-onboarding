@@ -1,0 +1,12 @@
+{
+  "registrati": [
+    {
+      "timestamp": "2020-01-21T08:14:22.417Z",
+      "referente": "Name",
+      "refTel": "+39",
+      "ipa": "pcm",
+      "url": "https://github.com/italia",
+      "pec": "mail@example"
+    }
+  ]
+}
