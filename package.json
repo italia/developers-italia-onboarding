@@ -5,9 +5,8 @@
   "main": "server.js",
   "scripts": {
     "lint": "eslint server.js src/**/*.js public/assets/js/*",
-    "dev": "export $(cat .env | xargs) && nodemon -e js,html -w src -w server.js server.js dev",
-    "prod": "export $(cat .env | xargs) && pm2-runtime server.js",
-    "start": "export $(cat .env | xargs) && pm2-runtime server.js"
+    "dev": "export $(grep -v '^#' .env | xargs) && nodemon -e js,html -w src -w server.js server.js dev",
+    "prod": "pm2-runtime server.js"
   },
   "repository": {
     "type": "git",
