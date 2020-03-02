@@ -22,4 +22,4 @@ RUN npm install
 
 USER ${USER}
 
-CMD npm run ${ONBOARDING_ENVIRONMENT}
+CMD npm run prod
