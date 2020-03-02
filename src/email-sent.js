@@ -16,9 +16,9 @@ module.exports = function (request, h) {
   const ipa = request.payload.ipa;
   const amministrazione = request.payload.description;
   const url = request.payload.url;
-  const overridePec = config.mail.overrideRecipientAddr
-                   && config.mail.overrideRecipientAddr.length > 1
-  const pec = overridePec ? config.mail.overrideRecipientAddr : request.payload.pec;
+  const overridePec = (config.email.overrideRecipientAddr
+                   && config.email.overrideRecipientAddr.length > 1);
+  const pec = overridePec ? config.email.overrideRecipientAddr : request.payload.pec;
 
   const originalPec = request.payload.pec;
 
@@ -33,7 +33,7 @@ module.exports = function (request, h) {
     return h.view('main-content', data, {layout: 'index'});
   }
 
-  if (config.environment == "dev") {
+  if (config.environment == 'dev') {
     // Generate test SMTP service account from ethereal.email
     // Only needed if you don't have a real mail account for testing
     nodemailer.createTestAccount((err, account) => {
