@@ -1,7 +1,6 @@
 'use strict';
 
 const config = require('./src/config');
-const fs = require('fs-extra');
 const Hapi = require('@hapi/hapi');
 const Mustache = require('mustache');
 const Path = require('path');
@@ -15,9 +14,9 @@ const init = async () => {
   const faqHandler = require('./src/faq');
 
   const httpPort = config.appBaseUrl
-                && Array.isArray(config.appBaseUrl.split(':'))
-                && config.appBaseUrl.split(':').length == 3
-                ? config.appBaseUrl.split(':')[2] : 80;
+    && Array.isArray(config.appBaseUrl.split(':'))
+    && config.appBaseUrl.split(':').length == 3
+    ? config.appBaseUrl.split(':')[2] : 80;
 
   const server = Hapi.server({
     port: httpPort,
