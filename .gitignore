@@ -13,9 +13,10 @@ dist
 .env
 .serverless
 .eslintcache
-src/config/appConfig.js
 
 .idea
 TODO
 .vscode
 .history
+
+private

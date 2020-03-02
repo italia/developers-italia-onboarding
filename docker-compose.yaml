@@ -16,7 +16,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - demo-volume:/private/data
+      - demo-data:/private/data
 
 volumes:
-  demo-volume:
+  demo-data:
