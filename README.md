@@ -114,12 +114,6 @@ Per eseguire l'applicativo direttamente sulla macchina dello sviluppatore, insta
 npm install
 ```
 
-Esportare le variabili d'ambiente, partendo dal file *.env* creato in precedenza, attraverso il seguente comando:
-
-```bash
-export $(grep -v '^#' .env | xargs)
-```
-
 Nella root del repository, creare una cartella *private/data*. Al suo interno creare un file vuoto *whitelist.db.json* (o in alternativa copiarlo da [demo-data/whitelist.db.json]).
 
 A questo punto sarà possibile eseguire il server tramite il comando:
