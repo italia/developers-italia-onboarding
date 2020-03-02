@@ -1,11 +1,13 @@
 module.exports = {
   environment: process.env.ONBOARDING_ENVIRONMENT,
   appBaseUrl: process.env.ONBOARDING_APP_BASE_URL || "http://localhost:3000",
-  esUrl: process.env.ONBARDING_ES_URL || "http://localhost:9200/index/_search",
+  esUrl: process.env.ONBOARDING_ES_URL || "http://localhost:9200/indicepa_pec/_search",
   smtp: {
     hostname: process.env.ONBOARDING_SMTP_HOSTNAME,
     port: process.env.ONBOARDING_SMTP_PORT || 587,
-    secure: process.env.ONBOARDING_SMTP_SECURE || true,
+    secure: (process.env.ONBOARDING_SMTP_SECURE == 'true')
+      ? true
+      : false,
     username: process.env.ONBOARDING_SMTP_USERNAME,
     password: process.env.ONBOARDING_SMTP_PASSWORD
   },
