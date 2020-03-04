@@ -5,6 +5,8 @@ ENV USER developers
 
 WORKDIR ${HOME}
 
+RUN apk add ca-certificates
+
 RUN adduser --home ${HOME} --shell /bin/sh --disabled-password ${USER}
 
 RUN chown -R ${USER}.${USER} ${HOME}
