@@ -7,10 +7,6 @@ WORKDIR ${HOME}
 
 RUN apk add ca-certificates
 
-RUN adduser --home ${HOME} --shell /bin/sh --disabled-password ${USER}
-
-RUN chown -R ${USER}.${USER} ${HOME}
-
 COPY public public
 COPY src src
 COPY AUTHORS .
@@ -19,6 +15,10 @@ COPY LICENSE .
 COPY package.json .
 COPY package-lock.json .
 COPY server.js .
+
+RUN adduser --home ${HOME} --shell /bin/sh --disabled-password ${USER}
+
+RUN chown -R ${USER}.${USER} ${HOME}
 
 RUN npm install
 

@@ -13,10 +13,7 @@ const init = async () => {
   const homeHandler = require('./src/home');
   const faqHandler = require('./src/faq');
 
-  const httpPort = config.appBaseUrl
-    && Array.isArray(config.appBaseUrl.split(':'))
-    && config.appBaseUrl.split(':').length == 3
-    ? config.appBaseUrl.split(':')[2] : 80;
+  const httpPort = config.port;
 
   const server = Hapi.server({
     port: httpPort,
