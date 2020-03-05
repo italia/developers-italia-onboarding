@@ -1,5 +1,6 @@
 module.exports = {
   environment: process.env.ONBOARDING_ENVIRONMENT,
+  port: process.env.ONBOARDING_PORT || 3000,
   appBaseUrl: process.env.ONBOARDING_APP_BASE_URL || 'http://localhost:3000',
   esUrl: process.env.ONBOARDING_ES_URL || 'http://localhost:9200/indicepa_pec/_search',
   smtp: {

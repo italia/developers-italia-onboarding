@@ -12,10 +12,7 @@ const init = async () => {
   const repoHandler = require('./src/repo-list');
   const homeHandler = require('./src/home');
 
-  const httpPort = config.appBaseUrl
-    && Array.isArray(config.appBaseUrl.split(':'))
-    && config.appBaseUrl.split(':').length == 3
-    ? config.appBaseUrl.split(':')[2] : 80;
+  const httpPort = config.port;
 
   const server = Hapi.server({
     port: httpPort,
