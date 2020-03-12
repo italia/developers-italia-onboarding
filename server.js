@@ -13,6 +13,7 @@ const init = async () => {
   const registeredHandler = require('./src/registered');
   const repoHandler = require('./src/repo-list');
   const homeHandler = require('./src/home');
+  const faqHandler = require('./src/faq');
 
   const appConfig = JSON.parse(process.argv.includes('dev') ?
     fs.readFileSync('config-dev.json').toString('utf8') :
@@ -93,6 +94,10 @@ const init = async () => {
     path: '/',
     handler: homeHandler
   }, {
+    method: 'GET',
+    path: '/faq',
+    handler: faqHandler
+  },{
     method: 'GET',
     path: '/{param*}',
     handler: {
