@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Release 1.3.0] - 2020-03-16 
+
+### Added
+
+-  Added FAQ page (#97) 
+
+### Changed
+
+-  Switched header and footer to DTD (#98)
+
+
 ## [Release 1.2.0] - 2020-03-12 
 
 ### Added
