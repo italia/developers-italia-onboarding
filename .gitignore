@@ -3,3 +3,4 @@ node_modules/
 smtp-account-config.json
 *.swp
 config-prod.json
+.env
