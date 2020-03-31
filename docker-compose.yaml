@@ -1,11 +1,10 @@
 version: '3.2'
 
 services:
-
   # Developers Italia Onboarding
   developers-italia-onboarding:
     container_name: developers-italia-onboarding
-    image: italia/developers-italia-onboarding:dockerize
+    image: italia/developers-italia-onboarding:latest
     build:
       context: ./
       dockerfile: Dockerfile
