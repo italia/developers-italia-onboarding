@@ -2,42 +2,51 @@
 ![Build Status](https://img.shields.io/circleci/project/github/italia/developers-italia-onboarding/master.svg?style=flat
 ) ![Issues](https://img.shields.io/github/issues/italia/developers-italia-onboarding.svg) ![License](https://img.shields.io/github/license/italia/developers-italia-onboarding.svg?style=flat)
 
-Tramite l'applicazione di onboarding, le PA possono registrare i propri repository di code hosting sul portale [Developers Italia](https://innovazione.gov.it/it/progetti/developers-italia/). In questo modo è possibile aggiungere il repository alla lista indicizzata dal *crawler* del portale, che popolerà il catalogo del riuso. 
+The onboarding tool allows Italian Public Administrations to register their own code repositories in [Developers Italia](https://innovazione.gov.it/it/progetti/developers-italia/). As such, repositories will be scanned by the [crawler](https://github.com/italia/developers-italia-backend) that will feed the reuse catalog.
 
 ## Developers Italia
 
-Ulteriori informazioni relative al progetto Developers Italia possono essere trovate sul sito del [https://innovazione.gov.it](https://innovazione.gov.it/it/progetti/developers-italia/).
+More informations about Developers Italia can be found on the [website https://innovazione.gov.it](https://innovazione.gov.it/it/progetti/developers-italia/).
 
-## Flow applicativo
+## Application flow
 
-* Inserimento da parte della PA dei dati relativi all'organizzazione. Utilizzando la funzionalità di *ricerca amministrazione* i dati sono
-automaticamente inseriti nei campi *Codice iPA, Amministrazione e PEC*. 
+* A Public Administration inserts its data into the system. Leveraging the functionality, the fields *ricerca amministrazione*, *Codice iPA*, *Amministrazione* and *PEC* are automatically mapped
 
-* Dopo aver selezionato il pulsante *Registra*, l'applicativo invia una PEC all'indirizzo email dell'amministrazione indicato nel form. 
+* After clicking *Registra*, the application sends a *PEC* to the email address automatically derived from [IndicePA](https://indicepa.gov.it/)
 
-* All'interno della email inviata è presente un link per confermare la registrazione. Cliccando sul link si viene rediretti a una pagina di conferma. 
+* A link to confirm the registration is included in the email. Clicking on the link, the user is redirected to a confirmation page
 
-* Selezionando *Registra* nella pagina di conferma l'amministrazione è registrata nel sistema.
+* Clicking *Registra* in the confirmation page, Public Administrations get registered in the system
 
-Come si può notare, la stessa PA può registrare diversi URL per repository di codice pubblico.
+The same Public Administration can register different public, code repositories.
 
-## La cartella private e il file whitelist.db.json
+## The private folder and the whitelist.db.json file
 
-L'applicazione fa uso di una cartella locale denominata *private/data* che deve contenere:
+The application makes use of a folder named *private/data*, which should contain:
 
-* Una chiave privata per generare i token inviati per email alle PA al momento della registrazione (autogenerata dal sotware, una volta eseguito)
+* A private key, used to generate tokens sent during the registration. If no private keys are present while the application starts, a new one is automatically created
 
-* Un file di database *whitelist.db.json*, che conterrà l'elenco delle PA registrate (può essere vuoto al primo avvio dell'applicazione)
+* A *whitelist.db.json* database file, with the list of the Public Administrations that have registered. If no database files are present while the application starts, a new one is automatically created
 
-Per ragioni di sicurezza, la cartella:
+For security reasons, the folder:
 
-* Non è commitata di default. Se si vuole procedere con l'esecuzione locale sarà necessario crearla nella root del repostiory, una volta scaricato
+* is not committed by default. To run the application, you'll need to create one manually
 
-* È aggiuta al .gitignore di questo repository
+* is added to the *.gitignore* file of this repository
 
-## Formato whitelist.db.json
+## whitelist.db.json file format
 
-Come accennato nel paragrafo precedente, le PA registrate sono salvate in un file locale JSON *whitelist.db.json*. Il file ha la seguente struttura.
+The *whitelist.db.json* file keeps track of the Public Administrations registered.
+
+When the database is still empty, it may look like this:
+
+```json
+{
+  "registrati": []
+}
+```
+
+When some Public Administrations register into the system, it should follow approximately this exemplar format:
 
 ```json
 {
@@ -58,11 +67,11 @@ Come accennato nel paragrafo precedente, le PA registrate sono salvate in un fil
 }
 ```
 
-Un file di esempio è disponibile [qui](demo-data/whitelist.db.json).
+An exemplar file is available [here](demo-data/whitelist.db.json).
 
-## API - lista PA registrate
+## Get the list of Public Administrations registered through APIs
 
-Per invocare la API che restituiscono la lista delle PA registrate, usare la URL `http://localhost/repo-list`. Il formato ritornato è il seguente:
+To retrieve the list of Public Administrations registered, make a GET request against `http://YOUR_HOSTNAME/repo-list`. A similar result should be returned:
 
 ```yaml
 ---
@@ -80,9 +89,9 @@ registrati:
     pec: "protocollo.comunemaramao@pec.it"
 ```
 
-## Repository supportati
+## Supported code hosting platforms
 
-Al momento i seguenti repository sono supportati:
+The application currently supports the following code hosting platforms:
 
 * https://github.com
 
@@ -96,60 +105,48 @@ Al momento i seguenti repository sono supportati:
 
 * https://gogs.io
 
-La lista è in continua evoluzione.
+Stay tuned. The list keeps growing...
 
-## Ambiente di sviluppo e debug
+## Development and test environments
 
-L'applicativo può essere eseguito in locale, sia direttamente, sulla macchina locale dello sviluppatore, sia attraverso container Docker.
+A development environment can be either brought up directly on the developer machine or in form of a Docker container.
 
-A prescindere dalla metodologia desiderata, è necessario clonare il repository in una cartella locale.
+### Run the application directly on the developer machine (npm/yarn)
 
-Copiare il file [.env.example](.env.example) in un file *.env*. Modificare le variabili d'ambiente come desiderato.
+Many developers prefer to directly run the application on their own machine, without Docker.
 
-### Esecuzione diretta sulla macchina dello sviluppatore (npm/yarn)
+To do so:
 
-Per eseguire l'applicativo direttamente sulla macchina dello sviluppatore, installare le dipendenze. Eseguire quindi dalla cartella clonata il seguente comando:
+* Create a *private/data* folder in the root of the repository
 
-```bash
-npm install
-```
+* Run `npm install`
 
-Nella root del repository, creare una cartella *private/data*. Al suo interno creare un file vuoto *whitelist.db.json* (o in alternativa copiarlo da [demo-data/whitelist.db.json]).
+* Serve the content locally on port *3000*, using *nodemon*, running `npm run dev`
 
-A questo punto sarà possibile eseguire il server tramite il comando:
+### Run the application using Docker
 
-```bash
-npm run dev
-```
+The [docker-compose.yml](docker-compose.yml) file leverages some environment variables that should be declared in an *.env* file, located in the root of this repository. A [.env.example](.env.example) file has some exemplar values. Before proceeding, copy the [.env.example](.env.example) into *.env* and modify the environment variables as needed.
 
-Questo comando crea un server di sviluppo locale esposto localhost attraverso *nodemon*, che quindi esegue il reload in automatico ad ogni cambiamento dei file, permettendo di testare i cambiamenti in fase di sviluppo. È ora possibile accedere alla UI in un browser, all'indirizzo *localhost:3000*.
+Then, build the container, running:
 
-### Docker
-
-L'applicativo è distribuito e consumato in produzione come immagine Docker. Per comodità, oltre a un *Dockerfile*, è stato anche aggiunto un file *docker-compose.yaml*.
-
-Docker-compose si occupa anche di montare il file [whitelist.db.json](demo-data/whitelist.db.json) nel container in *private/data/*.
-
-Per creare e avviare il container, eseguire:
-
-```bash
+```shell
 docker-compose up [-d] [--build]
 ```
 
-Dove:
+where:
 
-* *-d* esegue il container in background
+* *-d* executes the container in background
 
-* *--build* forza la build del container
+* *--build* forces the container to re-build
 
-Per distruggere il container usare:
+Once the container is up, the content will be served locally, on port *3000*.
 
-```
+To destroy the container, use:
+
+```shell
 docker-compose down
 ```
 
-# License
+## License
 
-Questo progetto è coperto da una licenza di tipo BSD 3-Clause License (codice
-SPDX: `BSD-3-Clause`). Per maggiori informazioni a riguardo consultare il file
-denominato [`LICENSE`](LICENSE).
+The project is distributed under BSD-3 license (SPDX code: *BSD-3-Clause*). For more informations, have a look at the [LICENSE file](LICENSE).
