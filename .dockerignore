@@ -1,3 +1,12 @@
+demo-volume
 node_modules
 npm-debug.log
 deploy.sh
+.git
+build
+.circleci
+.editorconfig
+.eslintignore
+.eslintrc.js
+.gitignore
+docker-compose.yaml

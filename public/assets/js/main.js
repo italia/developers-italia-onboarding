@@ -2,7 +2,10 @@ const ipaInput = document.querySelector('input#ipa');
 const refInput = document.querySelector('input#nomeReferente');
 const telInput = document.querySelector('input#telReferente');
 const urlInput = document.querySelector('input#url');
-
+const esUrl = document.querySelector('input#esUrl')
+  ? document.querySelector('input#esUrl').value
+  : null;
+  
 if (ipaInput) {
   //validation
   ipaInput.addEventListener('input', function () {
@@ -145,8 +148,7 @@ $('#ricercaAmministrazione').on('keyup', function (e) {
   let query = $('#ricercaAmministrazione').val();
 
   $.getJSON({
-    /* global ES_URL */
-    url: ES_URL,
+    url: esUrl,
     contentType: 'application/json; charset=UTF-8',
     type: 'POST',
     dataType: 'json',

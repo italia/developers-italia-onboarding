@@ -1,15 +1,27 @@
 FROM node:lts-alpine
 
-WORKDIR /usr/src/app/
+ENV HOME /usr/src/app/
+ENV USER developers
 
-COPY package.json . 
+WORKDIR ${HOME}
+
+RUN apk add ca-certificates
+
+COPY public public
+COPY src src
+COPY AUTHORS .
+COPY CHANGELOG.md .
+COPY LICENSE .
+COPY package.json .
+COPY package-lock.json .
+COPY server.js .
+
+RUN adduser --home ${HOME} --shell /bin/sh --disabled-password ${USER}
+
+RUN chown -R ${USER}.${USER} ${HOME}
+
 RUN npm install
 
-# copy app source to destination container
-COPY . .
+USER ${USER}
 
-# inject env vars
-RUN sed -i -e "s|^const ES_URL.*|const ES_URL = 'https://elasticsearch.developers.italia.it/indicepa_pec/_search';|g"  public/assets/js/constants.js
-
-# Launch application
-CMD npm run $env
+CMD npm run prod

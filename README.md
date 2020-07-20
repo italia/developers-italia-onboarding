@@ -1,28 +1,52 @@
-# Onboarding
+# Developers Italia Onboarding
 ![Build Status](https://img.shields.io/circleci/project/github/italia/developers-italia-onboarding/master.svg?style=flat
 ) ![Issues](https://img.shields.io/github/issues/italia/developers-italia-onboarding.svg) ![License](https://img.shields.io/github/license/italia/developers-italia-onboarding.svg?style=flat)
 
-Tramite l'applicazione di onboarding, le PA avranno la possibilità di
-registrare i propri repository di code hosting sul portale `Developers Italia`.
-In questo modo sarà possibile aggiungere il repository alla lista indicizzata
-dal *crawler* del portale che popolerà il catalogo del riuso. 
+The onboarding tool allows Italian Public Administrations to register their own code repositories in [Developers Italia](https://innovazione.gov.it/it/progetti/developers-italia/). As such, repositories will be scanned by the [crawler](https://github.com/italia/developers-italia-backend) that will feed the reuse catalog.
 
-# Flow dell'applicativo
+## Developers Italia
 
-1. Inserimento da parte della PA dei dati relativi all'organizzazione.
-N.B. Utilizzando la funzionalità di *ricerca amministrazione* i dati verranno
-automaticamente inseriti nei campi *Codice iPA, Amministrazione e PEC*. 
-2. Dopo aver selezionato il pulsante *Registra*, l'applicativo invierà una PEC
-   all'indirizzo email dell'amministrazione indicato nel form. 
-3. All'interno della email inviata è presente un link per confermare la
-   registrazione. Cliccando sul link si arriverà ad una pagina di conferma. 
-4. Selezionando *Registra* nella pagina di conferma l'amministrazione sarà
-   registrata. 
+More informations about Developers Italia can be found on the [website https://innovazione.gov.it](https://innovazione.gov.it/it/progetti/developers-italia/).
 
+## Application flow
 
-# Formati 
+* A Public Administration inserts its data into the system. Leveraging the functionality, the fields *ricerca amministrazione*, *Codice iPA*, *Amministrazione* and *PEC* are automatically mapped
 
-Le informazioni vengono salvate in un file JSON con la seguente struttura:
+* After clicking *Registra*, the application sends a *PEC* to the email address automatically derived from [IndicePA](https://indicepa.gov.it/)
+
+* A link to confirm the registration is included in the email. Clicking on the link, the user is redirected to a confirmation page
+
+* Clicking *Registra* in the confirmation page, Public Administrations get registered in the system
+
+The same Public Administration can register different public, code repositories.
+
+## The private folder and the whitelist.db.json file
+
+The application makes use of a folder named *private/data*, which should contain:
+
+* A private key, used to generate tokens sent during the registration. If no private keys are present while the application starts, a new one is automatically created
+
+* A *whitelist.db.json* database file, with the list of the Public Administrations that have registered. If no database files are present while the application starts, a new one is automatically created
+
+For security reasons, the folder:
+
+* is not committed by default. To run the application, you'll need to create one manually
+
+* is added to the *.gitignore* file of this repository
+
+## whitelist.db.json file format
+
+The *whitelist.db.json* file keeps track of the Public Administrations registered.
+
+When the database is still empty, it may look like this:
+
+```json
+{
+  "registrati": []
+}
+```
+
+When some Public Administrations register into the system, it should follow approximately this exemplar format:
 
 ```json
 {
@@ -43,130 +67,86 @@ Le informazioni vengono salvate in un file JSON con la seguente struttura:
 }
 ```
 
-Come si può notare, la stessa PA può registrare diverse URL per repository di
-codice pubblico. 
+An exemplar file is available [here](demo-data/whitelist.db.json).
 
-# Percorsi
-Le PA registrate vengono salvate all'interno del file
-`private/whitelist.db.json`. 
-Per invocare la API che restituisce la lista delle PA registrate, usare
-la URL `http://localhost/repo-list`.
-Il formato ritornato è il seguente:
+## Get the list of Public Administrations registered through APIs
+
+To retrieve the list of Public Administrations registered, make a GET request against `http://YOUR_HOSTNAME/repo-list`. A similar result should be returned:
 
 ```yaml
 ---
-  registrati: 
-    - 
-      timestamp: "2019-05-27T09:45:00.770Z"
-      ipa: "c_a123"
-      url: "https://github.com/undefined"
-      pec: "protocollo.comunemaramao@pec.it"
-    - 
-      timestamp: "2019-05-28T09:45:00.770Z"
-      ipa: "c_a123"
-      url: "https://gitlab.com/undefined"
-      pec: "protocollo.comunemaramao@pec.it"
+
+registrati: 
+  - 
+    timestamp: "2019-05-27T09:45:00.770Z"
+    ipa: "c_a123"
+    url: "https://github.com/undefined"
+    pec: "protocollo.comunemaramao@pec.it"
+  - 
+    timestamp: "2019-05-28T09:45:00.770Z"
+    ipa: "c_a123"
+    url: "https://gitlab.com/undefined"
+    pec: "protocollo.comunemaramao@pec.it"
 ```
 
-# Repository supportati
+## Supported code hosting platforms
 
-Al momento i seguenti repository sono supportati:
-```
-   'https://github.com/',
-   'https://bitbucket.org/',
-   'https://gitlab.com/',
-   'https://phabricator.com/',
-   'https://gitea.io/',
-   'https://gogs.io/'
-```
-La lista è in continua evoluzione. 
+The application currently supports the following code hosting platforms:
 
+* https://github.com
 
-# Avvio del progetto 
+* https://bitbucket.org
 
-## Modalità di sviluppo (dev)
+* https://gitlab.com
 
-Per sviluppare in locale è necessario innanzitutto clonare o scaricare il
-repository in una cartella locale. 
-Per far ciò, eseguire il comando `git clone` seguito dalla URL più appropriata.
+* https://phabricator.com
 
-### Locale (npm/yarn)
+* https://gitea.io
 
-Dopodichè, sarà necessario installare le dipendenze del progetto tramite:
-```bash
-npm install
-```
-A questo punto sarà possibile eseguire il server tramite il comando:
-```bash
-npm dev
-```
-Questo comando creerà un server di development esposto sulla port 80 di
-localhost attraverso `nodemon`, che quindi esegue il reload in automatico ad
-ogni cambiamento dei file, permettendo di testare i cambiamenti in fase di
-sviluppo. 
+* https://gogs.io
 
-### Docker
+Stay tuned. The list keeps growing...
 
-E' possibile avviare l'applicazione anche attraverso docker.
-Per far ciò, è necessario lanciare i seguenti comandi:
+## Development and test environments
 
-```bash
-docker build -t <imageName> .
-docker run -p 80:80 -e env=dev <imageName> 
+A development environment can be either brought up directly on the developer machine or in form of a Docker container.
+
+### Run the application directly on the developer machine (npm/yarn)
+
+Many developers prefer to directly run the application on their own machine, without Docker.
+
+To do so:
+
+* Create a *private/data* folder in the root of the repository
+
+* Run `npm install`
+
+* Serve the content locally on port *3000*, using *nodemon*, running `npm run dev`
+
+### Run the application using Docker
+
+The [docker-compose.yml](docker-compose.yml) file leverages some environment variables that should be declared in an *.env* file, located in the root of this repository. A [.env.example](.env.example) file has some exemplar values. Before proceeding, copy the [.env.example](.env.example) into *.env* and modify the environment variables as needed.
+
+Then, build the container, running:
+
+```shell
+docker-compose up [-d] [--build]
 ```
 
-## Modalita' di produzione (prod)
+where:
 
-Per configurare il software in modalità di produzione è necessario specificare
-dei parametri quali, ad esempio, gli host SMTP, gli host applicativi etc. 
+* *-d* executes the container in background
 
-### SMTP
-Innanzitutto, siccome l'applicativo prevede l'invio di *Posta Elettronica
-Certificata*, è necessario configurare un server SMTP.
-Questa fase di configurazione prevede di modificare due file di progetto.
-Il primo è il file denominato `config-prod.json` che contiene le seguenti
-informazioni:
-```json
-{
-    "host": "",
-    "port": 587,
-    "secure": true,
-    "applicationHost": "",
-    "applicationPort": 80,
-    "overrideRecipient": true,
-    "overrideMail": {
-      "rcpt": "example@domain.com"
-    },
-    "mailTemplate": {
-      "from": "\"Team Digitale\" <test@teamdigitale.com>",
-      "subject": "Onboarding Developers Italia"
-    }
-}
-```
-dove `host` e `port` rappresentano le informazioni del server SMTP.
-`applicationHost` e `applicationPort` rappresentano la configurazione per l'url di
-conferma che verrà inserito nella mail.
-`overrideRecipient` e `overridedMail.rcpt` vanno popolati nel caso in cui si desideri
-inviare tutte le mail di conferma verso un unico destinatario che si occuperà
-di inoltrarle verso la PEC dell'amministrazione di riferimento inserita nel corpo della mail.  
-`mailTemplate`
-  `from` `subject` Per customizzare il mittente e l'oggetto della mail da inviare.
-Per specificare le credenziali, invece, è necessario modificare un secondo
-file. Per far ciò, copiare il file denominato
-`smtp-account-config.json.example`, inserire le informazioni relative al
-proprio `user` e `password`, e salvarlo come `smtp-account-config.json`.
-In questo modo l'applicativo avrà le informazioni per connettersi al server
-SMTP ed inviare i messaggi di PEC.
+* *--build* forces the container to re-build
 
-A questo punto è possibile creare l'immagine docker e avviarla.
-Per far ciò, lanciare i seguenti comandi:
+Once the container is up, the content will be served locally, on port *3000*.
 
-```bash 
-docker build -t <imageName> .
-docker run -p 80:80 -e env=pm-prod <imageName> 
+To destroy the container, use:
+
+```shell
+docker-compose down
 ```
 
-# LICENSE
-Questo progetto è coperto da una licenza di tipo BSD 3-Clause License (codice
-SPDX: `BSD-3-Clause`). Per maggiori informazioni a riguardo consultare il file
-denominato [`LICENSE`](LICENSE).
+## License
+
+The project is distributed under BSD-3 license (SPDX code: *BSD-3-Clause*). For more informations, have a look at the [LICENSE file](LICENSE).

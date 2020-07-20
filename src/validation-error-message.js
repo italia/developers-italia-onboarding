@@ -1,7 +1,6 @@
 const {VALIDATION_OK, VALIDATION_ALREADY_PRESENT,
   VALIDATION_INVALID_URL, VALIDATION_PHONE} = require('./validator-result.js');
 
-
 /**
  * Ottiene il messaggio di errore
  *
