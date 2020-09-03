@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/italia/onboarding.developers.italia.it#readme",
   "dependencies": {
-    "@hapi/hapi": "^18.4.0",
+    "@hapi/hapi": "^19.1.1",
     "@hapi/inert": "^5.2.2",
     "@hapi/vision": "^5.5.4",
     "bootstrap-italia": "^1.3.10",
