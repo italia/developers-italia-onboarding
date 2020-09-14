@@ -35,18 +35,18 @@
     "mustache": "^4.0.1",
     "nodemailer": "^6.4.5",
     "parse-domain": "^2.3.4",
-    "pm2": "^4.2.3",
+    "pm2": "^4.4.1",
     "request": "^2.88.2",
     "write-file-atomic": "^3.0.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2",
+    "nodemon": "^2.0.4",
     "@types/hapi": "^18.0.3",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-node": "^11.0.0",
+    "eslint": "^7.9.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1"
   }
