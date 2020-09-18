@@ -1,7 +1,6 @@
 demo-volume
 node_modules
 npm-debug.log
-deploy.sh
 .git
 build
 .circleci
