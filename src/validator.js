@@ -12,23 +12,26 @@ const adapter = new FileSync(whitelistFile);
 const db = low(adapter);
 
 /**
- * Controlla se l'URL e' ben formata. Sono supportati fino a 5 livelli di dominio.
+ * Check if the URL HTTP(s) and well-formed.
  *
- * @param url rappresenta l'url da controllare
+ * @param url URL to check
  *
- * @return Un oggetto di tipo ValidatorResult
+ * @return VALIDATION_OK or VALIDATION_INVALID_URL
  */
 function validateUrl(url) {
-  const generalRegex = /^(https?):\/\/(www\.)?([a-z]+)(\.([\da-zA-Z-]+)){1,5}(\/[\da-zA-Z-_]+)*\/?$/;
-  if (!generalRegex.test(url)) {
+  try {
+    const u = new URL(url);
+    return u.protocol === 'http:' || u.protocol === 'https:'
+      ? VALIDATION_OK
+      : VALIDATION_INVALID_URL;
+  } catch(_) {
     return VALIDATION_INVALID_URL;
   }
-  return VALIDATION_OK;
 }
 
 /**
  * Controlla il formato del numero telefonico
- * 
+ *
  * @param {string} phone numero telefonico da verificare
  * @return Un oggetto di tipo ValidatorResult
  */
@@ -43,8 +46,8 @@ function validatePhoneNumber(phone) {
 
 /**
  * It returns VALIDATION_ALREADY_PRESENT if data already present
- * @param {string} ipa 
- * @param {string} url 
+ * @param {string} ipa
+ * @param {string} url
  */
 function checkDups(ipa, url) {
   // db must be reloaded

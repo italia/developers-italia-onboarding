@@ -29,6 +29,7 @@ jobs:
     steps:
       - checkout
       - << : *install_dependencies
+      - run: npm run test
       - << : *lint
 
 workflows:
