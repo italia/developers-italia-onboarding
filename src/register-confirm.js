@@ -1,9 +1,9 @@
-"use strict";
-const jwt = require("jsonwebtoken");
-const getErrorMessage = require("./validation-error-message.js");
-const { VALIDATION_OK } = require("./validator-result.js");
-const validator = require("./validator.js");
-const key = require("./get-jwt-key.js")();
+'use strict';
+const jwt = require('jsonwebtoken');
+const getErrorMessage = require('./validation-error-message.js');
+const { VALIDATION_OK } = require('./validator-result.js');
+const validator = require('./validator.js');
+const key = require('./get-jwt-key.js')();
 
 module.exports = function (request, h) {
   const token = request.query.token;
@@ -20,11 +20,11 @@ module.exports = function (request, h) {
   let errorMsg = null;
 
   if (validationCheckDups != VALIDATION_OK) {
-    errorMsg = getErrorMessage(validationCheckDups);  
+    errorMsg = getErrorMessage(validationCheckDups);
   }
 
   return h.view(
-    "register-confirm",
+    'register-confirm',
     {
       errorMsg,
       referente,
@@ -34,6 +34,6 @@ module.exports = function (request, h) {
       pec,
       amministrazione,
     },
-    { layout: "index" }
+    { layout: 'index' }
   );
 };
