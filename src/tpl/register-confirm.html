@@ -3,8 +3,10 @@
         <div class="container">
             <div class="row">
                 <div class="my-5 col-md-8">
-
+                    
+                    {{^errorMsg}}
                     <h3>Confermare registrazione dell'URL nel database?</h3>
+                    {{/errorMsg}}
 
                     Nome referente: {{referente}};
                     <br/>
@@ -19,8 +21,10 @@
                     URL di code hosting: {{url}};
                     <br/>
                     <br/>
-
+                    
+                    {{^errorMsg}}
                     <a href="/registered?nomeReferente={{referente}}&refTel={{refTel}}&ipa={{ipa}}&url={{url}}&pec={{pec}}&amministrazione={{amministrazione}}" class="btn btn-primary">Registra</a>
+                    {{/errorMsg}}
                     <a href="/" class="btn btn-default">Annulla</a>
 
                 </div>
