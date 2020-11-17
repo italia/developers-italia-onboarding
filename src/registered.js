@@ -6,11 +6,7 @@ const FileSync = require('lowdb/adapters/FileSync');
 const getErrorMessage = require('./validation-error-message');
 const validator = require('./validator');
 const { VALIDATION_OK } = require('./validator-result.js');
-
 const whitelistFile = 'private/data/whitelist.db.json';
-fs.ensureFileSync(whitelistFile);
-const adapter = new FileSync(whitelistFile);
-const db = low(adapter);
 
 module.exports = function (request, h) {
   const referente = request.query.nomeReferente;
@@ -19,6 +15,13 @@ module.exports = function (request, h) {
   const url = request.query.url;
   const pec = request.query.pec;
   const amministrazione = request.query.amministrazione;
+
+  fs.ensureFileSync(whitelistFile);
+  const adapter = new FileSync(whitelistFile);
+  const db = low(adapter);
+  
+  // Set some defaults (required if your JSON file is empty)
+  db.defaults({ registrati: [] }).write();
 
   const validationCheckDups = validator.checkDups(ipa, url);
   if (validationCheckDups != VALIDATION_OK) {
@@ -37,8 +40,6 @@ module.exports = function (request, h) {
     );
   }
 
-  // Set some defaults (required if your JSON file is empty)
-  db.defaults({ registrati: [] }).write();
   // this will reload file to be more permissive
   // and allow external manipulation
   db.read();
