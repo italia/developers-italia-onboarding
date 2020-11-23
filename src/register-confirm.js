@@ -33,6 +33,7 @@ module.exports = function (request, h) {
       url,
       pec,
       amministrazione,
+      token,
     },
     { layout: 'index' }
   );
