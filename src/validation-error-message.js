@@ -2,11 +2,11 @@ const {VALIDATION_OK, VALIDATION_ALREADY_PRESENT,
   VALIDATION_INVALID_URL, VALIDATION_PHONE} = require('./validator-result.js');
 
 /**
- * Ottiene il messaggio di errore
+ * Gets the error message from the validation result
  *
- * @param validatorResult Il risultato della validazione
+ * @param validatorResult The validation result
  *
- * @return Il messaggio di errore
+ * @return The error message
  */
 function getErrorMessage(validatorResult) {
   if (validatorResult == VALIDATION_OK) {

@@ -30,10 +30,10 @@ function validateUrl(url) {
 }
 
 /**
- * Controlla il formato del numero telefonico
+ * Validates the format of the given phone number
  *
- * @param {string} phone numero telefonico da verificare
- * @return Un oggetto di tipo ValidatorResult
+ * @param {string} phone phone number to be validated
+ * @return An object of type ValidatorResult
  */
 function validatePhoneNumber(phone) {
   const phoneRegex = /^\+?[1-9]\d{1,14}$/;
