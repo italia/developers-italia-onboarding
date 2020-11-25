@@ -10,7 +10,7 @@ const validator = require('./validator');
 const {VALIDATION_OK} = require('./validator-result');
 const getErrorMessage = require('./validation-error-message');
 
-module.exports = function (request, h) {
+module.exports = async function (request, h) {
   const referente = request.payload.nomeReferente;
   const refTel = request.payload.telReferente;
   const ipa = request.payload.ipa;
@@ -26,14 +26,19 @@ module.exports = function (request, h) {
   let validationResultUrl = validator.url(url);
   let validationResultPhone = validator.phone(refTel);
   let validationCheckDups = validator.checkDups(ipa, url);
+  const validationIpaMatchesPec = await validator.ipaMatchesPec(ipa, pec);
+
   if (validationResultUrl != VALIDATION_OK) {
     let data = {errorMsg: getErrorMessage(validationResultUrl)};
     return h.view('main-content', data, {layout: 'index'});
   } else if (validationResultPhone != VALIDATION_OK) {
     let data = {errorMsg: getErrorMessage(validationResultPhone)};
     return h.view('main-content', data, {layout: 'index'});
-  }else if (validationCheckDups != VALIDATION_OK) {
+  } else if (validationCheckDups != VALIDATION_OK) {
     let data = {errorMsg: getErrorMessage(validationCheckDups)};
+    return h.view('main-content', data, {layout: 'index'});
+  } else if (validationIpaMatchesPec !== VALIDATION_OK) {
+    let data = {errorMsg: getErrorMessage(validationIpaMatchesPec)};
     return h.view('main-content', data, {layout: 'index'});
   }
 
@@ -97,7 +102,7 @@ module.exports = function (request, h) {
         overridePec: overridePec
       })
     };
-    
+
     // send mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
