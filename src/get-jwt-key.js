@@ -13,7 +13,7 @@ module.exports = function () {
     });
 
     fs.ensureDirSync(dir);
-    fs.writeFileSync(file, password);
+    fs.writeFileSync(file, password, { mode: 0o600 });
   }
 
   return fs.readFileSync(file).toString('utf8');
