@@ -1,5 +1,8 @@
 const {VALIDATION_OK, VALIDATION_ALREADY_PRESENT,
-  VALIDATION_INVALID_URL, VALIDATION_PHONE} = require('./validator-result.js');
+  VALIDATION_INVALID_URL, VALIDATION_PHONE,
+  VALIDATION_INCONSISTENT_DATA,
+  VALIDATION_TEMPORARY_ERRROR,
+} = require('./validator-result.js');
 
 /**
  * Gets the error message from the validation result
@@ -22,7 +25,13 @@ function getErrorMessage(validatorResult) {
     message = 'Indirizzo URL invalido: ricompila il form';
     break;
   case VALIDATION_ALREADY_PRESENT:
-    message = 'Il codice IPA e l\'URL sono già presenti';
+    message = 'Il codice iPA e l\'URL sono già presenti';
+    break;
+  case VALIDATION_INCONSISTENT_DATA:
+    message = 'Nessun ente con questo codice iPA e PEC';
+    break;
+  case VALIDATION_TEMPORARY_ERRROR:
+    message = 'Errore inaspettato nel controllo della validità dei dati, riprovare più tardi';
     break;
   default:
     throw new Error('Url non valido');
