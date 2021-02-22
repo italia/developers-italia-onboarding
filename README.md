@@ -1,64 +1,72 @@
-# Developers Italia Onboarding
-![Build Status](https://img.shields.io/circleci/project/github/italia/developers-italia-onboarding/master.svg?style=flat
-) ![Issues](https://img.shields.io/github/issues/italia/developers-italia-onboarding.svg) ![License](https://img.shields.io/github/license/italia/developers-italia-onboarding.svg?style=flat)
+ <!-- markdownlint-disable no-inline-html -->
 
-The onboarding tool allows Italian Public Administrations to register their own code repositories in [Developers Italia](https://innovazione.gov.it/it/progetti/developers-italia/). As such, repositories will be scanned by the [crawler](https://github.com/italia/developers-italia-backend) that will feed the reuse catalog.
+# Overview
 
-## Developers Italia
+<div align="center">
+  <h3>
+    <a href="https://onboarding.developers.italia.it">
+      https://onboarding.developers.italia.it
+    </a>
+  </h3>
 
-More informations about Developers Italia can be found on the [website https://innovazione.gov.it](https://innovazione.gov.it/it/progetti/developers-italia/).
+  <img alt="Issues" src="https://img.shields.io/github/issues/italia/developers-italia-onboarding.svg" />
+  <img alt="License" src="https://img.shields.io/github/license/italia/developers-italia-onboarding.svg?style=flat" />
+</div>
+
+The onboarding tool is a [hapi](https://github.com/hapijs/hapi) web application that
+allows Italian Public Administrations to register their code repositories in
+[Developers Italia](https://innovazione.gov.it/it/progetti/developers-italia/).
+
+The repositories are scanned by the
+[crawler](https://github.com/italia/developers-italia-backend) that feeds the
+[reuse catalog](https://developers.italia.it/en/search).
 
 ## Application flow
 
-* A Public Administration inserts its data into the system. Leveraging the functionality, the fields *ricerca amministrazione*, *Codice iPA*, *Amministrazione* and *PEC* are automatically mapped
+* A Public Administration inserts its data into the system.
 
-* After clicking *Registra*, the application sends a *PEC* to the email address automatically derived from [IndicePA](https://indicepa.gov.it/)
+* After clicking *Registra*, the application sends a confirmation [PEC](https://en.wikipedia.org/wiki/Certified_email)
+  to the address from [IndicePA](https://indicepa.gov.it/)
 
-* A link to confirm the registration is included in the email. Clicking on the link, the user is redirected to a confirmation page
+* The Public Administration confirms the registration clicking on the link from
+  the PEC.
 
-* Clicking *Registra* in the confirmation page, Public Administrations get registered in the system
-
-The same Public Administration can register different public, code repositories.
+A single Public Administration can register multiple code repositories.
 
 ## The private folder and the whitelist.db.json file
 
-The application makes use of a folder named *private/data*, which should contain:
+The application uses of a directory named `private/data`, which should contain:
 
-* A private key, used to generate tokens sent during the registration. If no private keys are present while the application starts, a new one is automatically created
+* A private key, used to generate tokens sent during the registration.
+  If no private keys are present while the application starts, a new one
+  is automatically created
 
-* A *whitelist.db.json* database file, with the list of the Public Administrations that have registered. If no database files are present while the application starts, a new one is automatically created
+* `whitelist.db.json`, with the list of the registered Public Administrations.
+  If no database file is present while the application starts, a new one is
+  automatically created.
 
-For security reasons, the folder:
+For security reasons, that directory:
 
-* is not committed by default. To run the application, you'll need to create one manually
+* is not committed by default. To run the application, you'll need to create
+  one manually
 
-* is added to the *.gitignore* file of this repository
+* is added to the `.gitignore` file of this repository
 
-## whitelist.db.json file format
+### whitelist.db.json file format
 
-The *whitelist.db.json* file keeps track of the Public Administrations registered.
-
-When the database is still empty, it may look like this:
-
-```json
-{
-  "registrati": []
-}
-```
-
-When some Public Administrations register into the system, it should follow approximately this exemplar format:
+The format of `whitelist.db.json` is:
 
 ```json
 {
   "registrati": [
     {
-      "referente": "pluto",
+      "referente": "John Smith",
       "ipa": "c_a123",
       "url": "https://github.com/undefined",
       "pec": "protocollo.comunemaramao@pec.it"
     },
     {
-      "referente": "pluto",
+      "referente": "Mario Rossi",
       "ipa": "c_a123",
       "url": "https://gitlab.com/undefined",
       "pec": "protocollo.comunemaramao@pec.it"
@@ -67,86 +75,59 @@ When some Public Administrations register into the system, it should follow appr
 }
 ```
 
-An exemplar file is available [here](demo-data/whitelist.db.json).
+An example file is available [here](demo-data/whitelist.db.json).
 
 ## Get the list of Public Administrations registered through APIs
 
-To retrieve the list of Public Administrations registered, make a GET request against `http://YOUR_HOSTNAME/repo-list`. A similar result should be returned:
+`GET https://onboarding.developers.italia.it/repo-list` returns the list
+of currently registered Public Administrations, in YAML form:
 
 ```yaml
 ---
 
-registrati: 
-  - 
+registrati:
+  -
     timestamp: "2019-05-27T09:45:00.770Z"
     ipa: "c_a123"
     url: "https://github.com/undefined"
     pec: "protocollo.comunemaramao@pec.it"
-  - 
+  -
     timestamp: "2019-05-28T09:45:00.770Z"
     ipa: "c_a123"
     url: "https://gitlab.com/undefined"
     pec: "protocollo.comunemaramao@pec.it"
 ```
 
-## Supported code hosting platforms
+## Development
 
-The application currently supports the following code hosting platforms:
+### Run the application directly on the developer machine
 
-* https://github.com
+1. `mkdir private/data`
 
-* https://bitbucket.org
+2. `npm install`
 
-* https://gitlab.com
+3. `npm run dev`
 
-* https://phabricator.com
-
-* https://gitea.io
-
-* https://gogs.io
-
-Stay tuned. The list keeps growing...
-
-## Development and test environments
-
-A development environment can be either brought up directly on the developer machine or in form of a Docker container.
-
-### Run the application directly on the developer machine (npm/yarn)
-
-Many developers prefer to directly run the application on their own machine, without Docker.
-
-To do so:
-
-* Create a *private/data* folder in the root of the repository
-
-* Run `npm install`
-
-* Serve the content locally on port *3000*, using *nodemon*, running `npm run dev`
+The server will listen to `http://localhost:3000`.
 
 ### Run the application using Docker
 
-The [docker-compose.yml](docker-compose.yml) file leverages some environment variables that should be declared in an *.env* file, located in the root of this repository. A [.env.example](.env.example) file has some exemplar values. Before proceeding, copy the [.env.example](.env.example) into *.env* and modify the environment variables as needed.
+1. Copy the [`.env.example`](.env.example) file into `.env` and edit the
+   environment variables as it suits you.
 
-Then, build the container, running:
+   ```shell
+   cp .env.example .env
+   ```
 
-```shell
-docker-compose up [-d] [--build]
-```
+2. Build the container:
 
-where:
+   ```shell
+   docker-compose up
+   ```
 
-* *-d* executes the container in background
-
-* *--build* forces the container to re-build
-
-Once the container is up, the content will be served locally, on port *3000*.
-
-To destroy the container, use:
-
-```shell
-docker-compose down
-```
+Once the container is up, the content will be served at `http://localhost:3000`
 
 ## License
 
-The project is distributed under BSD-3 license (SPDX code: *BSD-3-Clause*). For more informations, have a look at the [LICENSE file](LICENSE).
+The project is distributed under BSD-3 license (SPDX code: *BSD-3-Clause*). For
+more information, have a look at the [LICENSE file](LICENSE).
