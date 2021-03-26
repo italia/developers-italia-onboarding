@@ -26,7 +26,7 @@ module.exports = async function (request, h) {
   let validationResultUrl = validator.url(url);
   let validationResultPhone = validator.phone(refTel);
   let validationCheckDups = validator.checkDups(ipa, url);
-  const validationIpaMatchesPec = await validator.ipaMatchesPec(ipa, pec);
+  const validationIpaMatchesPec = await validator.ipaMatchesPec(ipa, originalPec);
 
   if (validationResultUrl != VALIDATION_OK) {
     let data = {errorMsg: getErrorMessage(validationResultUrl)};
