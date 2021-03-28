@@ -37,7 +37,7 @@
     "mustache": "^4.0.1",
     "nodemailer": "^6.4.11",
     "parse-domain": "^3.0.3",
-    "pm2": "^4.4.1",
+    "pm2": "^4.5.5",
     "request": "^2.88.2",
     "write-file-atomic": "^3.0.3"
   },
