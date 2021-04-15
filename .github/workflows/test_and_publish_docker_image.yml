@@ -9,7 +9,7 @@ on:
 name: ci
 
 jobs:
-  test_and_publish_docker_image:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -24,16 +24,31 @@ jobs:
       - run: npm run lint
       - run: npm run test
 
+  build_and_publish_docker_image:
+    needs: test
+
+    runs-on: ubuntu-latest
+
+    if: ${{ github.event_name != 'pull_request' }}
+    steps:
       - name: Login to DockerHub
-        if: github.event_name != 'pull_request'
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Get Docker image tags
+        id: image_tags
+        run: |
+          IMAGE=italia/developers-italia-onboarding
+
+          TAGS=${IMAGE}:$(echo ${GITHUB_REF##*/})
+          TAGS="$TAGS,${IMAGE}:${GITHUB_SHA::8}"
+
+          echo ::set-output name=tags::${TAGS}
+
       - name: Build and push
-        if: github.event_name != 'pull_request'
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: italia/developers-italia-onboarding:staging
+          tags: ${{ steps.image_tags.outputs.tags }}
