@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "npx lab",
+    "test": "npx lab --timeout 5000",
     "lint": "eslint server.js src/**/*.js public/assets/js/*",
     "dev": "export $(grep -v '^#' .env | xargs) && nodemon -e js,html -w src -w server.js server.js dev",
     "prod": "pm2-runtime server.js -- --port ${ONBOARDING_PORT}"
