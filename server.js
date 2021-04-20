@@ -2,6 +2,7 @@
 
 const config = require('./src/config');
 const Hapi = require('@hapi/hapi');
+const HapiUrl = require('hapi-url');
 const Mustache = require('mustache');
 const Path = require('path');
 
@@ -99,6 +100,21 @@ const init = async () => {
     }
   }
   ]);
+
+  server.events.on('response', (request) => {
+    const { pathname } = HapiUrl(request);
+
+    if (! pathname.match('^/bootstrap-italia/|^/assets/')) {
+      const now = new Date(Date.now()).toISOString();
+
+      const address = request.info.remoteAddress;
+      const method = request.method.toUpperCase();
+      const code = request.response.statusCode;
+      const userAgent = request.headers['user-agent'];
+
+      console.info(`${address} [${now}] "${method} ${pathname}" ${code} "${userAgent}"`);
+    }
+  });
 
   await server.start();
   console.log(`Server is running at port ${server.info.port}`);
