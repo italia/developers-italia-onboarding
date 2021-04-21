@@ -7,7 +7,7 @@
     "test": "npx lab --timeout 5000",
     "lint": "eslint server.js src/**/*.js public/assets/js/*",
     "dev": "export $(grep -v '^#' .env | xargs) && nodemon -e js,html -w src -w server.js server.js dev",
-    "prod": "pm2-runtime server.js -- --port ${ONBOARDING_PORT}"
+    "prod": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -37,7 +37,6 @@
     "mustache": "^4.0.1",
     "nodemailer": "^6.4.17",
     "parse-domain": "^3.0.3",
-    "pm2": "^4.5.6",
     "request": "^2.88.2",
     "write-file-atomic": "^3.0.3"
   },
