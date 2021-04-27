@@ -6,18 +6,19 @@
           <form action="email-sent" method="POST">
             <h1>Registrazione repository per software pubblico</h1>
             <br />
-            <p class="h5">
+            <p class="lead">
               Le Pubbliche Amministrazioni possono dichiarare qui i repository
               in cui pubblicano i propri software, secondo le
               <a href="https://developers.italia.it/it/riuso">linee guida sull'acquisizione e il riuso di software</a>.
             </p>
 
-            <p class="h5">
+            <p class="lead">
               I repository dei software verranno scansiti per rilevare i file
-              <a href="https://docs.italia.it/italia/developers-italia/publiccodeyml/it/master/">publiccode.yml</a>.
+              <a href="https://docs.italia.it/italia/developers-italia/publiccodeyml/it/master/"
+                 aria-label="Documentazione del formato publiccode.yml">publiccode.yml</a>.
             </p>
 
-            <p class="h5">
+            <p class="lead">
               La compilazione di questo form genererà una PEC contenente un link per confermare
               la titolarità dei repository usati per la pubblicazione.
               Per ulteriori informazioni consultare la sezione <a href="/faq">domande frequenti</a>.
@@ -25,7 +26,7 @@
             <br />
             <input id="esUrl" type="hidden" value="{{{ esUrl }}}">
             <div class="form-group">
-              <input type="text" class="form-control" id="nomeReferente" name="nomeReferente" required>
+              <input type="text" class="form-control" id="nomeReferente" name="nomeReferente" autocomplete="name" required>
               <label for="nomeReferente">Referente (nome e cognome) *</label>
               <small class="form-text text-muted">
                 Il nome e il cognome della persona che sta effettuando questa richiesta. Sarà citato nella PEC
