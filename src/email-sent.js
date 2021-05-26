@@ -7,39 +7,42 @@ const mustache = require('mustache');
 const jwt = require('jsonwebtoken');
 const key = require('./get-jwt-key')();
 const validator = require('./validator');
-const {VALIDATION_OK} = require('./validator-result');
-const getErrorMessage = require('./validation-error-message');
 
 module.exports = async function (request, h) {
-  const referente = request.payload.nomeReferente;
-  const refTel = request.payload.telReferente;
-  const ipa = request.payload.ipa;
+  const referente = request.payload.nomeReferente.trim();
+  const refTel = request.payload.telReferente.replace(/\s/g,'');
+  const ipa = request.payload.ipa.trim();
   const amministrazione = request.payload.description;
-  const url = request.payload.url;
+  const url = request.payload.url.trim();
   const overridePec = (config.email.overrideRecipientAddr
                    && config.email.overrideRecipientAddr.length > 1);
   const pec = overridePec ? config.email.overrideRecipientAddr : request.payload.pec;
 
   const originalPec = request.payload.pec;
 
-  // Server validation
-  let validationResultUrl = validator.url(url);
-  let validationResultPhone = validator.phone(refTel);
-  let validationCheckDups = validator.checkDups(ipa, url);
-  const validationIpaMatchesPec = await validator.ipaMatchesPec(ipa, originalPec);
-
-  if (validationResultUrl != VALIDATION_OK) {
-    let data = {errorMsg: getErrorMessage(validationResultUrl)};
-    return h.view('main-content', data, {layout: 'index'});
-  } else if (validationResultPhone != VALIDATION_OK) {
-    let data = {errorMsg: getErrorMessage(validationResultPhone)};
-    return h.view('main-content', data, {layout: 'index'});
-  } else if (validationCheckDups != VALIDATION_OK) {
-    let data = {errorMsg: getErrorMessage(validationCheckDups)};
-    return h.view('main-content', data, {layout: 'index'});
-  } else if (validationIpaMatchesPec !== VALIDATION_OK) {
-    let data = {errorMsg: getErrorMessage(validationIpaMatchesPec)};
-    return h.view('main-content', data, {layout: 'index'});
+  if (! validator.isValidCodeHostingUrl(url)) {
+    let data = { errorMsg: 'Indirizzo del repository non valido', pa: request.payload };
+    return h.view('main-content', data, { layout: 'index' });
+  }
+  if (! validator.isValidPhoneNumber(refTel)) {
+    let data = { errorMsg: 'Numero di telefono non valido', pa: request.payload };
+    return h.view('main-content', data, { layout: 'index' });
+  }
+  if (validator.isAlreadyOnboarded(ipa, url)) {
+    let data = { errorMsg: 'Questo repository è già presente', pa: request.payload };
+    return h.view('main-content', data, { layout: 'index' });
+  }
+  const ipaMatchesPec = await validator.ipaMatchesPec(ipa, originalPec);
+  if (ipaMatchesPec === null ) {
+    let data = {
+      errorMsg: 'Errore inaspettato nel controllo della validità dei dati, riprovare più tardi',
+      pa: request.payload
+    };
+    return h.view('main-content', data, { layout: 'index' });
+  }
+  if (! ipaMatchesPec) {
+    let data = { errorMsg: 'Nessun Ente con questo codice iPA e PEC', pa: request.payload };
+    return h.view('main-content', data, { layout: 'index' });
   }
 
   if (config.environment == 'dev') {

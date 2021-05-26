@@ -1,92 +1,117 @@
 <main id="content">
-  <div class="d-flex align-items-center justify-content-center main-content mt-5">
-    <div class="container">
-      <div class="row">
-        <div class="my-5 col-md-8">
-          <form action="email-sent" method="POST">
-            <h1>Registrazione repository per software pubblico</h1>
-            <br />
-            <p class="lead">
-              Le Pubbliche Amministrazioni possono dichiarare qui i repository
-              in cui pubblicano i propri software, secondo le
-              <a href="https://developers.italia.it/it/riuso">linee guida sull'acquisizione e il riuso di software</a>.
-            </p>
+  <div class="container">
+    <div class="row d-flex align-items-center justify-content-center main-content">
+      <div class="my-5 col-md-9">
+        <form id="pa-form" action="email-sent" method="POST">
+          <h1>Registrazione repository per software pubblico</h1>
+          <br />
+          <p class="lead">
+          Le Pubbliche Amministrazioni possono dichiarare qui i repository
+          in cui pubblicano i propri software, secondo le
+          <a href="https://developers.italia.it/it/riuso">linee guida sull'acquisizione e il riuso di software</a>.
+          </p>
 
-            <p class="lead">
-              I repository dei software verranno scansiti per rilevare i file
-              <a href="https://docs.italia.it/italia/developers-italia/publiccodeyml/it/master/"
-                 aria-label="Documentazione del formato publiccode.yml">publiccode.yml</a>.
-            </p>
+          <p class="lead">
+            I repository dei software verranno scansiti per rilevare i file
+            <a href="https://docs.italia.it/italia/developers-italia/publiccodeyml/it/master/"
+               aria-label="Documentazione del formato publiccode.yml">publiccode.yml</a>.
+          </p>
 
-            <p class="lead">
-              La compilazione di questo form genererà una PEC contenente un link per confermare
-              la titolarità dei repository usati per la pubblicazione.
-              Per ulteriori informazioni consultare la sezione <a href="/faq">domande frequenti</a>.
-            </p>
-            <br />
-            <input id="esUrl" type="hidden" value="{{{ esUrl }}}">
-            <div class="form-group">
-              <input type="text" class="form-control" id="nomeReferente" name="nomeReferente" autocomplete="name" required>
-              <label for="nomeReferente">Referente (nome e cognome) *</label>
-              <small class="form-text text-muted">
-                Il nome e il cognome della persona che sta effettuando questa richiesta. Sarà citato nella PEC
-                indirizzata all'Amministrazione richiedente in modo da facilitare lo smistamento del messaggio
-                all'interno dell'Amministrazione stessa.
-              </small>
+          <p class="lead mb-5">
+            La compilazione di questo form genererà una PEC contenente un link per confermare
+            la titolarità dei repository usati per la pubblicazione.
+            Per ulteriori informazioni consultare la sezione <a href="/faq">domande frequenti</a>.
+          </p>
+
+          <input type="hidden" id="esUrl" name="esUrl" value="{{{ pa.esUrl }}}">
+          <input type="hidden" id="ipa" name="ipa" value="{{{ pa.ipa }}}">
+          <input type="hidden" id="pec" name="pec" value="{{{ pa.pec }}}">
+
+          <div class="form-group autocomplete-wrapper">
+            <input type="search" class="form-control autocomplete" id="ricercaAmministrazione"
+                   autocomplete="off" name="description"
+                   value="{{{ pa.description }}}"
+                   required>
+            <span class="autocomplete-icon" aria-hidden="true">
+              <div
+                  id="search-spinner"
+                  class="d-none icon icon-sm progress-spinner progress-spinner-double progress-spinner-active size-sm"
+                >
+                <div class="progress-spinner-inner"></div>
+                <div class="progress-spinner-inner"></div>
+                <span class="sr-only">Caricamento...</span>
+              </div>
+              <svg class="icon icon-sm">
+                <use xlink:href="/bootstrap-italia/dist/svg/sprite.svg#it-search"></use>
+              </svg>
+            </span>
+            <label for="ricercaAmministrazione">Cerca Amministrazione *</label>
+            <small class="form-text text-muted">
+              Scegli l'Amministrazione dai risultati della ricerca
+            </small>
+
+            <ul id="risultatoRicerca" class="autocomplete-list"></ul>
+          </div>
+
+          <div class="form-group">
+            <input
+              type="text" class="form-control" id="nomeReferente" name="nomeReferente" autocomplete="name"
+              value="{{{ pa.nomeReferente }}}"
+              required
+              pattern="\S+"
+              oninput="this.setCustomValidity('')"
+              oninvalid="this.setCustomValidity('Specificare un referente')"
+            >
+            <label for="nomeReferente">Referente (nome e cognome) *</label>
+            <small class="form-text text-muted">
+              Il nome e il cognome della persona che sta effettuando questa richiesta. Sarà citato nella PEC
+              indirizzata all'Amministrazione richiedente in modo da facilitare lo smistamento del messaggio
+              all'interno dell'Amministrazione stessa.
+            </small>
+          </div>
+          <div class="form-group">
+            <input
+              type="tel"
+              id="telReferente"
+              name="telReferente"
+              class="form-control"
+              value="{{{ pa.telReferente }}}"
+              required
+            >
+            <label for="telReferente">Telefono Referente *</label>
+            <small class="form-text text-muted">
+              Numero telefonico del referente
+            </small>
+          </div>
+
+          <div class="form-group">
+            <input
+              type="url" class="form-control" id="url" name="url"
+              value="{{{ pa.url }}}"
+              required
+            >
+            <label for="url">URL dell'account nello strumento di code hosting *</label>
+            <small class="form-text text-muted">
+              URL dell'account (detto anche "organizzazione")
+              intestato all'Amministrazione. Ad esempio: <i>https://github.com/comune-di-reuso.</i>
+            </small>
+            <small class="form-text text-muted">
+              L'URL sarà <b>aggiunto</b> a quelli già noti per l'Amministrazione indicata;
+              per rimuovere URL già comunicati si prega di scrivere all'indirizzo
+              <a href="mailto:contatti@developers.italia.it">contatti@developers.italia.it</a>.
+            </small>
+            <small class="form-text text-muted">
+              Attualmente sono supportati: GitHub, GitLab, BitBucket.
+            </small>
+          </div>
+
+          <div class="container-fluid">
+            <div class="row">
+              <button type="submit" class="btn btn-primary ml-auto">Registra</button>
             </div>
-            <div class="form-group">
-              <input type="tel" class="form-control" id="telReferente" name="telReferente" required>
-              <label for="telReferente">Telefono Referente *</label>
-              <small class="form-text text-muted">
-                Numero telefonico del referente, formato E.164
-              </small>
-            </div>
+          </div>
 
-            <div class="form-group">
-              <i class="ico-prefix it-search"></i>
-              <input type="text" class="form-control autocomplete" id="ricercaAmministrazione" name="description">
-              <label for="ricercaAmministrazione">Ricerca amministrazione</label>
-              <small class="form-text text-muted">I tre campi sottostanti verranno automaticamente compilati con i
-                risultati della ricerca.
-              </small>
-              <ul id="risultatoRicerca" class="autocomplete-list"></ul>
-            </div>
-
-            <div class="form-group active child">
-              <input type="text" class="form-control-plaintext active readonly" id="ipa" name="ipa" tabindex="-1"
-                required>
-              <label for="ipa">Codice iPA *</label>
-            </div>
-
-            <div class="form-group active child">
-              <input type="text" class="form-control-plaintext active readonly" id="nomeAmministrazione" tabindex="-1"
-                required>
-              <label for="nomeAmministrazione">Amministrazione *</label>
-            </div>
-
-            <div class="form-group active child">
-              <input type="text" class="form-control-plaintext active readonly" id="pec" name="pec" tabindex="-1"
-                required>
-              <label for="pec">PEC *</label>
-            </div>
-
-            <div class="form-group">
-              <input type="text" class="form-control" id="url" name="url" required>
-              <label for="url">URL dell'account nello strumento di code hosting *</label>
-              <small class="form-text text-muted">
-                URL dell'account (detto anche "organizzazione")
-                intestato all'Amministrazione. Ad esempio: <i>https://github.com/ComuneDiRoma.</i>
-                L'URL sarà <b>aggiunto</b> a quelli già noti per l'Amministrazione indicata;
-                per rimuovere URL già comunicati si prega di scrivere all'indirizzo
-                <a href="mailto:contatti@developers.italia.it">contatti@developers.italia.it</a>.
-                Attualmente sono supportati: GitHub, GitLab, BitBucket.
-              </small>
-            </div>
-
-            <br>
-            <button type="submit" class="btn btn-primary">Registra</button>
-          </form>
-        </div>
+        </form>
       </div>
     </div>
   </div>

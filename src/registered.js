@@ -6,9 +6,7 @@ const key = require('./get-jwt-key.js')();
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
-const getErrorMessage = require('./validation-error-message');
 const validator = require('./validator');
-const { VALIDATION_OK } = require('./validator-result.js');
 const whitelistFile = 'private/data/whitelist.db.json';
 
 module.exports = function (request, h) {
@@ -30,12 +28,11 @@ module.exports = function (request, h) {
   // Set some defaults (required if your JSON file is empty)
   db.defaults({ registrati: [] }).write();
 
-  const validationCheckDups = validator.checkDups(ipa, url);
-  if (validationCheckDups != VALIDATION_OK) {
+  if (validator.isAlreadyOnboarded(ipa, url)) {
     return h.view(
       'register-confirm',
       {
-        errorMsg: getErrorMessage(validationCheckDups),
+        errorMsg: 'Questo repository è già presente',
         referente,
         refTel,
         ipa,
