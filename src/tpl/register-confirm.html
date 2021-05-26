@@ -1,32 +1,55 @@
 <main id="content">
-    <div class="d-flex align-items-center justify-content-center main-content mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="my-5 col-md-8">
+    <div class="container">
+        <div class="row d-flex align-items-center justify-content-center main-content mt-5">
+            <div class="my-5 col-md-8">
 
-                    {{^errorMsg}}
-                    <h3>Confermare registrazione dell'URL nel database?</h3>
-                    {{/errorMsg}}
+                {{^errorMsg}}
+                <h3>Confermare registrazione dell'URL nel database?</h3>
+                {{/errorMsg}}
 
-                    Nome referente: {{referente}};
-                    <br/>
-                    Telefono referente: {{refTel}};
-                    <br/>
-                    Amministrazione richiedente: {{amministrazione}};
-                    <br/>
-                    Codice ipa: {{ipa}};
-                    <br/>
-                    Indirizzo PEC: {{pec}};
-                    <br/>
-                    URL di code hosting: {{url}};
-                    <br/>
-                    <br/>
+                <div class="card-wrapper">
+                    <div class="card">
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-3">Nome referente:</dt>
+                                <dd class="col-sm-9">{{ referente }}</dd>
+                            </dl>
 
-                    {{^errorMsg}}
-                    <a href="/registered?token={{token}}" class="btn btn-primary">Registra</a>
-                    {{/errorMsg}}
-                    <a href="/" class="btn btn-default">Annulla</a>
+                            <dl class="row">
+                                <dt class="col-sm-3">Telefono referente:</dt>
+                                <dd class="col-sm-9">{{ refTel }}</dd>
+                            </dl>
 
+                            <dl class="row">
+                                <dt class="col-sm-3">Amministrazione richiedente:</dt>
+                                <dd class="col-sm-9">{{ amministrazione }}</dd>
+                            </dl>
+
+                            <dl class="row">
+                                <dt class="col-sm-3">Codice iPA:</dt>
+                                <dd class="col-sm-9">{{ ipa }}</dd>
+                            </dl>
+
+                            <dl class="row">
+                                <dt class="col-sm-3">Indirizzo PEC:</dt>
+                                <dd class="col-sm-9">{{ pec }}</dd>
+                            </dl>
+
+                            <dl class="row">
+                                <dt class="col-sm-3">URL di code hosting:</dt>
+                                <dd class="col-sm-9">{{ url }}</dd>
+                            </dl>
+                          </div>
+                      </div>
+                </div>
+
+                <div class="container">
+                    <div class="row">
+                        <a href="/" class="btn btn-outline-primary">Annulla</a>
+                        {{^errorMsg}}
+                        <a href="/registered?token={{token}}" class="btn btn-primary ml-auto">Registra</a>
+                        {{/errorMsg}}
+                    </div>
                 </div>
             </div>
         </div>
