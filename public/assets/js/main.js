@@ -1,57 +1,76 @@
 const ipaInput = document.querySelector('input#ipa');
-const refInput = document.querySelector('input#nomeReferente');
 const telInput = document.querySelector('input#telReferente');
 const urlInput = document.querySelector('input#url');
 const esUrl = document.querySelector('input#esUrl')
   ? document.querySelector('input#esUrl').value
   : null;
-  
-if (ipaInput) {
-  //validation
-  ipaInput.addEventListener('input', function () {
-    ipaInput.setCustomValidity('');
-    ipaInput.checkValidity();
-  });
 
-  refInput.addEventListener('input', function () {
-    refInput.setCustomValidity('');
-    refInput.checkValidity();
+if (ipaInput) {
+  document.querySelector('form#pa-form').addEventListener('submit', function (e) {
+    if (ipaInput.value === '') {
+      document
+        .querySelector('#ricercaAmministrazione')
+        // eslint-disable-next-line quotes
+        .setCustomValidity("Selezionare un'Amministrazione");
+
+      e.preventDefault();
+    }
   });
 
   telInput.addEventListener('input', function () {
-    telInput.setCustomValidity('');
-    telInput.checkValidity();
+    const stripped = telInput.value.replace(/\s/g,'');
+
+    const regex = /^\+{0,1}\d{8,15}$/;
+    if (!regex.test(stripped)) {
+      telInput.setCustomValidity('Inserire un numero di telefono valido');
+    } else {
+      telInput.setCustomValidity('');
+    }
   });
 
   urlInput.addEventListener('input', function () {
+    const trimmed = urlInput.value.trim();
+
+    try {
+      const u = new URL(trimmed);
+      if (u.protocol != 'https:') {
+        urlInput.setCustomValidity('Specificare un URL in HTTPS');
+        return;
+      }
+
+      if (u.host == 'github.com' || u.host == 'gitlab.com' || u.host == 'bitbucket.org') {
+        const orgsRegexp = new RegExp('^/[^/]+?/{0,1}$');
+
+        if (orgsRegexp.test(u.pathname)) {
+          urlInput.setCustomValidity('');
+        } else {
+          urlInput.setCustomValidity(
+            'Deve essere un URL di una organizzazione (es. https://github.com/comune-di-reuso)'
+          );
+        }
+        return;
+      }
+    } catch(_) {
+      urlInput.setCustomValidity('Specificare un URL valido');
+      return;
+    }
+
     urlInput.setCustomValidity('');
-    urlInput.checkValidity();
   });
+}
 
-  ipaInput.addEventListener('invalid', function () {
-    if (ipaInput.value === '')
-      ipaInput.setCustomValidity('Selezionare un\'amministrazione dal campo Ricerca Amministrazione!');
-  });
-
-  refInput.addEventListener('invalid', function () {
-    if (refInput.value === '')
-      refInput.setCustomValidity('Specificare un referente per l\'amministrazione!');
-  });
-
-  telInput.addEventListener('keyup', function () {
-    const regex = /^\+?[1-9]\d{1,14}$/;
-    if (!regex.test(telInput.value))
-      telInput.setCustomValidity('Inserire un numero E.164 Valido');
-  });
-  telInput.addEventListener('invalid', function () {
-    if (telInput.value === '')
-      telInput.setCustomValidity('Specificare un numero telefonico per il referente!');
-  });
-
-  urlInput.addEventListener('invalid', function () {
-    if (urlInput.value === '')
-      urlInput.setCustomValidity('Specificare un URL di riferimento!');
-  });
+function debounce(func, wait) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    clearTimeout(timeout);
+    timeout = setTimeout(
+      function() {
+        timeout = null;
+        func.apply(context, args);
+      }, wait
+    );
+  };
 }
 
 /**
@@ -63,8 +82,11 @@ function getResultElement(result) {
   return '<li class="result-item" data-ipa="' + result.ipa + '" data-pec="' + result.pec + '" ' +
     'data-description="' + result.description + '" data-office="' + result.office + '">'
     + '<a href="#">' +
-    '    <span class="autocomplete-list-text">\n' +
-    '      <span>' + result.value + '</span>\n' +
+    '    <svg class="icon">' +
+    '      <use xlink:href="/bootstrap-italia/dist/svg/sprite.svg#it-pa"></use>' +
+    '    </svg>' +
+    '    <span class="autocomplete-list-text">' +
+    '      <span>' + result.value + '</span>' +
     '    </span>' +
     '  </a>'
     + '</li>';
@@ -82,10 +104,10 @@ function modelData(result) {
     description: result.description,
     pec: result.pec,
     link: '#',
-    value: result.description
+    value: '<span class="lead">' + result.description + '</span>'
       + '<br />'
-      + '<b>ipa: </b>' + result.ipa
-      + ', <b>pec: </b>'
+      + 'Codice iPA: ' + result.ipa
+      + '<br />'
       + result.pec,
   };
 }
@@ -95,6 +117,8 @@ function modelData(result) {
  * @param data
  */
 function populateAutocompleteBox(data) {
+  $('#search-spinner').addClass('d-none');
+
   let resultsElem = $('#risultatoRicerca');
   if (data.hits.hits.length > 0) {
 
@@ -113,19 +137,13 @@ function populateAutocompleteBox(data) {
     resultsElem.addClass('autocomplete-list-show');
 
     $('.result-item').click(function (e) {
-      $('#ipa').val(this.dataset.ipa);
-      $('label[for=\'ipa\']').addClass('active');
-      $('#nomeAmministrazione').val(this.dataset.description);
-      $('label[for=\'nomeAmministrazione\']').addClass('active');
-      $('#pec').val(this.dataset.pec);
-      $('label[for=\'pec\']').addClass('active');
-      $('#risultatoRicerca').empty();
-      $('#ricercaAmministrazione').val(this.dataset.description);
-      resultsElem.removeClass('autocomplete-list-show');
-      ipaInput.setCustomValidity('');
-      ipaInput.checkValidity();
+      $('input#ipa').val(this.dataset.ipa);
+      $('input#nomeAmministrazione').val(this.dataset.description);
+      $('input#pec').val(this.dataset.pec);
 
-      //prevent default link action
+      $('#ricercaAmministrazione').val(this.dataset.description + ' (' + this.dataset.pec + ')');
+
+      resultsElem.removeClass('autocomplete-list-show');
       e.preventDefault();
     });
   }
@@ -135,13 +153,19 @@ function populateAutocompleteBox(data) {
 /**
  * setting up key listener for autocomplete input box
  */
-$('#ricercaAmministrazione').on('keyup', function (e) {
-  $('#risultatoRicerca').empty();
-
+$('#ricercaAmministrazione').on('keyup', debounce(function (e) {
   if (this.value.length < 2) {
     $('#risultatoRicerca').removeClass('autocomplete-list-show');
+
+    $('input#ipa').val('');
+    $('input#nomeAmministrazione').val('');
+    $('input#pec').val('');
+
     return;
   }
+
+  $('#search-spinner').removeClass('d-none');
+
   if (e.which == 13) {
     e.preventDefault();
   }
@@ -176,10 +200,4 @@ $('#ricercaAmministrazione').on('keyup', function (e) {
     }),
     success: populateAutocompleteBox
   });
-});
-
-//hack to make readonly fields required and validate them
-$('.readonly').on('keydown paste', function (e) {
-  e.preventDefault();
-});
-
+}, 200));
