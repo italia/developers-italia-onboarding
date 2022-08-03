@@ -7,9 +7,12 @@ const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
 const validator = require('./validator');
+const config = require('./config');
 const whitelistFile = 'private/data/whitelist.db.json';
+const getPasetoKey = require('./api/get-paseto-key.js');
+const fetch = require('cross-fetch').fetch;
 
-module.exports = function (request, h) {
+module.exports = async function (request, h) {
 
   const token = request.query.token;
   const decoded = jwt.verify(token, key);
@@ -26,7 +29,7 @@ module.exports = function (request, h) {
   const db = low(adapter);
 
   // Set some defaults (required if your JSON file is empty)
-  db.defaults({ registrati: [] }).write();
+  db.defaults({registrati: []}).write();
 
   if (validator.isAlreadyOnboarded(ipa, url)) {
     return h.view(
@@ -40,7 +43,7 @@ module.exports = function (request, h) {
         pec,
         amministrazione,
       },
-      { layout: 'index' }
+      {layout: 'index'}
     );
   }
 
@@ -59,5 +62,23 @@ module.exports = function (request, h) {
     })
     .write();
 
-  return h.view('confirmed', null, { layout: 'index' });
+
+  const apiPasetoKey = await getPasetoKey();
+  const apiPayload = {
+    email: pec,
+    codeHosting: [{
+      url: url
+    }],
+  };
+
+  fetch(config.apiURL + '/publishers', {
+    method: 'POST',
+    body: JSON.stringify(apiPayload),
+    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiPasetoKey}
+  }).then(res => {
+    console.log(res.json());
+  });
+
+
+  return h.view('confirmed', null, {layout: 'index'});
 };
