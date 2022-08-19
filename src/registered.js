@@ -51,18 +51,6 @@ module.exports = async function (request, h) {
   // and allow external manipulation
   db.read();
 
-  db.get('registrati')
-    .push({
-      timestamp: new Date().toJSON(),
-      referente: referente,
-      refTel: refTel,
-      ipa: ipa,
-      url: url,
-      pec: pec,
-    })
-    .write();
-
-
   const apiPasetoKey = await getPasetoKey();
   const apiPayload = {
     email: pec,
@@ -71,14 +59,48 @@ module.exports = async function (request, h) {
     }],
   };
 
-  fetch(config.apiURL + '/publishers', {
-    method: 'POST',
-    body: JSON.stringify(apiPayload),
-    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiPasetoKey}
-  }).then(res => {
-    console.log(res.json());
-  });
+  const apiURL = config.apiURL.replace(/\/$/, '');
 
+  try {
+    const res = await fetch(`${apiURL}/publishers`, {
+      method: 'POST',
+      body: JSON.stringify(apiPayload),
+      headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${apiPasetoKey}`},
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw `errore imprevisto nel salvataggio, riprovare più tardi (${data?.title}, ${data?.detail})`;
+    }
+
+    db.get('registrati')
+      .push({
+        timestamp: new Date().toJSON(),
+        referente: referente,
+        refTel: refTel,
+        ipa: ipa,
+        url: url,
+        pec: pec,
+      })
+      .write();
+  } catch(err) {
+    console.error(err);
+
+    return h.view(
+      'register-confirm',
+      {
+        errorMsg: `Errore: ${err}`,
+        referente,
+        refTel,
+        ipa,
+        url,
+        pec,
+        amministrazione,
+      },
+      {layout: 'index'}
+    );
+  }
 
   return h.view('confirmed', null, {layout: 'index'});
 };
