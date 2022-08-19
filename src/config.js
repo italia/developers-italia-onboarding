@@ -21,5 +21,5 @@ module.exports = {
   },
   pasetoKey: process.env.PASETO_KEY,
   pasetoIssuerPayload: '{"iss":"developers-italia-onboarding"}',
-  apiURL: process.env.DEVELOPERS_ITALIA_API_URL || 'https://api.developers.italia.it/v1/status',
+  apiURL: process.env.DEVELOPERS_ITALIA_API_URL || 'https://api.developers.italia.it/v1',
 };
