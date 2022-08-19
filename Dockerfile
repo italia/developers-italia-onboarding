@@ -5,7 +5,7 @@ ENV USER developers
 
 WORKDIR ${HOME}
 
-RUN apk add ca-certificates
+RUN apk add ca-certificates python make g++
 
 COPY public public
 COPY src src
