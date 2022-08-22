@@ -7,9 +7,12 @@ const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
 const validator = require('./validator');
+const config = require('./config');
 const whitelistFile = 'private/data/whitelist.db.json';
+const getPasetoKey = require('./api/get-paseto-key.js');
+const fetch = require('cross-fetch').fetch;
 
-module.exports = function (request, h) {
+module.exports = async function (request, h) {
 
   const token = request.query.token;
   const decoded = jwt.verify(token, key);
@@ -26,7 +29,7 @@ module.exports = function (request, h) {
   const db = low(adapter);
 
   // Set some defaults (required if your JSON file is empty)
-  db.defaults({ registrati: [] }).write();
+  db.defaults({registrati: []}).write();
 
   if (validator.isAlreadyOnboarded(ipa, url)) {
     return h.view(
@@ -40,7 +43,7 @@ module.exports = function (request, h) {
         pec,
         amministrazione,
       },
-      { layout: 'index' }
+      {layout: 'index'}
     );
   }
 
@@ -48,16 +51,56 @@ module.exports = function (request, h) {
   // and allow external manipulation
   db.read();
 
-  db.get('registrati')
-    .push({
-      timestamp: new Date().toJSON(),
-      referente: referente,
-      refTel: refTel,
-      ipa: ipa,
-      url: url,
-      pec: pec,
-    })
-    .write();
+  const apiPasetoKey = await getPasetoKey();
+  const apiPayload = {
+    email: pec,
+    codeHosting: [{
+      url: url
+    }],
+  };
 
-  return h.view('confirmed', null, { layout: 'index' });
+  const apiURL = config.apiURL.replace(/\/$/, '');
+
+  try {
+    const res = await fetch(`${apiURL}/publishers`, {
+      method: 'POST',
+      body: JSON.stringify(apiPayload),
+      headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${apiPasetoKey}`},
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw `errore imprevisto nel salvataggio, riprovare più tardi (${data?.title}, ${data?.detail})`;
+    }
+
+    db.get('registrati')
+      .push({
+        timestamp: new Date().toJSON(),
+        referente: referente,
+        refTel: refTel,
+        ipa: ipa,
+        url: url,
+        pec: pec,
+      })
+      .write();
+  } catch(err) {
+    console.error(err);
+
+    return h.view(
+      'register-confirm',
+      {
+        errorMsg: `Errore: ${err}`,
+        referente,
+        refTel,
+        ipa,
+        url,
+        pec,
+        amministrazione,
+      },
+      {layout: 'index'}
+    );
+  }
+
+  return h.view('confirmed', null, {layout: 'index'});
 };
