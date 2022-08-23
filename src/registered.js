@@ -107,7 +107,7 @@ module.exports = async function (request, h) {
         pec,
         amministrazione,
         apiError: true,
-        token: token,
+        token,
       },
       {layout: 'index'}
     );
