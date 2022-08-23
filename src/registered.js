@@ -53,9 +53,9 @@ module.exports = async function (request, h) {
 
   const apiPasetoKey = await getPasetoKey();
   const apiPayload = {
-    email: pec,
+    email: 'a',
     codeHosting: [{
-      url: url
+      url: 'b'
     }],
   };
 
@@ -71,15 +71,10 @@ module.exports = async function (request, h) {
     const data = await res.json();
 
     if (!res.ok) {
-      let errorMsg = '';
-      if (data.validationErrors) {
-        for (const error of data.validationErrors) {
-          errorMsg += `Valore non valido: <b>${error.value}</b> per il field: <b>${error.field}</b> con la regola: <b>${error.rule}</b></br>`;
-        }
-        throw errorMsg;
-      }
-
-      throw data.detail;
+      throw data.validationErrors?.map(error => `
+        Valore non valido: <strong>${error.value}</strong> per il campo: <strong>${error.field}</strong>
+        con la regola: <strong>${error.rule}</strong><br>
+      `).join('') || data.detail;
     }
 
     db.get('registrati')
