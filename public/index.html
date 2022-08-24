@@ -113,11 +113,24 @@
   </header>
 
   <div id="middle-content">
-    <!-- errorMsg viene visualizzato se l'URL inserito non e' valido -->
     {{#errorMsg}}
       <div class="container">
         <div class="alert alert-danger" role="alert">
           {{{errorMsg}}}
+          {{#errorDetail}}
+          <div class="collapse-div collapse-background-hover">
+            <div class="collapse-header" id="errorDetailHeading">
+              <button data-toggle="collapse" data-target="#errorDetail" aria-controls="errorDetail">
+                Dettagli
+              </button>
+            </div>
+            <div id="errorDetail" class="collapse" role="region" aria-labelledby="errorDetailHeading">
+              <div class="collapse-body">
+                {{{errorDetail}}}
+              </div>
+            </div>
+          </div>
+          {{/errorDetail}}
         </div>
       </div>
     {{/errorMsg}}

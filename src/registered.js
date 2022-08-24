@@ -71,7 +71,10 @@ module.exports = async function (request, h) {
     const data = await res.json();
 
     if (!res.ok) {
-      throw `errore imprevisto nel salvataggio, riprovare più tardi (${data?.title}, ${data?.detail})`;
+      throw data.validationErrors?.map(error => `
+        Valore non valido: <strong>${error.value}</strong> per il campo: <strong>${error.field}</strong>
+        con la regola: <strong>${error.rule}</strong><br>
+      `).join('') || data.detail;
     }
 
     db.get('registrati')
@@ -90,13 +93,16 @@ module.exports = async function (request, h) {
     return h.view(
       'register-confirm',
       {
-        errorMsg: `Errore: ${err}`,
+        errorMsg: 'Errore imprevisto nel salvataggio, riprovare più tardi',
+        errorDetail: err,
         referente,
         refTel,
         ipa,
         url,
         pec,
         amministrazione,
+        apiError: true,
+        token,
       },
       {layout: 'index'}
     );
