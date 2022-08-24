@@ -3,7 +3,7 @@
     <div class="row d-flex align-items-center justify-content-center main-content">
       <div class="my-5 col-md-9">
         <form id="pa-form" action="email-sent" method="POST">
-          <h2>Registrazione repository per software pubblico</h2>
+          <h1>Registrazione repository per software pubblico</h1>
           <br />
           <p class="lead">
           Le Pubbliche Amministrazioni possono dichiarare qui i repository
@@ -17,13 +17,10 @@
                aria-label="Documentazione del formato publiccode.yml">publiccode.yml</a>.
           </p>
 
-          <p class="lead">
-            <strong>La compilazione di questo form invierà una PEC contenente un link per confermare
-              la titolarità dei repository usati per la pubblicazione.</strong>
-          </p>
-
           <p class="lead mb-5">
-            Per ulteriori informazioni consultare la sezione <a href="/faq">domande frequenti</a>
+            La compilazione di questo form genererà una PEC contenente un link per confermare
+            la titolarità dei repository usati per la pubblicazione.
+            Per ulteriori informazioni consultare la sezione <a href="/faq">domande frequenti</a>.
           </p>
 
           <input type="hidden" id="esUrl" name="esUrl" value="{{{ pa.esUrl }}}">
@@ -50,7 +47,7 @@
             </span>
             <label for="ricercaAmministrazione">Cerca Amministrazione *</label>
             <small class="form-text text-muted">
-              Digita e scegli l'Amministrazione dai risultati della ricerca
+              Scegli l'Amministrazione dai risultati della ricerca
             </small>
 
             <ul id="risultatoRicerca" class="autocomplete-list"></ul>
@@ -66,7 +63,9 @@
             >
             <label for="nomeReferente">Referente (nome e cognome) *</label>
             <small class="form-text text-muted">
-              Il nome e il cognome della persona relativo a questa richiesta: sarà citato nella PEC indirizzata all'Amministrazione richiedente
+              Il nome e il cognome della persona che sta effettuando questa richiesta. Sarà citato nella PEC
+              indirizzata all'Amministrazione richiedente in modo da facilitare lo smistamento del messaggio
+              all'interno dell'Amministrazione stessa.
             </small>
           </div>
           <div class="form-group">
@@ -90,19 +89,18 @@
               value="{{{ pa.url }}}"
               required
             >
-            <label for="url">URL dell'organizzazione nello strumento di code hosting (GitHub, GitLab, BitBucket) *</label>
+            <label for="url">URL dell'account nello strumento di code hosting *</label>
             <small class="form-text text-muted">
               URL dell'account (detto anche "organizzazione")
               intestato all'Amministrazione. Ad esempio: <i>https://github.com/comune-di-reuso.</i>
             </small>
             <small class="form-text text-muted">
-              Non scrivere l'URL del repository, ma <b>scrivi solo l'URL dell'organizzazione.</b>
-            </small>
-
-            <small class="form-text text-muted">
-              Se l'Amministrazione è già presente, l'URL sarà <b>aggiunto</b> a quelli già noti.
-              Per rimuovere URL già comunicati si prega di scrivere all'indirizzo
+              L'URL sarà <b>aggiunto</b> a quelli già noti per l'Amministrazione indicata;
+              per rimuovere URL già comunicati si prega di scrivere all'indirizzo
               <a href="mailto:contatti@developers.italia.it">contatti@developers.italia.it</a>.
+            </small>
+            <small class="form-text text-muted">
+              Attualmente sono supportati: GitHub, GitLab, BitBucket.
             </small>
           </div>
 
