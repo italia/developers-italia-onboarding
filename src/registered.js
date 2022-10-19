@@ -54,6 +54,7 @@ module.exports = async function (request, h) {
   const apiPasetoKey = await getPasetoKey();
   const apiPayload = {
     email: pec,
+    description: amministrazione,
     codeHosting: [{
       url: url
     }],
