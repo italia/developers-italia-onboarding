@@ -19,7 +19,7 @@ module.exports = {
     overrideRecipientAddr: process.env.ONBOARDING_EMAIL_OVERRIDE_RECIPIENT_ADDR,
     subject: process.env.ONBOARDING_EMAIL_SUBJECT || 'Onboarding Developers Italia'
   },
-  pasetoKey: process.env.PASETO_KEY,
+  pasetoKey: process.env.ONBOARDING_PASETO_KEY,
   pasetoIssuerPayload: '{"iss":"developers-italia-onboarding"}',
   apiURL: process.env.DEVELOPERS_ITALIA_API_URL || 'https://api.developers.italia.it/v1',
 };
