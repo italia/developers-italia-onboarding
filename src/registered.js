@@ -73,10 +73,6 @@ module.exports = async function (request, h) {
 
     switch (getPublisherResp.status) {
     case 200:
-      if (publisher.alternativeId !== ipa) {
-        throw new Error('Si è verificato un errore imprevisto durante la verifica dell\'esistenza del publisher');
-      }
-
       await updateExistingPublisher(apiURL, apiPayload, apiPasetoKey, publisher.id);
       break;
 
