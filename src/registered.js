@@ -52,43 +52,33 @@ module.exports = async function (request, h) {
   db.read();
 
   const apiPasetoKey = await getPasetoKey();
-  const apiPayload = {
-    email: pec,
-    description: amministrazione,
-    codeHosting: [{
-      url: url
-    }],
-  };
 
   const apiURL = config.apiURL.replace(/\/$/, '');
 
   try {
-    const res = await fetch(`${apiURL}/publishers`, {
-      method: 'POST',
-      body: JSON.stringify(apiPayload),
+    const getPublisherResp = await fetch(`${apiURL}/publishers/${ipa}-${pec}`, {
+      method: 'GET',
       headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${apiPasetoKey}`},
     });
 
-    const data = await res.json();
+    const publisher = await getPublisherResp.json();
 
-    if (!res.ok) {
-      throw data.validationErrors?.map(error => `
-        Valore non valido: <strong>${error.value}</strong> per il campo: <strong>${error.field}</strong>
-        con la regola: <strong>${error.rule}</strong><br>
-      `).join('') || data.detail;
+    switch (getPublisherResp.status) {
+    case 200:
+      await updateExistingPublisher(apiURL, apiPasetoKey, publisher.id, pec, url, publisher.codeHosting);
+      break;
+
+    case 404:
+      await createPublisher(apiURL, apiPasetoKey, pec, amministrazione, ipa, url);
+      break;
+
+    default:
+      throw new Error('Risposta inattesa dal server.');
     }
 
-    db.get('registrati')
-      .push({
-        timestamp: new Date().toJSON(),
-        referente: referente,
-        refTel: refTel,
-        ipa: ipa,
-        url: url,
-        pec: pec,
-      })
-      .write();
-  } catch(err) {
+    addToLegacyDB(db, referente, refTel, ipa, url, pec);
+
+  } catch (err) {
     console.error(err);
 
     return h.view(
@@ -111,3 +101,68 @@ module.exports = async function (request, h) {
 
   return h.view('confirmed', null, {layout: 'index'});
 };
+
+async function createPublisher(apiURL, apiPasetoKey, pec, amministrazione, ipa, url) {
+  const apiPayload = {
+    email: pec,
+    description: amministrazione,
+    codeHosting: [{
+      url: url
+    }],
+    alternativeId: `${ipa}-${pec}`,
+  };
+
+  const res = await fetch(`${apiURL}/publishers`, {
+    method: 'POST',
+    body: JSON.stringify(apiPayload),
+    headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${apiPasetoKey}`},
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throwValidationError(data);
+  }
+}
+
+async function updateExistingPublisher(apiURL, apiPasetoKey, publisherID, pec, url, codeHosting) {
+  const apiPayload = {
+    email: pec,
+    codeHosting: codeHosting.append({
+      url: url
+    }),
+  };
+
+  const res = await fetch(`${apiURL}/publishers/${publisherID}`, {
+    method: 'PATCH',
+    body: JSON.stringify(apiPayload),
+    headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${apiPasetoKey}`},
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throwValidationError(data);
+  }
+}
+
+
+function addToLegacyDB(db, referente, refTel, ipa, url, pec) {
+  return db.get('registrati')
+    .push({
+      timestamp: new Date().toJSON(),
+      referente: referente,
+      refTel: refTel,
+      ipa: ipa,
+      url: url,
+      pec: pec,
+    }).write();
+}
+
+function throwValidationError(data) {
+  throw data.validationErrors?.map(error => `
+        Valore non valido: <strong>${error.value}</strong> per il campo: <strong>${error.field}</strong>
+        con la regola: <strong>${error.rule}</strong><br>
+      `).join('') || data.detail;
+}
+
