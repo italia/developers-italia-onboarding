@@ -74,8 +74,7 @@ module.exports = async function (request, h) {
       break;
 
     default:
-      addToLegacyDB(db, referente, refTel, ipa, url, pec);
-      break;
+      throw new Error('Errore inatteso.');
     }
 
   } catch (err) {
