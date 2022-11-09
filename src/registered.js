@@ -51,8 +51,6 @@ module.exports = async function (request, h) {
   // and allow external manipulation
   db.read();
 
-  addToLegacyDB(db, referente, refTel, ipa, url, pec);
-
   const apiPasetoKey = await getPasetoKey();
 
   const apiURL = config.apiURL.replace(/\/$/, '');
@@ -72,6 +70,11 @@ module.exports = async function (request, h) {
 
     case 404:
       await createPublisher(apiURL, apiPasetoKey, pec, amministrazione, ipa, url);
+      addToLegacyDB(db, referente, refTel, ipa, url, pec);
+      break;
+
+    default:
+      addToLegacyDB(db, referente, refTel, ipa, url, pec);
       break;
     }
 
