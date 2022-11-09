@@ -58,7 +58,7 @@ module.exports = async function (request, h) {
   const apiURL = config.apiURL.replace(/\/$/, '');
 
   try {
-    const getPublisherResp = await fetch(`${apiURL}/publishers/${ipa}`, {
+    const getPublisherResp = await fetch(`${apiURL}/publishers/${ipa}-${pec}`, {
       method: 'GET',
       headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${apiPasetoKey}`},
     });
