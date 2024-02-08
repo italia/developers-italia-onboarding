@@ -37,7 +37,7 @@
     "jsonwebtoken": "^9.0.0",
     "lowdb": "^1.0.0",
     "mustache": "^4.0.1",
-    "nodemailer": "^6.6.1",
+    "nodemailer": "^6.9.9",
     "parse-domain": "^3.0.3",
     "paseto.js": "^0.1.7",
     "request": "^2.88.2",
