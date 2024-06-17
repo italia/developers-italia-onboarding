@@ -6,8 +6,8 @@
           <h1>Registrazione repository per software pubblico</h1>
           <br />
           <p class="lead">
-          Le Pubbliche Amministrazioni possono dichiarare qui i repository
-          in cui pubblicano i propri software, secondo le
+          Le Pubbliche Amministrazioni possono dichiarare qui dove ospitano
+          il proprio software, secondo le
           <a href="https://developers.italia.it/it/riuso">linee guida sull'acquisizione e il riuso di software</a>.
           </p>
 
@@ -18,8 +18,6 @@
           </p>
 
           <p class="lead mb-5">
-            La compilazione di questo form genererà una PEC contenente un link per confermare
-            la titolarità dei repository usati per la pubblicazione.
             Per ulteriori informazioni consultare la sezione <a href="/faq">domande frequenti</a>.
           </p>
 
@@ -63,9 +61,7 @@
             >
             <label for="nomeReferente">Referente (nome e cognome) *</label>
             <small class="form-text text-muted">
-              Il nome e il cognome della persona che sta effettuando questa richiesta. Sarà citato nella PEC
-              indirizzata all'Amministrazione richiedente in modo da facilitare lo smistamento del messaggio
-              all'interno dell'Amministrazione stessa.
+              Il nome e il cognome della persona che sta effettuando questa richiesta.
             </small>
           </div>
           <div class="form-group">
@@ -79,7 +75,7 @@
             >
             <label for="telReferente">Telefono Referente *</label>
             <small class="form-text text-muted">
-              Numero telefonico del referente
+              Numero telefonico della persona di riferimento
             </small>
           </div>
 
@@ -89,18 +85,20 @@
               value="{{{ pa.url }}}"
               required
             >
-            <label for="url">URL dell'account nello strumento di code hosting *</label>
+            <label for="url">URL dello strumento di code hosting *</label>
             <small class="form-text text-muted">
-              URL dell'account (detto anche "organizzazione")
-              intestato all'Amministrazione. Ad esempio: <i>https://github.com/comune-di-reuso.</i>
+              URL che ospita tutti i repository dell'Amministrazione.
             </small>
-            <small class="form-text text-muted">
+           <small class="form-text text-muted">
               L'URL sarà <b>aggiunto</b> a quelli già noti per l'Amministrazione indicata;
-              per rimuovere URL già comunicati si prega di scrivere all'indirizzo
+              per rimuovere URL già comunicati si prega di scrivere a
               <a href="mailto:contatti@developers.italia.it">contatti@developers.italia.it</a>.
             </small>
             <small class="form-text text-muted">
               Attualmente sono supportati: GitHub, GitLab, BitBucket.
+            </small>
+            <small class="form-text text-muted">
+              Esempio: <i>https://github.com/comune-di-reuso.</i>
             </small>
           </div>
 
