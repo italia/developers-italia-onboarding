@@ -1,8 +1,6 @@
 'use strict';
 
 const fs = require('fs-extra');
-const jwt = require('jsonwebtoken');
-const key = require('./get-jwt-key.js')();
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 
@@ -12,16 +10,12 @@ const whitelistFile = 'private/data/whitelist.db.json';
 const fetch = require('cross-fetch').fetch;
 
 module.exports = async function(request, h) {
-
-  const token = request.query.token;
-  const decoded = jwt.verify(token, key);
-
-  const referente = decoded.referente;
-  const refTel = decoded.refTel;
-  const ipa = decoded.ipa;
-  const url = decoded.url;
-  const pec = decoded.pec;
-  const amministrazione = decoded.description;
+  const referente = request.payload.nomeReferente.trim();
+  const refTel = request.payload.telReferente.replace(/\s/g, '');
+  const ipa = request.payload.ipa.trim();
+  const amministrazione = request.payload.description;
+  const url = request.payload.url.trim();
+  const pec = request.payload.pec;
 
   fs.ensureFileSync(whitelistFile);
   const adapter = new FileSync(whitelistFile);
@@ -30,20 +24,33 @@ module.exports = async function(request, h) {
   // Set some defaults (required if your JSON file is empty)
   db.defaults({ registrati: [] }).write();
 
+  if (!validator.isValidCodeHostingUrl(url)) {
+    return h.view('fast-onboarding-error', { errorMsg: 'Indirizzo del repository non valido', });
+  }
   if (validator.isAlreadyOnboarded(ipa, url)) {
+    return h.view('fast-onboarding-error', { errorMsg: 'Questo repository è già presente', });
+  }
+
+  const result = await validator.isGitHubValidated(url, request.server.app.indicePaWebsites[ipa]);
+  if (result.isVerified !== true) {
+    let errorDetail = null;
+
+    if (result.error) {
+      errorDetail = result.error;
+    }
+    if (!result.ipaWebsite) {
+      errorDetail += '\nIl sito web configurato in IndicePA non è valido';
+    }
+    if (!result.githubWebsite) {
+      errorDetail += '\nIl sito web configurato in GitHub non è valido';
+    }
+
     return h.view(
-      'register-confirm',
+      'fast-onboarding-error',
       {
-        errorMsg: 'Questo repository è già presente',
-        referente,
-        refTel,
-        ipa,
-        url,
-        pec,
-        amministrazione,
-      },
-      { layout: 'index' }
-    );
+        errorMsg: 'Questo repository non è verificato su GitHub',
+        errorDetail,
+      });
   }
 
   // this will reload file to be more permissive
@@ -74,23 +81,14 @@ module.exports = async function(request, h) {
     }
 
     addToLegacyDB(db, referente, refTel, ipa, url, pec);
-
   } catch (err) {
     console.error(err);
 
     return h.view(
-      'register-confirm',
+      'fast-onboarding-error',
       {
         errorMsg: 'Errore imprevisto nel salvataggio, riprovare più tardi',
         errorDetail: err,
-        referente,
-        refTel,
-        ipa,
-        url,
-        pec,
-        amministrazione,
-        apiError: true,
-        token,
       },
       { layout: 'index' }
     );
@@ -155,7 +153,6 @@ async function updateExistingPublisher(apiURL, pasetoApiToken, publisherID, pec,
   }
 }
 
-
 function addToLegacyDB(db, referente, refTel, ipa, url, pec) {
   return db.get('registrati')
     .push({
@@ -170,8 +167,7 @@ function addToLegacyDB(db, referente, refTel, ipa, url, pec) {
 
 function validationErrors(data) {
   return data.validationErrors?.map(error => `
-        Valore non valido: <strong>${error.value}</strong> per il campo: <strong>${error.field}</strong>
-        con la regola: <strong>${error.rule}</strong><br>
+        Valore non valido: <strong>${error.value}</strong> per il campo: <strong>${error.field}</strong> (<strong>${error.rule}</strong>)<br>
       `).join('') || data.detail;
 }
 

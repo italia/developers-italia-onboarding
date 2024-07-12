@@ -120,11 +120,11 @@
           {{#errorDetail}}
           <div class="collapse-div collapse-background-hover">
             <div class="collapse-header" id="errorDetailHeading">
-              <button data-toggle="collapse" data-target="#errorDetail" aria-controls="errorDetail">
+              <button data-toggle="collapse" data-target="#errorDetail" aria-controls="errorDetail" aria-expanded="true">
                 Dettagli
               </button>
             </div>
-            <div id="errorDetail" class="collapse" role="region" aria-labelledby="errorDetailHeading">
+            <div id="errorDetail" class="collapse show" role="region" aria-labelledby="errorDetailHeading">
               <div class="collapse-body">
                 {{{errorDetail}}}
               </div>
