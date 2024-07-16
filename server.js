@@ -16,7 +16,7 @@ const init = async () => {
 
   const httpPort = config.port;
 
-  console.info(`Using API at ${config.apiURL}`)
+  console.info(`Using API at ${config.apiURL}`);
 
   const server = Hapi.server({
     port: httpPort,
