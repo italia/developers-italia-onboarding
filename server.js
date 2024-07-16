@@ -16,7 +16,7 @@ const init = async () => {
 
   const httpPort = config.port;
 
-  console.info(`Using API at ${config.apiURL}`);
+  console.log(`Using API at ${config.apiURL}`);
 
   const server = Hapi.server({
     port: httpPort,
@@ -90,7 +90,7 @@ const init = async () => {
     method: 'GET',
     path: '/faq',
     handler: faqHandler
-  },{
+  }, {
     method: 'GET',
     path: '/{param*}',
     handler: {
@@ -106,7 +106,7 @@ const init = async () => {
   server.events.on('response', (request) => {
     const { pathname } = HapiUrl(request);
 
-    if (! pathname.match('^/bootstrap-italia/|^/assets/')) {
+    if (!pathname.match('^/bootstrap-italia/|^/assets/')) {
       const now = new Date(Date.now()).toISOString();
 
       const address = request.info.remoteAddress;
