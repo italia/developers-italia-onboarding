@@ -15,6 +15,7 @@ COPY LICENSE .
 COPY package.json .
 COPY package-lock.json .
 COPY server.js .
+COPY indice-pa-websites.csv .
 
 RUN adduser --home ${HOME} --shell /bin/sh --disabled-password ${USER}
 
