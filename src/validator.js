@@ -3,6 +3,7 @@ const { Client } = require('@elastic/elasticsearch');
 const fs = require('fs-extra');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
+const fetch = require('cross-fetch').fetch;
 
 const whitelistFile = 'private/data/whitelist.db.json';
 fs.ensureFileSync(whitelistFile);
@@ -82,7 +83,7 @@ function isValidCodeHostingUrl(url) {
 
       return orgsRegexp.test(u.pathname);
     }
-  } catch(_) {
+  } catch (_) {
     return false;
   }
 
@@ -95,9 +96,73 @@ function isValidPhoneNumber(phone) {
   return regex.test(phone);
 }
 
+async function isGitHubValidated(url, ipaWebsite) {
+  let orgName = '';
+  try {
+    const u = new URL(url);
+
+    if (u.hostname.replace(/^www\./, '') != 'github.com') {
+      return { error: 'Non è un URL GitHub' };
+    }
+
+    // Remove the trailing slash
+    orgName = u.pathname.substring(1);
+  } catch {
+    return { error: 'Indirizzo non valido' };
+  }
+
+  const res = await fetch(`https://api.github.com/orgs/${orgName}`, {
+    headers: {
+      'Content-Type': 'application/vnd.github.v3+json',
+    },
+  });
+  if (res.status == 404) {
+    const githubDoc = 'https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-your-personal-account/converting-a-user-into-an-organization';
+    return {
+      error: `Non è un'organizzazione GitHub, se è un account personale trasformalo in organizzazione: <a href="${githubDoc}" target="_blank">${githubDoc}</a>`
+    };
+  }
+  if (!res.ok) {
+    return { error: `Errore, riprova più tardi (risposta da GitHub: ${res.status} - ${res.statusText})` };
+  }
+
+  let data = null;
+  try {
+    data = await res.json();
+  } catch {
+    return { error: 'Errore nella risposta da GitHub, riprova più tardi' };
+  }
+
+  let githubUrl = null;
+  let ipaUrl = null;
+
+  try {
+    githubUrl = new URL(data.blog);
+    ipaUrl = new URL(ipaWebsite);
+  } catch (error) {
+    return { error: 'Errore: il sito web configurato in GitHub o in IndicePA non è un URL valido' };
+  }
+
+  ipaWebsite = ipaUrl?.hostname;
+  const githubWebsite = githubUrl?.hostname;
+
+  const isVerified =
+    ipaWebsite
+    && githubWebsite
+    && ipaWebsite.replace(/^www\./, '') === githubWebsite.replace(/^www\./, '')
+    && data.is_verified === true;
+
+  return {
+    githubWebsite,
+    ipaWebsite,
+    isVerified,
+  };
+}
+
 module.exports = {
   isAlreadyOnboarded,
   ipaMatchesPec,
   isValidCodeHostingUrl,
   isValidPhoneNumber,
+  isGitHubValidated,
 };

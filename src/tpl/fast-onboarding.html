@@ -1,0 +1,182 @@
+<main id="content">
+  <div class="container">
+    <div class="row d-flex align-items-center justify-content-center main-content">
+      <div class="my-5 col-md-9">
+        {{#fastOnboarding}}
+        <h1>Verifica dominio su GitHub</h1>
+        {{/fastOnboarding}}
+        {{^fastOnboarding}}
+        <h1>Verifica via PEC</h1>
+        {{/fastOnboarding}}
+        <br />
+
+        <p class="lead">
+          I repository del software su GitHub.com possono essere registrati velocemente con
+          la verifica del dominio.
+        </p>
+
+        {{^fastOnboarding}}
+        <p class="lead">
+          Questo repository non è su GitHub.com, ma è possibile proseguire comunque con la registrazione
+          tramite PEC.
+        </p>
+        {{/fastOnboarding}}
+
+        {{#fastOnboarding}}
+        <div class="container-fluid text-sm">
+          <div id="verify-result-loading" class="d-none">
+            <div
+                id="search-spinner"
+                class="icon icon-sm progress-spinner progress-spinner-double progress-spinner-active size-sm"
+              >
+              <div class="progress-spinner-inner"></div>
+              <div class="progress-spinner-inner"></div>
+            </div>
+
+            <span class="ml-2">Controllo in corso...</span>
+          </div>
+          <div class="container-fluid">
+            <div id="result-is-verified" class="d-none alert alert-success" role="alert">
+              Il sito dell'amministrazione <strong class="result-ipa-website"></strong> è verificato su GitHub <strong><a href="{{ pa.url }}">{{ pa.url }}</a></strong>,
+              si può proseguire con la registrazione immediata.
+            </div>
+            <div id="result-no-ipa-website" class="d-none alert alert-danger" role="alert">
+              Questa organizzazione non ha un sito web valido in <a href="https://indicepa.gov.it" target="_blank">IndicePA</a>,
+              non si può proseguire con la registrazione immediata.
+
+              <p class="mt-2">
+                Aggiungi il sito della tua organizzazione in IndicePA e ai
+                <a href="https://docs.github.com/en/organizations/managing-organization-settings/verifying-or-approving-a-domain-for-your-organization#verifying-a-domain-for-your-organization" target="_blank">domini verificati su GitHub</a>, poi riprova.
+              </p>
+
+              <p class="mt-2">
+                In alternativa, registra via PEC.
+              </p>
+            </div>
+            <div id="result-is-not-verified" class="d-none alert alert-danger" role="alert">
+              Il sito dell'amministrazione <strong class="result-ipa-website"></strong> non è verificato su GitHub
+              <strong><a href="{{ pa.url }}" target="_blank">{{ pa.url }}</a></strong>,
+              non si può proseguire con la registrazione immediata.
+
+              <p class="mt-2">
+                Aggiungi <span class="result-ipa-website text-monospace"></span> ai
+                <a href="https://docs.github.com/en/organizations/managing-organization-settings/verifying-or-approving-a-domain-for-your-organization#verifying-a-domain-for-your-organization" target="_blank">domini verificati su GitHub</a> e riprova.
+              </p>
+
+              <p class="mt-2">
+                In alternativa, registra via PEC.
+              </p>
+            </div>
+            <div id="result-is-error" class="d-none alert alert-danger" role="alert">
+            </div>
+          </div>
+        </div>
+
+        <div class="container-fluid">
+          <button id="verify-refresh-button" class="btn btn-sm btn-outline-primary">
+            <svg class="icon icon-primary icon-sm" aria-hidden="true">
+              <use href="/bootstrap-italia/dist/svg/sprite.svg#it-refresh"></use>
+            </svg>
+            <span class="xs">Aggiorna</span>
+          </button>
+        </div>
+        {{/fastOnboarding}}
+
+        <form id="pa-form" method="POST">
+          <input type="hidden" id="fast-onboarding.ipa" name="ipa" value="{{{ pa.ipa }}}">
+          <input type="hidden" id="fast-onboarding.url" name="url" value="{{{ pa.url }}}">
+          <input type="hidden" name="pec" value="{{{ pa.pec }}}">
+          <input type="hidden" name="nomeReferente" value="{{{ pa.nomeReferente }}}">
+          <input type="hidden" name="telReferente" value="{{{ pa.telReferente }}}">
+          <input type="hidden" name="description" value="{{{ pa.description }}}">
+
+          {{#fastOnboarding}}
+          <div class="container-fluid mt-5">
+            <div class="row justify-content-end">
+              <button class="btn" type="submit" formaction="email-sent">Registra via PEC</button>
+              <button id="fast-onboarding-button" formaction="register-fast-onboarding" type="submit" class="ml-4 col-3 btn btn-primary" disabled>Registra repository</button>
+            </div>
+          </div>
+          {{/fastOnboarding}}
+          {{^fastOnboarding}}
+          <div class="container-fluid mt-5">
+            <div class="row justify-content-end">
+              <button formaction="email-sent" type="submit" class="ml-4 col-3 btn btn-primary">Registra via PEC</button>
+            </div>
+          </div>
+          {{/fastOnboarding}}
+        </form>
+
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+    const verifyRefreshBtn = document.getElementById('verify-refresh-button');
+
+    const verifyGithubOrgWebsite = async function() {
+        const loading = document.getElementById('verify-result-loading');
+        const isVerifiedEl = document.getElementById('result-is-verified');
+        const isNotVerifiedEl = document.getElementById('result-is-not-verified');
+        const noIpaWebsiteEl = document.getElementById('result-no-ipa-website');
+        const errorEl = document.getElementById('result-is-error');
+        const fastOnboardingBtn = document.getElementById('fast-onboarding-button');
+
+        loading.classList.remove('d-none')
+        verifyRefreshBtn.classList.add('d-none')
+        isVerifiedEl.classList.add('d-none')
+        isNotVerifiedEl.classList.add('d-none')
+        noIpaWebsiteEl.classList.add('d-none')
+        errorEl.classList.add('d-none')
+        fastOnboardingBtn.disabled = true;
+
+        const data = {
+          ipa: document.getElementById("fast-onboarding.ipa").value,
+          url: document.getElementById("fast-onboarding.url").value,
+        };
+
+        let response = null;
+        try {
+            const res = await fetch('/verify-github-org', {
+                method: 'POST',
+               headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            if (!res.ok) {
+                console.log(res)
+                throw(`Response status not OK: ${res.status}`)
+            }
+
+            response = await res.json();
+        } catch(error) {
+            errorEl.innerText = "Errore imprevisto, riprovare più tardi";
+            errorEl.classList.remove('d-none')
+            console.error('Error:', error);
+
+            return;
+        } finally {
+            loading.classList.add('d-none')
+            verifyRefreshBtn.classList.remove('d-none')
+        };
+
+        if (response.error) {
+            errorEl.classList.remove('d-none')
+            errorEl.innerHTML = response.error;
+        } else if (!response.ipaWebsite) {
+            noIpaWebsiteEl.classList.remove ('d-none')
+        } else if (response.isVerified) {
+            isVerifiedEl.classList.remove('d-none')
+            fastOnboardingBtn.disabled = false;
+        } else {
+            isNotVerifiedEl.classList.remove('d-none')
+        }
+        document.querySelectorAll('.result-ipa-website').forEach(el => el.innerText = response.ipaWebsite);
+    }
+
+    {{#fastOnboarding}}
+    document.addEventListener('DOMContentLoaded', verifyGithubOrgWebsite);
+    verifyRefreshBtn.addEventListener('click', verifyGithubOrgWebsite);
+    {{/fastOnboarding }}
+</script>

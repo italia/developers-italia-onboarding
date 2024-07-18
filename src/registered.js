@@ -9,10 +9,9 @@ const FileSync = require('lowdb/adapters/FileSync');
 const validator = require('./validator');
 const config = require('./config');
 const whitelistFile = 'private/data/whitelist.db.json';
-const getPasetoKey = require('./api/get-paseto-key.js');
 const fetch = require('cross-fetch').fetch;
 
-module.exports = async function (request, h) {
+module.exports = async function(request, h) {
 
   const token = request.query.token;
   const decoded = jwt.verify(token, key);
@@ -29,7 +28,7 @@ module.exports = async function (request, h) {
   const db = low(adapter);
 
   // Set some defaults (required if your JSON file is empty)
-  db.defaults({registrati: []}).write();
+  db.defaults({ registrati: [] }).write();
 
   if (validator.isAlreadyOnboarded(ipa, url)) {
     return h.view(
@@ -43,7 +42,7 @@ module.exports = async function (request, h) {
         pec,
         amministrazione,
       },
-      {layout: 'index'}
+      { layout: 'index' }
     );
   }
 
@@ -51,29 +50,27 @@ module.exports = async function (request, h) {
   // and allow external manipulation
   db.read();
 
-  const apiPasetoKey = await getPasetoKey();
-
   const apiURL = config.apiURL.replace(/\/$/, '');
 
   try {
     const getPublisherResp = await fetch(`${apiURL}/publishers/${ipa}-${pec}`, {
       method: 'GET',
-      headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${apiPasetoKey}`},
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${config.pasetoApiToken}` },
     });
 
     const publisher = await getPublisherResp.json();
 
     switch (getPublisherResp.status) {
     case 200:
-      await updateExistingPublisher(apiURL, apiPasetoKey, publisher.id, pec, url, publisher.codeHosting);
+      await updateExistingPublisher(apiURL, config.pasetoApiToken, publisher.id, pec, url, publisher.codeHosting);
       break;
 
     case 404:
-      await createPublisher(apiURL, apiPasetoKey, pec, amministrazione, ipa, url);
+      await createPublisher(apiURL, config.pasetoApiToken, pec, amministrazione, ipa, url);
       break;
 
     default:
-      throw new Error('Risposta inattesa dal server.');
+      throw `Risposta inattesa dal server: ${getPublisherResp.status} - ${getPublisherResp.statustext}`;
     }
 
     addToLegacyDB(db, referente, refTel, ipa, url, pec);
@@ -95,14 +92,14 @@ module.exports = async function (request, h) {
         apiError: true,
         token,
       },
-      {layout: 'index'}
+      { layout: 'index' }
     );
   }
 
-  return h.view('confirmed', null, {layout: 'index'});
+  return h.view('confirmed', null, { layout: 'index' });
 };
 
-async function createPublisher(apiURL, apiPasetoKey, pec, amministrazione, ipa, url) {
+async function createPublisher(apiURL, pasetoApiToken, pec, amministrazione, ipa, url) {
   const apiPayload = {
     email: pec,
     description: amministrazione,
@@ -115,17 +112,23 @@ async function createPublisher(apiURL, apiPasetoKey, pec, amministrazione, ipa, 
   const res = await fetch(`${apiURL}/publishers`, {
     method: 'POST',
     body: JSON.stringify(apiPayload),
-    headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${apiPasetoKey}`},
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${pasetoApiToken}` },
   });
 
   const data = await res.json();
 
   if (!res.ok) {
-    throwValidationError(data);
+    let errorText = `Risposta dall'API: ${res.status} - ${res.statusText}`;
+    const errors = validationErrors(data);
+
+    if (errors) {
+      errorText += `\n${errors}`;
+    }
+    throw errorText;
   }
 }
 
-async function updateExistingPublisher(apiURL, apiPasetoKey, publisherID, pec, url, codeHosting) {
+async function updateExistingPublisher(apiURL, pasetoApiToken, publisherID, pec, url, codeHosting) {
   const apiPayload = {
     email: pec,
     codeHosting: codeHosting.push({
@@ -136,13 +139,19 @@ async function updateExistingPublisher(apiURL, apiPasetoKey, publisherID, pec, u
   const res = await fetch(`${apiURL}/publishers/${publisherID}`, {
     method: 'PATCH',
     body: JSON.stringify(apiPayload),
-    headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${apiPasetoKey}`},
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${pasetoApiToken}` },
   });
 
   const data = await res.json();
 
   if (!res.ok) {
-    throwValidationError(data);
+    let errorText = `Risposta dall'API: ${res.status} - ${res.statusText}`;
+    const errors = validationErrors(data);
+
+    if (errors) {
+      errorText += `\n${errors}`;
+    }
+    throw errorText;
   }
 }
 
@@ -159,8 +168,8 @@ function addToLegacyDB(db, referente, refTel, ipa, url, pec) {
     }).write();
 }
 
-function throwValidationError(data) {
-  throw data.validationErrors?.map(error => `
+function validationErrors(data) {
+  return data.validationErrors?.map(error => `
         Valore non valido: <strong>${error.value}</strong> per il campo: <strong>${error.field}</strong>
         con la regola: <strong>${error.rule}</strong><br>
       `).join('') || data.detail;
