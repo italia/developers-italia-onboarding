@@ -106,7 +106,7 @@ async function createPublisher(apiURL, pasetoApiToken, pec, amministrazione, ipa
     codeHosting: [{
       url: url
     }],
-    alternativeId: `${ipa}-${pec}`,
+    alternativeId: ipa,
   };
 
   const res = await fetch(`${apiURL}/publishers`, {
