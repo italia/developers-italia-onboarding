@@ -109,7 +109,8 @@ async function isGitHubValidated(url, ipaWebsite) {
       return { error: 'Non è un URL GitHub' };
     }
 
-    orgName = u.pathname;
+    // Remove the leading slash
+    orgName = u.pathname.substring(1);
   } catch {
     return { error: 'Indirizzo non valido' };
   }
