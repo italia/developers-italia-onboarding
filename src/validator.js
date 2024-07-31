@@ -99,14 +99,17 @@ function isValidPhoneNumber(phone) {
 async function isGitHubValidated(url, ipaWebsite) {
   let orgName = '';
   try {
-    const u = new URL(url);
+    const cleanedUrl = url.endsWith('/')
+      ? url.slice(0, -1)
+      : url;
+
+    const u = new URL(cleanedUrl);
 
     if (u.hostname.replace(/^www\./, '') != 'github.com') {
       return { error: 'Non è un URL GitHub' };
     }
 
-    // Remove the trailing slash
-    orgName = u.pathname.substring(1);
+    orgName = u.pathname;
   } catch {
     return { error: 'Indirizzo non valido' };
   }
