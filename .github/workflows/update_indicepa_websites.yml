@@ -1,0 +1,19 @@
+name: Update indice-pa-websites.csv
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 15 9 * * *
+
+jobs:
+  update-external-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: >
+          curl -sL 'https://indicepa.gov.it/ipa-dati/datastore/dump/d09adf99-dc10-4349-8c53-27b1e5aa97b6?format=csv' > indice-pa-websites.csv
+      - uses: peter-evans/create-pull-request@v6
+        with:
+            commit-message: "chore: update indice-pa-websites.csv"
+            title: "chore: update indice-pa-websites.csv"
+            body: ""
+            branch: update-ipa-websites
