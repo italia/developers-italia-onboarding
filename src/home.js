@@ -7,6 +7,7 @@ module.exports = function (request, h) {
   return h.view(
     'main-content', {
       appVersion,
+      fastOnboarding: config.fastOnboarding,
       pa: {
         esUrl: config.esUrl,
         ipa: '',

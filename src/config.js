@@ -21,4 +21,5 @@ module.exports = {
   },
   pasetoApiToken: process.env.ONBOARDING_PASETO_KEY,
   apiURL: process.env.DEVELOPERS_ITALIA_API_URL || 'https://api.developers.italia.it/v1',
+  fastOnboarding: process.env.FAST_ONBOARDING || false
 };

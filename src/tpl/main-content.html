@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row d-flex align-items-center justify-content-center main-content">
       <div class="my-5 col-md-9">
-        <form id="pa-form" action="fast-onboarding" method="POST">
+        <form id="pa-form" action="{{#fastOnboarding }}fast-onboarding{{/fastOnboarding}}{{^fastOnboarding }}email-sent{{/fastOnboarding}}" method="POST">
           <h1>Registrazione repository per software pubblico</h1>
           <br />
           <p class="lead">
