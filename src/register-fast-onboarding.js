@@ -129,9 +129,7 @@ async function createPublisher(apiURL, pasetoApiToken, pec, amministrazione, ipa
 async function updateExistingPublisher(apiURL, pasetoApiToken, publisherID, pec, url, codeHosting) {
   const apiPayload = {
     email: pec,
-    codeHosting: codeHosting.push({
-      url: url
-    }),
+    codeHosting: [ ...codeHosting, { url } ],
   };
 
   const res = await fetch(`${apiURL}/publishers/${publisherID}`, {
