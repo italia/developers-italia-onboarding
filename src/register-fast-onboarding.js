@@ -127,9 +127,12 @@ async function createPublisher(apiURL, pasetoApiToken, pec, amministrazione, ipa
 }
 
 async function updateExistingPublisher(apiURL, pasetoApiToken, publisherID, pec, url, codeHosting) {
+  // Clean up the codeHosting array by leaving only the url field of each element.
+  const cleanCodeHosting = codeHosting.map(({ url })=> ({ url }));
+
   const apiPayload = {
     email: pec,
-    codeHosting: [ ...codeHosting, { url } ],
+    codeHosting: [ ...cleanCodeHosting, { url } ],
   };
 
   const res = await fetch(`${apiURL}/publishers/${publisherID}`, {
